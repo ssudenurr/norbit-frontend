@@ -1,0 +1,90 @@
+        modified:   changelog
+        modified:   package-lock.json
+        modified:   package.json
+        modified:   src/assets/images/users/avatar-1.jpg
+        modified:   src/assets/images/users/avatar-10.jpg
+        modified:   src/assets/images/users/avatar-2.jpg
+        modified:   src/assets/images/users/avatar-3.jpg
+        modified:   src/assets/images/users/avatar-4.jpg
+        modified:   src/assets/images/users/avatar-5.jpg
+        modified:   src/assets/images/users/avatar-6.jpg
+        modified:   src/assets/images/users/avatar-7.jpg
+        modified:   src/assets/images/users/avatar-8.jpg
+        modified:   src/assets/images/users/avatar-9.jpg
+
+        modified:   src/assets/js/app.js
+        modified:   src/assets/js/layout.js
+        modified:   src/assets/js/pages/apps-nft-auction.init.js
+        modified:   src/assets/js/pages/calendar.init.js
+        modified:   src/assets/js/pages/coming-soon.init.js
+        modified:   src/assets/js/pages/dashboard-ecommerce.init.js
+        modified:   src/assets/js/pages/dashboard-projects.init.js
+        modified:   src/assets/js/pages/listjs.init.js
+        modified:   src/assets/js/pages/plugins/lord-icon-2.1.0.js
+        modified:   src/assets/js/pages/seller-details.init.js
+        modified:   src/assets/js/plugins.js
+
+        modified:   src/assets/scss/components/_buttons.scss
+        modified:   src/assets/scss/components/_card.scss
+        modified:   src/assets/scss/components/_demos.scss
+        modified:   src/assets/scss/components/_dropdown.scss
+        modified:   src/assets/scss/components/_forms.scss
+        modified:   src/assets/scss/components/_helper.scss
+        modified:   src/assets/scss/components/_nav.scss
+        modified:   src/assets/scss/components/_reboot.scss
+        modified:   src/assets/scss/config/creative/_theme-dark.scss
+        modified:   src/assets/scss/config/creative/_variables.scss
+        modified:   src/assets/scss/config/creative/app.scss
+        modified:   src/assets/scss/config/creative/bootstrap.scss
+        modified:   src/assets/scss/config/default/_theme-dark.scss
+        modified:   src/assets/scss/config/default/_variables.scss
+        modified:   src/assets/scss/config/default/app.scss
+        modified:   src/assets/scss/config/default/bootstrap.scss
+        modified:   src/assets/scss/config/galaxy/_theme-dark.scss
+        modified:   src/assets/scss/config/galaxy/_variables.scss
+        modified:   src/assets/scss/config/galaxy/app.scss
+        modified:   src/assets/scss/config/galaxy/bootstrap.scss
+        modified:   src/assets/scss/config/interactive/_theme-dark.scss
+        modified:   src/assets/scss/config/interactive/_variables.scss
+        modified:   src/assets/scss/config/interactive/app.scss
+        modified:   src/assets/scss/config/interactive/bootstrap.scss
+        modified:   src/assets/scss/config/material/_theme-dark.scss
+        modified:   src/assets/scss/config/material/_variables.scss
+        modified:   src/assets/scss/config/material/app.scss
+        modified:   src/assets/scss/config/material/bootstrap.scss
+        modified:   src/assets/scss/config/minimal/_theme-dark.scss
+        modified:   src/assets/scss/config/minimal/_variables.scss
+        modified:   src/assets/scss/config/minimal/app.scss
+        modified:   src/assets/scss/config/minimal/bootstrap.scss
+        modified:   src/assets/scss/config/modern/_theme-dark.scss
+        modified:   src/assets/scss/config/modern/_variables.scss
+
+        modified:   src/html/galaxy/partials/customizer.html
+        modified:   src/html/galaxy/tables-listjs.html
+
+        modified:   src/html/interactive/partials/customizer.html
+        modified:   src/html/interactive/pages-team.html
+        modified:   src/html/interactive/tables-listjs.html
+
+        modified:   src/html/material/partials/customizer.html
+        modified:   src/html/material/pages-team.html
+        modified:   src/html/material/tables-listjs.html
+
+        modified:   src/html/minimal/partials/customizer.html
+        modified:   src/html/minimal/pages-team.html
+        modified:   src/html/minimal/tables-listjs.html
+
+        modified:   src/html/modern/partials/customizer.html
+        modified:   src/html/modern/pages-team.html
+        modified:   src/html/modern/tables-listjs.html
+
+        modified:   src/html/saas/partials/customizer.html
+        modified:   src/html/saas/pages-team.html
+        modified:   src/html/saas/tables-listjs.html
+
+        modified:   theme-config.json
+
+  (use "git add <file>..." to include in what will be committed)
+
+        NewAdded:   src/assets/scss/config/corporate/
+        NewAdded:   src/html/corporate/
