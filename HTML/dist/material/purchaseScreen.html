@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
+    data-sidebar-image="none" data-preloader="disable">
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>Norbit Ar-Ge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <!-- App favicon -->
+
+
+    <!-- jsvectormap css -->
+    <link href="assets/libs/jsvectormap/css/jsvectormap.min.css" rel="stylesheet" type="text/css" />
+
+    <!--Swiper slider css-->
+    <link href="assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Layout config Js -->
+    <script src="assets/js/layout.js"></script>
+    <!-- Bootstrap Css -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <!-- custom Css-->
+    <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+    <!-- Begin page -->
+    <div id="preloader">
+        <div id="status">
+            <div class="spinner-border text-primary avatar-sm" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="root">
+        <header id="page-topbar">
+            <div class="layout-width">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                        <div class="navbar-brand-box horizontal-logo">
+                            <a href="index.html" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="assets/images/logo-removebg-preview.png" alt="" height="22">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="assets/images/logo-removebg-preview.png" alt="" height="17">
+                                </span>
+                            </a>
+
+                            <a href="index.html" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="assets/images/logo-removebg-preview.png" alt="" height="22">
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="assets/images/logo-removebg-preview.png" alt="" height="17">
+                                </span>
+                            </a>
+                        </div>
+
+                        <button type="button"
+                            class="btn btn-sm px-3 fs-16 header-item vertical-menu-btn topnav-hamburger shadow-none"
+                            id="topnav-hamburger-icon">
+                            <span class="hamburger-icon">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </span>
+                        </button>
+
+                        <!-- App Search-->
+
+                    </div>
+                    <!-- Bildirim Paneli -->
+                    <div class="d-flex align-items-center">
+
+                        <div class="dropdown topbar-head-dropdown ms-1 header-item" id="notificationDropdown">
+                            <button type="button"
+                                class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle shadow-none"
+                                id="page-header-notifications-dropdown" data-bs-toggle="dropdown"
+                                data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+                                <i class='bx bx-bell fs-22'></i>
+                                <span
+                                    class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger">
+                                    <!-- bildirim sayısı -->
+                                    <span class="visually-hidden">unread messages</span></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                                aria-labelledby="page-header-notifications-dropdown">
+
+                                <div class="dropdown-head bg-primary bg-pattern rounded-top">
+                                    <div class="p-3">
+                                        <div class="row align-items-center">
+                                            <div class="col">
+                                                <h6 class="m-0 fs-16 fw-semibold text-white"> Notifications </h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-content position-relative" id="notificationItemsTabContent">
+                                    <div class="tab-pane fade show active py-2 ps-2" id="all-noti-tab" role="tabpanel">
+                                        <div data-simplebar style="max-height: 300px;" class="pe-2">
+                                            <!-- Bildirim içeriği -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dropdown ms-sm-3 header-item topbar-user">
+                                <button type="button" class="btn shadow-none" id="page-header-user-dropdown"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="d-flex align-items-center">
+                                        <img class="rounded-circle header-profile-user"
+                                            src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                                        <span class="text-start ms-xl-2">
+                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna
+                                                Adame</span>
+                                            <span
+                                                class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span>
+                                        </span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </header>
+
+        <!-- removeNotificationModal -->
+        <div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+                            id="NotificationModalbtn-close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mt-2 text-center">
+                            <lord-icon src="https://cdn.lordicon.com/gsqxdxog.json" trigger="loop"
+                                colors="primary:#f7b84b,secondary:#f06548" style="width:100px;height:100px"></lord-icon>
+                            <div class="mt-4 pt-2 fs-15 mx-4 mx-sm-5">
+                                <h4>Are you sure ?</h4>
+                                <p class="text-muted mx-4 mb-0">Are you sure you want to remove this Notification ?</p>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 justify-content-center mt-4 mb-2">
+                            <button type="button" class="btn w-sm btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn w-sm btn-danger" id="delete-notification">Yes, Delete
+                                It!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========== App Menu ========== -->
+        <div class="app-menu navbar-menu">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <!-- Dark Logo-->
+                <a href="index.html" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
+                    </span>
+                </a>
+                <!-- Light Logo-->
+                <a href="index.html" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
+                    </span>
+                </a>
+                <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover"
+                    id="vertical-hover">
+                    <i class="ri-record-circle-line"></i>
+                </button>
+            </div>
+
+            <div id="scrollbar">
+                <div class="container-fluid">
+
+                    <div id="two-column-menu">
+                    </div>
+                    <ul class="navbar-nav" id="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" id="homePage" href="index.html" target="_self">
+                                <i class="mdi mdi-home"></i> <span data-key="t-dashboards">Home Page</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" id="buyScreen" href="purchaseScreen.html" target="_self">
+                                <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Satın Alma İstek
+                                    Ekranı</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="personalPage.html" target="_self">
+                                <i class="mdi mdi-account-multiple"></i> <span data-key="t-apps">Personel Ekranı</span>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarLayouts">
+                                <i class="mdi mdi-view-carousel-outline"></i> <span data-key="t-layouts">Datasheet
+                                    Ekranı</span>
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarAuth" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarAuth">
+                                <i class="mdi mdi-account-circle-outline"></i> <span
+                                    data-key="t-authentication">Know-How Ekranı</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarPages">
+                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesaplar</span>
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarLanding">
+                                <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
+                            </a>
+
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarUI">
+                                <i class="mdi mdi-cube-outline"></i> <span data-key="t-base-ui">Satın Alım
+                                    Bilgileri</span>
+                            </a>
+                        </li>
+
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+        <i class="ri-arrow-up-line"></i>
+    </button>
+    </div>
+    </div>
+
+    <div class="main-content" id="mainContent">
+        <table class="table">
+            <div class="buttons">
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true" data-bs-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content ">
+                            <div class="modal-header ">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Personel Oluşturma Formu</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="inputEmail4" class="form-label">Ürün İsmi</label>
+                                        <input type="email" class="form-control" id="inputEmail4">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="inputPassword4" class="form-label">Fiyat</label>
+                                        <input type="password" class="form-control" id="inputPassword4">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="inputAddress" class="form-label">Link</label>
+                                        <input type="text" class="form-control" id="inputAddress">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="inputAddress2" class="form-label">Açıklama</label>
+                                        <input type="text" class="form-control" id="inputAddress2">
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary">Ekle</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover " id="purchaseTable">
+                        <thead class="table-light">
+                            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                                <div class="container-fluid">
+                                    <a class="mdi mdi-filter btn btn-primary btn-m"></a>
+
+                                    <div class="app-search d-flex" id="navbarSupportedContent">
+                                        <form class="d-flex" role="search">
+                                            <input class="form-control me-2" type="search" placeholder="Search"
+                                                aria-label="Search">
+                                            <button class="btn btn-dark" type="submit">Search</button>
+                                        </form>
+                                    </div>
+                                    <div class="table-buttons">
+                                        <a class="mdi mdi-thumb-up btn btn-success btn-mm"></a>
+                                        <a class="mdi mdi-chevron-down btn btn-light btn-m"></a>
+                                        <a class="mdi mdi-plus btn btn-info btn-m" id="add-btn" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal"></a>
+                                        <a class="mdi mdi-pencil btn btn-success btn-m"></a>
+                                        <a class="mdi mdi-delete btn btn-danger btn-m"></a>
+                                    </div>
+                                </div>
+                                <tr>
+
+                                    <th scope="col"><input class="form-check-input" type="checkbox" value=""
+                                            id="flexCheckDefault"> #</th>
+                                    <th scope="col">İsteyen Kişi</th>
+                                    <th scope="col">Açıklama</th>
+                                    <th scope="col">Ürün Adı</th>
+                                    <th scope="col">Link</th>
+                                    <th scope="col">Fiyat</th>
+                                </tr>
+                            </nav>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
+                                        id="flexCheckDefault"> 1</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
+                                        id="flexCheckDefault"> 2</th>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </table>
+    </div>
+    <!-- JAVASCRIPT -->
+    <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/libs/simplebar/simplebar.min.js"></script>
+    <script src="assets/libs/node-waves/waves.min.js"></script>
+    <script src="assets/libs/feather-icons/feather.min.js"></script>
+    <script src="assets/js/pages/plugins/lord-icon-2.1.0.js"></script>
+    <script src="assets/js/plugins.js"></script>
+
+    <!-- apexcharts -->
+    <script src="assets/libs/apexcharts/apexcharts.min.js"></script>
+
+    <!-- Vector map-->
+    <script src="assets/libs/jsvectormap/js/jsvectormap.min.js"></script>
+    <script src="assets/libs/jsvectormap/maps/world-merc.js"></script>
+
+    <!--Swiper slider js-->
+    <script src="assets/libs/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Dashboard init -->
+    <script src="assets/js/pages/dashboard-ecommerce.init.js"></script>
+
+    <!-- App js -->
+    <script src="assets/js/app.js"></script>
+    <script src="index.js"></script>
+
+
+
+</body>
+
+</html>

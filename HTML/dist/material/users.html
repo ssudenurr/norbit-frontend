@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kullanıcılar</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- axios kütüphanesini ekleyin -->
+   
+  
+</head>
+<body>
+  <h1>Kullanıcı Listesi</h1>
+  <div id="userList"></div>
+  <p></p>
+
+  <script>
+    // Sayfanın yüklendiğinde çalışacak kodu buraya eklemelisiniz
+    document.addEventListener("DOMContentLoaded", function () {
+      const userToken = localStorage.getItem("kullanici1");
+
+      const apiUrl = "http://31.192.210.123:7777/accounts/user/";
+      axios({
+        method: "get",
+        url: apiUrl,
+        headers: {
+          Authorization: `Token ${userToken}`
+        }
+      }).then((response) => {
+        const user = response.data;
+        const userList = document.getElementById("userList");
+        
+          const userItem = document.createElement("div");
+          const userHTML = `
+          <p>Username: ${user.username}</p>
+          <p>User Type: ${user.user_type}</p>
+        `;
+          userItem.innerHTML=userHTML;
+          userList.appendChild(userItem);        
+          // console.log(userItem)
+
+      }).catch((error) => {
+        console.log(error);
+      });
+    });
+  </script>
+
+</body>
+</html>
