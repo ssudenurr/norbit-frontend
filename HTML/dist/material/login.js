@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (status==200){     
         const userToken = response.data.key;
         localStorage.setItem('kullanici1',userToken);
-        window.location.href = "users.html" 
+        window.location.href = "homePage.html" 
       }
 
     }).catch((error) => {
