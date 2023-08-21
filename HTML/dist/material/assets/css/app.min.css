@@ -18717,6 +18717,8 @@ span.flatpickr-weekday {
 
 }
 .calendar-container{
+    width: 100%;
+    height: 100%;
     margin-left: 250px;
     margin-top: 70px;
 }
