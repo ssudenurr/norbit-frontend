@@ -6,7 +6,7 @@
 
 Load particles.js and configure the particles:
 
-**index.html**
+**homePage.html**
 ```html
 <div id="particles-js"></div>
 

@@ -1714,7 +1714,7 @@
 	* Adjusted .npmignore ([#1834](https://github.com/PrismJS/prism/issues/1834)) [`29a30c62`](https://github.com/PrismJS/prism/commit/29a30c62)
 * __Website__
 	* Add Python triple-quoted strings "known failure" ([#1449](https://github.com/PrismJS/prism/issues/1449)) [`334c7bca`](https://github.com/PrismJS/prism/commit/334c7bca)
-	* Updated index.html to fix broken instructions ([#1462](https://github.com/PrismJS/prism/issues/1462)) [`7418dfdd`](https://github.com/PrismJS/prism/commit/7418dfdd)
+	* Updated homePage.html to fix broken instructions ([#1462](https://github.com/PrismJS/prism/issues/1462)) [`7418dfdd`](https://github.com/PrismJS/prism/commit/7418dfdd)
 	* Improve download page typography ([#1484](https://github.com/PrismJS/prism/issues/1484)) [`b1c2f4df`](https://github.com/PrismJS/prism/commit/b1c2f4df)
 	* Fixed peer dependencies in download page ([#1491](https://github.com/PrismJS/prism/issues/1491)) [`9d15ff6e`](https://github.com/PrismJS/prism/commit/9d15ff6e)
 	* Fixed empty link in extending ([#1507](https://github.com/PrismJS/prism/issues/1507)) [`74916d48`](https://github.com/PrismJS/prism/commit/74916d48)

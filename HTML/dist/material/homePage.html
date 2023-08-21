@@ -51,20 +51,21 @@
                     <div class="d-flex">
                         <!-- LOGO -->
                         <div class="navbar-brand-box horizontal-logo">
-                            <a href="homePage.html " class="logo logo-dark">
-                                <span class="logo-sm">
+                            <a href="homePage.html" class="logo logo-dark">
+                                <span class="logo-sm" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="22">
+
                                 </span>
-                                <span class="logo-lg">
+                                <span class="logo-lg" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="17">
                                 </span>
                             </a>
 
-                            <a href="homePage.html" class="logo logo-light">
-                                <span class="logo-sm">
+                            <a href="homePage.html" class="logo logo-light" id="logo">
+                                <span class="logo-sm" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="22">
                                 </span>
-                                <span class="logo-lg">
+                                <span class="logo-lg" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="17">
                                 </span>
                             </a>
@@ -171,19 +172,19 @@
             <div class="navbar-brand-box">
                 <!-- Dark Logo-->
                 <a href="homePage.html" class="logo logo-dark">
-                    <span class="logo-sm">
+                    <span class="logo-sm" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
-                    <span class="logo-lg">
+                    <span class="logo-lg" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
                 </a>
                 <!-- Light Logo-->
                 <a href="homePage.html" class="logo logo-light">
-                    <span class="logo-sm">
+                    <span class="logo-sm" id="logo" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
-                    <span class="logo-lg">
+                    <span class="logo-lg" id="logo" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
                 </a>
@@ -200,22 +201,22 @@
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link menu-link" id="homePage" href="h">
+                            <a class="nav-link menu-link" id="homePage" href="homePage.html" target="_self">
                                 <i class="mdi mdi-home"></i> <span data-key="t-dashboards">Home Page</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" id="buyScreen" href="purchaseScreen.html">
+                            <a class="nav-link menu-link" id="buyScreen" href="purchaseScreen.html" target="_self">
                                 <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Satın Alma İstek
                                     Ekranı</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" id="personalScreen" href="personalPage.html">
+                            <a class="nav-link menu-link" href="personalPage.html" target="_self">
                                 <i class="mdi mdi-account-multiple"></i> <span data-key="t-apps">Personel Ekranı</span>
                             </a>
-
                         </li>
+
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
@@ -259,6 +260,13 @@
                                     Bilgileri</span>
                             </a>
                         </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" id="log-out" href="#sidebarUI" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarUI">
+                                <i class="mdi mdi-cube-outline"></i> <span data-key="t-base-ui">log-out</span>
+                            </a>
+                        </li>
 
 
                     </ul>
@@ -274,135 +282,17 @@
     </div>
     </div>
 
-    <div class="main-content" id="mainContent">
-        <table class="table">
-            <div class="buttons">
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true" data-bs-backdrop="false">
-                    <div class="modal-dialog">
-                        <div class="modal-content ">
-                            <div class="modal-header ">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Personel Oluşturma Formu</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body ">
-                                <form class="row g-3">
-                                    <div class="col-md-6">
-                                        <label for="inputEmail4" class="form-label">Ad-Soyad</label>
-                                        <input type="text" class="form-control" id="inputEmail4">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="inputJob" class="form-label">Görevi</label>
-                                        <input type="text" class="form-control" id="inputJob">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
-                                        <input type="datetime-local" class="form-control" id="inputDate">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="inputCompany" class="form-label">Şirketi</label>
-                                        <input type="text" class="form-control" id="inputCompany">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="inputUsername" class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="inputUsername">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="inputPassword4" class="form-label">Şifre</label>
-                                        <input type="password" class="form-control" id="inputPassword4">
-                                    </div>
-                                </form>
-                            </div>
-                            
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary">Ekle</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-striped table-hover " id="personalTable">
-                        <thead class="table-light">
-                            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                                <div class="container-fluid">
-                                    <a class="mdi mdi-filter btn btn-primary btn-m"></a>
-
-                                    <div class="app-search d-flex" id="navbarSupportedContent">
-                                        <form class="d-flex" role="search">
-                                            <input class="form-control me-2" type="search" placeholder="Search"
-                                                aria-label="Search">
-                                            <button class="btn btn-dark" type="submit">Search</button>
-                                        </form>
-                                    </div>
-                                    <div class="table-buttons">
-                                        <a class="mdi mdi-thumb-up btn btn-success btn-mm"></a>
-                                        <a class="mdi mdi-chevron-down btn btn-light btn-m"></a>
-                                        <a class="mdi mdi-plus btn btn-info btn-m" id="add-btn" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal"></a>
-                                        <a class="mdi mdi-pencil btn btn-success btn-m"></a>
-                                        <a class="mdi mdi-delete btn btn-danger btn-m"></a>
-                                    </div>
-                                </div>
-                                <tr>
-
-                                    <th scope="col"><input class="form-check-input" type="checkbox" value=""
-                                            id="flexCheckDefault"> #</th>
-                                    <th scope="col">İsim</th>
-                                    <th scope="col">Görevi</th>
-                                    <th scope="col">Durum</th>
-                                    <th scope="col">İşe Giriş Tarihi</th>
-                                    <th scope="col">Şirketi</th>
-                                    <th scope="col">Username</th>
-                                </tr>
-                            </nav>
-                        </thead>
-                        <tbody>
-                            <!-- <tr>
-                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
-                                        id="flexCheckDefault"> 1</th>
-                                <td>sudenur çoban</td>
-                                <td>stajyer</td>
-                                <td>aktif</td>
-                                <td>16.08.2023</td>
-                                <td>Norbit</td>
-                                <td>SudenurÇ</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
-                                        id="flexCheckDefault"> 1</th>
-                                <td>sudenur çoban</td>
-                                <td>stajyer</td>
-                                <td>aktif</td>
-                                <td>16.08.2023</td>
-                                <td>Norbit</td>
-                                <td>SudenurÇ</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
-                                        id="flexCheckDefault"> 1</th>
-                                <td>sudenur çoban</td>
-                                <td>stajyer</td>
-                                <td>aktif</td>
-                                <td>16.08.2023</td>
-                                <td>Norbit</td>
-                                <td>SudenurÇ</td>
-                            </tr>
-                            <tr>
-                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
-                                        id="flexCheckDefault"> 1</th>
-                                <td>sudenur çoban</td>
-                                <td>stajyer</td>
-                                <td>aktif</td>
-                                <td>16.08.2023</td>
-                                <td>Norbit</td>
-                                <td>SudenurÇ</td>
-                            </tr> -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </table>
+    <div class="calendar-container" id="calendar-container">
+        <a href="calendar.html">
+            <iframe
+                src="https://calendar.google.com/calendar/embed?height=600&wkst=2&bgcolor=%23ffe8e8&ctz=UTC&src=c3VkZTEyMzRjYm5AZ21haWwuY29t&src=YWRkcmVzc2Jvb2sjY29udGFjdHNAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&src=dHIudHVya2lzaCNob2xpZGF5QGdyb3VwLnYuY2FsZW5kYXIuZ29vZ2xlLmNvbQ&src=c2V1Zjg2MG1rdW92bG9kOWcwMjc0ZmcycjQza3ZsYzdAaW1wb3J0LmNhbGVuZGFyLmdvb2dsZS5jb20&color=%23039BE5&color=%2333B679&color=%230B8043&color=%239E69AF"
+                style="width: 100%; height: 540px;" frameborder="0" scrolling="no"></iframe>
+        </a>
     </div>
+
+
+
+
     <!-- JAVASCRIPT -->
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/libs/simplebar/simplebar.min.js"></script>
@@ -426,7 +316,8 @@
 
     <!-- App js -->
     <script src="assets/js/app.js"></script>
-
+    <script src="homePage.js"></script>
+    <script src="login.js"></script>
 
 
 
