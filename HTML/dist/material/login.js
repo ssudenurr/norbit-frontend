@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   loginBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    const usersApiUrl = "http://31.192.210.123:7777/accounts/login/";
+    const usersApiUrl = "https://backend.norbit.com.tr/accounts/login/";
     
     axios({
       method: 'post',
@@ -54,9 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (status==200){     
         const userToken = response.data.key;
-        // localStorage.setItem('token',userToken);
+        localStorage.setItem('token',userToken);
         window.location.href = "homePage.html" 
-        localStorage.removeItem('kullanici1')
+        
       }
 
     }).catch((error) => {
