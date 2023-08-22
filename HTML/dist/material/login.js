@@ -36,6 +36,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = document.getElementById("password-input");
   const loginBtn = document.getElementById('loginBtn');  
 
+
+
+
   loginBtn.addEventListener('click', function (e) {
     e.preventDefault();
     const usersApiUrl = "http://31.192.210.123:7777/accounts/login/";
@@ -50,11 +53,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }).then((response) => {
 
-      const status = response.request.status;
+      const status = response.status;
 
       if (status==200){     
         const userToken = response.data.key;
-        localStorage.setItem('kullanici1',userToken);
+        localStorage.setItem('token',userToken);
         window.location.href = "homePage.html" 
       }
 
@@ -63,3 +66,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 })
+function userControl() {
+  const token = localStorage.getItem('token');
+  if (token) {
+    window.location.href = "homePage.html";
+  }
+}
