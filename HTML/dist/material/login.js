@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   loginBtn.addEventListener('click', function (e) {
     e.preventDefault();
-    const usersApiUrl = "https://backend.norbit.com.tr/accounts/login/";
+    const usersApiUrl = "http://backend.norbit.com.tr/accounts/login/";
     
     axios({
       method: 'post',

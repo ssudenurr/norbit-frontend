@@ -18,7 +18,7 @@
     document.addEventListener("DOMContentLoaded", function () {
       const userToken = localStorage.getItem("token");
 
-      const apiUrl = "https://backend.norbit.com.tr/accounts/user/";
+      const apiUrl = "http://backend.norbit.com.tr/accounts/user/";
       axios({
         method: "get",
         url: apiUrl,
