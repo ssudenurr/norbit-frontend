@@ -54,8 +54,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (status==200){     
         const userToken = response.data.key;
-        localStorage.setItem('token',userToken);
+        // localStorage.setItem('token',userToken);
         window.location.href = "homePage.html" 
+        localStorage.removeItem('kullanici1')
       }
 
     }).catch((error) => {
@@ -68,20 +69,4 @@ function userControl() {
   if (token) {
     window.location.href = "homePage.html";
   }
-}
-// Eski anahtar adı
-const oldKey = 'kullanici1';
-
-// Yeni anahtar adı
-const newKey = 'token';
-
-// Eski anahtar altındaki veriyi al
-const dataToTransfer = localStorage.getItem(oldKey);
-
-// Eğer veri varsa, yeni anahtar altında sakla
-if (dataToTransfer) {
-  localStorage.setItem(newKey, dataToTransfer);
-  
-  // Eski anahtar altındaki veriyi sil
-  localStorage.removeItem(oldKey);
 }
