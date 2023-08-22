@@ -36,9 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const passwordInput = document.getElementById("password-input");
   const loginBtn = document.getElementById('loginBtn');  
 
-
-
-
   loginBtn.addEventListener('click', function (e) {
     e.preventDefault();
     const usersApiUrl = "http://31.192.210.123:7777/accounts/login/";
