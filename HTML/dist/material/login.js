@@ -1,4 +1,4 @@
-
+userControl();
 document.addEventListener("DOMContentLoaded", function () {
 
   // loginForm.addEventListener("submit", function (event) {
@@ -64,6 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 })
+
 function userControl() {
   const token = localStorage.getItem('token');
   if (token) {
