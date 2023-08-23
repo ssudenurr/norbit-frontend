@@ -14,11 +14,10 @@
   <p></p>
 
   <script>
-    // Sayfanın yüklendiğinde çalışacak kodu buraya eklemelisiniz
     document.addEventListener("DOMContentLoaded", function () {
       const userToken = localStorage.getItem("token");
 
-      const apiUrl = "http://backend.norbit.com.tr/accounts/user/";
+      const apiUrl = "http://backend.norbit.com.tr/ems/list/";
       axios({
         method: "get",
         url: apiUrl,

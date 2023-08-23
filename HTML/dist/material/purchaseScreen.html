@@ -294,24 +294,24 @@
                             <div class="modal-body">
                                 <form class="row g-3">
                                     <div class="col-md-6">
-                                        <label for="inputEmail4" class="form-label">Ürün İsmi</label>
-                                        <input type="email" class="form-control" id="inputEmail4">
+                                        <label for="inputEmail4" class="form-label" >Ürün İsmi</label>
+                                        <input type="text" class="form-control" id="productName">
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="inputPassword4" class="form-label">Fiyat</label>
-                                        <input type="password" class="form-control" id="inputPassword4">
+                                        <label for="inputPassword4" class="form-label" >Fiyat</label>
+                                        <input type="number" class="form-control" id="price">
                                     </div>
                                     <div class="col-12">
-                                        <label for="inputAddress" class="form-label">Link</label>
-                                        <input type="text" class="form-control" id="inputAddress">
+                                        <label for="inputAddress" class="form-label" >Link</label>
+                                        <input type="url" class="form-control" id="link">
                                     </div>
                                     <div class="col-12">
                                         <label for="inputAddress2" class="form-label">Açıklama</label>
-                                        <input type="text" class="form-control" id="inputAddress2">
+                                        <input type="text" class="form-control"  id="description">
                                     </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary">Ekle</button>
+                                <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
                             </div>
                         </div>
@@ -335,18 +335,21 @@
                                         <a class="mdi mdi-plus btn btn-info btn-m" id="add-btn" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal"></a>
                                         <a class="mdi mdi-pencil btn btn-success btn-m"></a>
-                                        <a class="mdi mdi-delete btn btn-danger btn-m"></a>
+                                        <a class="mdi mdi-delete btn btn-danger btn-m" id="deleteBtn"></a>
                                     </div>
                                 </div>
                                 <tr>
 
                                     <th scope="col"><input class="form-check-input" type="checkbox" value=""
                                             id="flexCheckDefault"> #</th>
-                                    <th scope="col">İsteyen Kişi</th>
-                                    <th scope="col">Açıklama</th>
-                                    <th scope="col">Ürün Adı</th>
+                                    <th scope="col">İsteyen Kişi</th>                                    
+                                    <th scope="col">Ürün Adı</th>                                    
+                                    <th scope="col">Fiyat</th>                                    
                                     <th scope="col">Link</th>
-                                    <th scope="col">Fiyat</th>
+                                    <th scope="col">Açıklama</th>
+
+
+
                                 </tr>
                             </nav>
                         </thead>
@@ -400,7 +403,7 @@
     <!-- App js -->
     <script src="assets/js/app.js"></script>
     <script src="homePage.js"></script>
-
+    <script src="purchaseScreen.js"></script>
 
 
 </body>
