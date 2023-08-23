@@ -66,8 +66,10 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function userControl() {
+  
   const token = localStorage.getItem('token');
   if (token) {
     window.location.href = "homePage.html";
   }
+  window.alert(token)
 }
