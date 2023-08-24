@@ -3,21 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kullanıcılar</title>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- axios kütüphanesini ekleyin -->
-   
-  
+  <title>Kullanıcı Bilgileri</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-  <h1>Kullanıcı Listesi</h1>
-  <div id="userList"></div>
-  <p></p>
+  <h1>Kullanıcı Bilgileri</h1>
+  <div id="userDetails">
+    <table>
+      <tbody>
+        <tr>
+          <th class="ps-0" scope="row" id="userName">User Name :</th>
+          <td id="userNameValue"></td>
+        </tr>
+        <tr>
+          <th class="ps-0" scope="row" id="firstName">First Name :</th>
+          <td id="firstNameValue"></td>  
+        </tr>
+        <tr>
+          <th class="ps-0" scope="row" id="LastName">Last Name :</th>
+          <td id="lastNameValue"></td>
+        </tr>
+        <tr>
+          <th class="ps-0" scope="row" id="lastName">Last Login :</th>
+          <td id="lastLoginValue"></td>
+        </tr>
+        <tr>
+          <th class="ps-0" scope="row" id="email">E-mail :</th>
+          <td id="emailValue"></td>
+        </tr>
+        <tr>
+          <th class="ps-0" scope="row" id="companyName">Company Name :</th>
+          <td id="companyNameValue"></td>
+        </tr>
+        <tr>
+          <th class="ps-0" scope="row" id="userType">User Type :</th>
+          <td id="userTypeValue"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const userToken = localStorage.getItem("token");
+      const apiUrl = "http://backend.norbit.com.tr/accounts/user/";
 
-      const apiUrl = "http://backend.norbit.com.tr/ems/list/";
       axios({
         method: "get",
         url: apiUrl,
@@ -25,23 +55,19 @@
           Authorization: `Token ${userToken}`
         }
       }).then((response) => {
-        const user = response.data;
-        const userList = document.getElementById("userList");
-        
-          const userItem = document.createElement("div");
-          const userHTML = `
-          <p>Username: ${user.username}</p>
-          <p>User Type: ${user.user_type}</p>
-        `;
-          userItem.innerHTML=userHTML;
-          userList.appendChild(userItem);        
-          // console.log(userItem)
-
+        const userDetails = response.data.results; 
+         console.log(userDetails)
+        // document.getElementById("userNameValue").textContent = userDetails.username;
+        // document.getElementById("firstNameValue").textContent = userDetails.first_name;
+        // document.getElementById("lastNameValue").textContent = userDetails.last_name;
+        // document.getElementById("lastLoginValue").textContent = userDetails.last_login;
+        // document.getElementById("emailValue").textContent = userDetails.email;
+        // document.getElementById("companyNameValue").textContent = userDetails.company_name;
+        // document.getElementById("userTypeValue").textContent = userDetails.user;
       }).catch((error) => {
         console.log(error);
       });
     });
   </script>
-
 </body>
 </html>

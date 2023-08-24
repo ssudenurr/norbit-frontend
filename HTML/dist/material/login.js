@@ -71,5 +71,5 @@ function userControl() {
   if (token) {
     window.location.href = "homePage.html";
   }
-  window.alert(token)
+
 }
