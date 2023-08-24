@@ -30,6 +30,7 @@
     <link href="assets/css/custom.min.css" rel="stylesheet" type="text/css" />
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
 
@@ -134,7 +135,7 @@
                                 <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
                                 <h6 class="dropdown-header">Welcome Anna!</h6>
-                                <a class="dropdown-item" href="profilePages.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profiles</span></a>
+                                <a class="dropdown-item" href="profilePage.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profiles</span></a>
                                 <a class="dropdown-item" ><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout" id="logout">Logout</span></a>
                                 </div>
                             </div>
@@ -290,40 +291,64 @@
             <div class="card">
                 <div class="card-body">
                     <h2 class="card-title mb-3">Kişi Bilgileri</h2>
-                    <div id="userDetails">
-                        <table>
-                          <tbody>
-                            <tr>
-                              <th class="ps-0" scope="row" id="userName">User Name :</th>
-                              <td id="userNameValue"></td>
-                            </tr>
-                            <tr>
-                              <th class="ps-0" scope="row" id="firstName">First Name :</th>
-                              <td id="firstNameValue"></td>  
-                            </tr>
-                            <tr>
-                              <th class="ps-0" scope="row" id="LastName">Last Name :</th>
-                              <td id="lastNameValue"></td>
-                            </tr>
-                            <tr>
-                              <th class="ps-0" scope="row" id="lastName">Last Login :</th>
-                              <td id="lastLoginValue"></td>
-                            </tr>
-                            <tr>
-                              <th class="ps-0" scope="row" id="email">E-mail :</th>
-                              <td id="emailValue"></td>
-                            </tr>
-                            <tr>
-                              <th class="ps-0" scope="row" id="companyName">Company Name :</th>
-                              <td id="companyNameValue"></td>
-                            </tr>
-                            <tr>
-                              <th class="ps-0" scope="row" id="userType">User Type :</th>
-                              <td id="userTypeValue"></td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                        <div id="userDetails">
+                            <a class="mdi mdi-pencil btn btn-success btn-m" id="updateBtn"></a>
+                            <div class="modal" id="updateModal" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Bilgi Güncelleme</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="updateForm">
+                                                <input type="text" id="newFirstName" >
+                                                <input type="text" id="newLastName">
+                                                <!-- Diğer güncellenecek alanlar buraya eklenebilir -->
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+
+                                            <button type="button" class="btn btn-primary" id="saveChangesBtn">Kaydet</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table>
+                                <tbody>
+                                    <tr>
+                                    <th class="ps-0" scope="row" id="userName">User Name :</th>
+                                    <td id="userNameValue"></td>
+                                    </tr>
+                                    <tr>
+                                    <th class="ps-0" scope="row" id="firstName">First Name :</th>
+                                    <td id="firstNameValue"></td>  
+                                    </tr>
+                                    <tr>
+                                    <th class="ps-0" scope="row" id="LastName">Last Name :</th>
+                                    <td id="lastNameValue"></td>
+                                    </tr>
+                                    <tr>
+                                    <th class="ps-0" scope="row" id="lastName">Last Login :</th>
+                                    <td id="lastLoginValue"></td>
+                                    </tr>
+                                    <tr>
+                                    <th class="ps-0" scope="row" id="email">E-mail :</th>
+                                    <td id="emailValue"></td>
+                                    </tr>
+                                    <tr>
+                                    <th class="ps-0" scope="row" id="companyName">Company Name :</th>
+                                    <td id="companyNameValue"></td>
+                                    </tr>
+                                    <tr>
+                                    <th class="ps-0" scope="row" id="userType">User Type :</th>
+                                    <td id="userTypeValue"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div>
@@ -352,7 +377,8 @@
     <!-- App js -->
     <script src="assets/js/app.js"></script>
     <script src="logout.js"></script>
-
+    <script src="profilePage.js"></script>
+    <script src="updateUserInfo.js"></script>
 </body>
 
 </html>

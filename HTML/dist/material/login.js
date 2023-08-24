@@ -3,34 +3,19 @@ document.addEventListener("DOMContentLoaded", function () {
 userControl();
   // loginForm.addEventListener("submit", function (event) {
   //   event.preventDefault();
-
-  //   const email = emailInput.value;
+  //   const username = usernameInput.value;
   //   const password = passwordInput.value;
 
-  //   if (email.trim() === "" || password.trim() === "") {
-  //     window.alert("Email ve şifre boş geçilemez");
+  //   if (username.trim() === "" || password.trim() === "") {
+  //     window.alert("Kullanıcı adı ve şifre boş geçilemez");
   //     return;
   //   }
 
   //   const data = {
-  //     email: email,
+  //     username: username,
   //     password: password,
   //   };
 
-  //   const apiUrl = "https://backend.fidauth.com/accounts/user/";
-
-  //   axios
-  //     .post(apiUrl, data)
-  //     .then((response) => {
-  //       console.log(JSON.stringify(response.data));
-        
-  //       // Kullanıcı girişi başarılı ise users.html sayfasına yönlendir
-  //       window.location.href = "users.html";
-  //     })
-  //     .catch(function (error) {
-  //       window.alert("API error:", error);
-  //       // Handle API request errors here
-  //     });
   // });
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password-input");
