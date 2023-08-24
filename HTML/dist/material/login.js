@@ -1,6 +1,6 @@
-userControl();
-document.addEventListener("DOMContentLoaded", function () {
 
+document.addEventListener("DOMContentLoaded", function () {
+userControl();
   // loginForm.addEventListener("submit", function (event) {
   //   event.preventDefault();
 
@@ -56,17 +56,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const userToken = response.data.key;
         localStorage.setItem('token',userToken);
         window.location.href = "homePage.html" 
-        
       }
 
     }).catch((error) => {
       console.log(error);
     });
   });
+
 })
 
 function userControl() {
-  
   const token = localStorage.getItem('token');
   if (token) {
     window.location.href = "homePage.html";
