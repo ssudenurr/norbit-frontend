@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", function () {
         const newFirstName = document.getElementById('newFirstName').value;
         const newLastName = document.getElementById('newLastName').value;
 
+        if (newFirstName.trim() === "" || newLastName.trim() === "") {
+            window.alert("Alanlar Boş Geçilemez");
+            return;
+        }        
+
         const updateData = {
             first_name: newFirstName,
             last_name: newLastName

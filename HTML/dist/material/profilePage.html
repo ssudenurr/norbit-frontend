@@ -351,7 +351,7 @@
                         </div>
                         <a class=" btn btn-success btn-m " id="updateBtn">Düzenle</a>
                         <button class="btn btn-danger btn-m" data-bs-target="#passwordModal"  data-bs-toggle="modal" id="changePassword">Şifreyi Değiştir</button>
-                        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true" data-backdrop="static">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
@@ -371,7 +371,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">Kapat</button>
-                                        <button type="button" class="btn btn-primary" id="submitPassword">Kaydet</button>                      
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  id="submitPassword">Kaydet</button>                      
                                     </div>
                                 </div>
                             </div>
