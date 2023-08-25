@@ -31,7 +31,7 @@
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -291,26 +291,23 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title mb-3">Kişi Bilgileri</h2>
+                    <h2 class="card-title mb-3 fs-2" >Kişi Bilgileri</h2>
+                        
                         <div id="userDetails">
-                            <a class="mdi mdi-pencil btn btn-success btn-m" id="updateBtn"></a>
                             <div class="modal" id="updateModal" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Bilgi Güncelleme</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <h5 class="modal-title">Bilgi Güncelleme</h5>                               
                                         </div>
                                         <div class="modal-body">
                                             <form id="updateForm">
-                                                <input type="text" id="newFirstName" >
-                                                <input type="text" id="newLastName">
-                                                <!-- Diğer güncellenecek alanlar buraya eklenebilir -->
+                                                <input type="text" id="newFirstName" placeholder="Yeni İsim" >
+                                                <input type="text" id="newLastName"placeholder="Yeni Soyisim" >                                            
                                             </form>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
-
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close">Kapat</button>
                                             <button type="button" class="btn btn-primary" id="saveChangesBtn">Kaydet</button>
                                         </div>
                                     </div>
@@ -320,36 +317,66 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                    <th class="ps-0" scope="row" id="userName">User Name :</th>
+                                    <th class="ps-0  fs-5" scope="row" id="userName">User Name :</th>
                                     <td id="userNameValue"></td>
                                     </tr>
                                     <tr>
-                                    <th class="ps-0" scope="row" id="firstName">First Name :</th>
+                                    <th class="ps-0 fs-5" scope="row" id="firstName">First Name :</th>
                                     <td id="firstNameValue"></td>  
                                     </tr>
                                     <tr>
-                                    <th class="ps-0" scope="row" id="LastName">Last Name :</th>
+                                    <th class="ps-0 fs-5" scope="row" id="LastName">Last Name :</th>
                                     <td id="lastNameValue"></td>
                                     </tr>
                                     <tr>
-                                    <th class="ps-0" scope="row" id="lastName">Last Login :</th>
+                                    <th class="ps-0 fs-5" scope="row" id="lastName">Last Login :</th>
                                     <td id="lastLoginValue"></td>
                                     </tr>
                                     <tr>
-                                    <th class="ps-0" scope="row" id="email">E-mail :</th>
+                                    <th class="ps-0 fs-5" scope="row" id="email">E-mail :</th>
                                     <td id="emailValue"></td>
                                     </tr>
                                     <tr>
-                                    <th class="ps-0" scope="row" id="companyName">Company Name :</th>
+                                    <th class="ps-0 fs-5" scope="row" id="companyName">Company Name :</th>
                                     <td id="companyNameValue"></td>
                                     </tr>
                                     <tr>
-                                    <th class="ps-0" scope="row" id="userType">User Type :</th>
+                                    <th class="ps-0 fs-5" scope="row" id="userType">User Type :</th>
                                     <td id="userTypeValue"></td>
                                     </tr>
                                 </tbody>
                             </table>
+                            <br>
+                            <br>
                         </div>
+                        <a class=" btn btn-success btn-m " id="updateBtn">Düzenle</a>
+                        <button class="btn btn-danger btn-m" data-bs-target="#passwordModal"  data-bs-toggle="modal" id="changePassword">Şifreyi Değiştir</button>
+                        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="passwordModalLabel">Şifre Değiştir</h5>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="changePasswordForm">
+                                            <div class="form-group">
+                                                <label for="newPassword1">Yeni Şifre</label>
+                                                <input type="password" class="form-control" id="newPassword1" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="newPassword2">Yeni Şifre Tekrar</label>
+                                                <input type="password" class="form-control" id="newPassword2" required>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">Kapat</button>
+                                        <button type="button" class="btn btn-primary" id="submitPassword">Kaydet</button>                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                 </div><!-- end card body -->
             </div><!-- end card -->
         </div>

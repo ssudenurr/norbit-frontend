@@ -49,7 +49,9 @@ document.addEventListener("DOMContentLoaded", function () {
     saveChangesBtn.addEventListener('click', function () {
         updateUserInfo();
     });
-
+    document.getElementById('close').addEventListener('click', function() {
+        document.getElementById('updateModal').style.display = 'none';
+     });
     window.onload = function () {
         getUserInfo();
     };
