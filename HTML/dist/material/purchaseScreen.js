@@ -37,6 +37,60 @@
 //     description.value = '';
 
 // });
+function addPurchaseValue() {
+    console.log('hello');
+    const apiUrl = "http://backend.norbit.com.tr/purchase/list/";
+
+    axios({
+        method: 'get',
+        url: apiUrl,
+    })
+    .then(response => {
+        const purchaseData = response.data;
+        console.log(purchaseData);
+        populateTable(purchaseData.results); // Doğru veriyi gönder
+    })
+    .catch(error => {
+        console.error('Hata oluştu', error);
+        // Hata bildirimi sağlayabilirsiniz
+    });
+}
+
+function populateTable(purchaseData) {
+    const tableBody = document.getElementById('purchaseTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = ''; // Tabloyu temizle
+
+    purchaseData.forEach(item => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input class="form-check-input" type="checkbox" value=""></td>
+            <td>${item.user}</td>
+            <td>${item.productName}</td>
+            <td>${item.price}</td>
+            <td>${item.e_commerce_site}</td>
+            <td>${item.description}</td>
+        `;
+        tableBody.appendChild(newRow);
+    });
+}
+
+window.onload = function () {
+    addPurchaseValue();
+}
 
 
 
+// function populateTable(data) {
+//     document.getElementById('')
+// }
+
+
+    // axios.get(apiUrl)
+    //     .then(response => {
+    //         const purchaseData = response.data.results;
+    //         console.log(purchaseData);
+    //         populateTable(purchaseData);
+    //     })
+    //     .catch(error => {
+    //         console.log(error);
+    //     });
