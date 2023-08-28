@@ -1,6 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-userControl();
+// userControl();
 
 
   const usernameInput = document.getElementById("username");
@@ -49,10 +49,10 @@ userControl();
 
 })
 
-function userControl() {
-  const token = localStorage.getItem('token');
-  if (token) {
-    window.location.href = "homePage.html";
-  }
+// function userControl() {
+//   const token = localStorage.getItem('token');
+//   if (token) {
+//     window.location.href = "/homePage.html";
+//   }
 
-}
+// }
