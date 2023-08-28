@@ -39,38 +39,4 @@
 // });
 
 
-const addBtn = document.getElementById('addBtn');
-const productName = document.getElementById('productName');
-const price = document.getElementById('price');
-const link = document.getElementById('link');
-const description = document.getElementById('description');
-
-function addPurchaseValue(){
-    const apiUrl= "http://backend.norbit.com.tr/purchase/list/"
-
-
-axios ({
-    method:'get',
-    url: apiUrl,
-
-}).then((response)=>{
-
-    const purchaseData = response.data;
-    console.log(purchaseData)
-    purchaseDetails(purchaseData);
-
-}).catch((error) => {
-      console.log(error);
-    });
-}
-
-function purchaseDetails(){
-    document.getElementById('productName').textContent = purchaseData.productName;
-    document.getElementById('price').textContent = purchaseData.price;
-    document.getElementById('link').textContent = purchaseData.e_commerce_site;
-    document.getElementById('price').textContent = purchaseData.price;
-
-}
-
-
 
