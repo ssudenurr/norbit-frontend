@@ -1,3 +1,4 @@
+
 !(function () {
     var a,
       o,
@@ -1769,4 +1770,34 @@
     (window.onscroll = function () {
       scrollFunction();
     });
+
+    
+const userName = document.getElementById('userName')
+const userType = document.getElementById('userType')
+
+    const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+    const token  = localStorage.getItem('token');
+
+axios ({
+    method:'get',
+    url: apiUrl,
+    headers: {
+        "Authorization": `Token ${token}`
+    },
+}).then((response)=>{
+    const userData = response.data;
+    personalInfo(userData);
+    console.log(userData)
+}).catch((error) => {
+      console.log(error);
+    });
+
+function personalInfo(userData){
+    userName.textContent = userData.first_name + ' ' + userData.last_name;
+    userType.textContent = userData.user_type;
+}
+
+window.onload = function () {
+    personalInfo();
+};
   

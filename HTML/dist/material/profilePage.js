@@ -1,3 +1,4 @@
+
 function getUserInfo(){
     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
     const token  = localStorage.getItem('token');
@@ -11,6 +12,7 @@ axios ({
 }).then((response)=>{
     const userData = response.data;
     userDetails(userData);
+    console.log(userData)
 }).catch((error) => {
       console.log(error);
     });
@@ -24,6 +26,8 @@ function userDetails(userData){
     document.getElementById("companyNameValue").textContent = userData.company_name;
     document.getElementById("userTypeValue").textContent = userData.user_type;
 }
+
 window.onload = function () {
     getUserInfo();
+
 };

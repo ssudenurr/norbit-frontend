@@ -126,9 +126,9 @@
                                         <!-- <img class="rounded-circle header-profile-user"
                                             src="assets/images/users/avatar-1.jpg" alt="Header Avatar"> -->
                                         <span class="text-start ms-xl-2">
-                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">Anna Adame</span>
+                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="userName"></span>
                                             <span
-                                                class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text">Founder</span>
+                                                class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text" id="userType"></span>
                                         </span>
                                     </span>
                                 </button>
@@ -285,8 +285,8 @@
         <div class="container-fluid"> 
             <div class="col">
                 <div class="p-2">
-                    <h3 class="text-white mb-1" id="userName">Anna Adame</h3>
-                    <p class="text-white text-opacity-75" >Owner & Founder</p>
+                    <h3 class="text-white mb-1" id="userName"></h3>
+                    <p class="text-white text-opacity-75"></p>
                 </div>
             </div>
             <div class="card">
@@ -295,6 +295,7 @@
                         
                         <div id="userDetails">
                             <div class="modal" id="updateModal" tabindex="-1">
+                                
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
