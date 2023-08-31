@@ -76,6 +76,7 @@ function addPersonal(personalData){
         <td><input class = "form-check-input" type = "checkbox" value=""</td>
         <td>${item.first_name + ' ' + item.last_name}</td>
         <td>${item.job_title}</td>
+        <td class="is_active">${item.is_active}</td>
         <td>${item.date_joined}</td>
         <td>${item.company_name}</td>
         <td>${item.username}</td>
@@ -92,6 +93,15 @@ function addPersonal(personalData){
         
     })
 }
+const situationButton = document.getElementById('situation');
+const isActive = document.querySelectorAll('.is_active')
+
+situationButton('click',function(){
+    isActive.forEach(data => {
+        data.textContent = data.textContent === 'true' ? 'false' : 'true';
+    });
+
+})
 window.onload = function () {
     personalList();
 }
