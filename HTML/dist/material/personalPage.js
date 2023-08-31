@@ -7,10 +7,10 @@ const job = document.getElementById('inputJob');
 const entryDate = document.getElementById('inputDate');
 const company = document.getElementById('inputCompany');
 const username = document.getElementById('inputUsername');
-
+const tableBody = document.querySelector('#personalTable tbody')
 
 function addRowTable(fullName,job,status,entryDate,company,username){
-    const tableBody = document.querySelector('#personalTable tbody')
+
 
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
@@ -44,4 +44,55 @@ addBtn.addEventListener('click', function() {
 
 
 
+function personalList (){
+    const apiUrl = "http://backend.norbit.com.tr/ems/list/";
+    const token  = localStorage.getItem('token');
+
+    axios({
+        method: 'get',
+        url: apiUrl,
+        headers: {
+            "Authorization": `Token ${token}`
+        }
+    })
+    .then(response =>{
+        const personalData = response.data;
+        console.log(personalData)
+        addPersonal(personalData.results)
+    })
+    .catch(error => {
+        console.error('hata oluştu',error);
+    })
+}
+
+personalList();
+
+function addPersonal(personalData){
+    tableBody.innerHTML = '';
+
+    personalData.forEach(item => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML =  `
+        <td><input class = "form-check-input" type = "checkbox" value=""</td>
+        <td>${item.first_name + ' ' + item.last_name}</td>
+        <td>${item.job_title}</td>
+        <td>${item.date_joined}</td>
+        <td>${item.company_name}</td>
+        <td>${item.username}</td>
+        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
+        <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn"  data-bs-toggle="modal">Delete</button></td>
+        `;
+
+        // const deleteBtn = newRow.querySelector('.delete-btn');
+        // deleteBtn.addEventListener('click', function () {
+        //     const indexToDelete = this.getAttribute('data-index');
+        //     deleteRow(indexToDelete);
+        // });
+        tableBody.appendChild(newRow);
+        
+    })
+}
+window.onload = function () {
+    personalList();
+}
 
