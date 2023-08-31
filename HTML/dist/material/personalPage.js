@@ -1,7 +1,6 @@
 const addBtn = document.getElementById('addBtn')
 const deleteBtn = document.getElementById('deleteBtn')
 
-
 const fullName = document.getElementById('inputName');
 const job = document.getElementById('inputJob');
 const entryDate = document.getElementById('inputDate');
@@ -21,6 +20,8 @@ function addRowTable(fullName,job,status,entryDate,company,username){
     <td>${entryDate}</td>
     <td>${company}</td>
     <td>${username}</td>
+    <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
+    <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn"  data-bs-toggle="modal">Delete</button></td>
     `;
     tableBody.appendChild(newRow)
 }
