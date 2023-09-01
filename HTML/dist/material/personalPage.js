@@ -21,7 +21,7 @@ function addRowTable(fullName,job,status,entryDate,company,username){
     <td>${company}</td>
     <td>${username}</td>
     <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
-    <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn"  data-bs-toggle="modal">Delete</button></td>
+    <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn" data-bs-toggle="modal">Delete</button></td>
     `;
     tableBody.appendChild(newRow)
 }
