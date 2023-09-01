@@ -8,9 +8,7 @@ const company = document.getElementById('inputCompany');
 const username = document.getElementById('inputUsername');
 const tableBody = document.querySelector('#personalTable tbody')
 
-function addRowTable(fullName,job,status,entryDate,company,username){
-
-
+function addRowTable(fullName,job,status,entryDate,company,username){      //tabloya veri ekleme
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
     <td><input class="form-check-input" type="checkbox" value=""></td>
@@ -25,15 +23,37 @@ function addRowTable(fullName,job,status,entryDate,company,username){
     `;
     tableBody.appendChild(newRow)
 }
+
+
 addBtn.addEventListener('click', function() {
     const fullNameValue = fullName.value;
     const jobValue = job.value;
-    const status = "aktif";
-    const entryDateValue = entryDate.value;
-    const companyValue = company.value;
-    const usernameValue = username.value;
+    const apiUrl= "http://backend.norbit.com.tr/accounts/registration/"
+    const token  = localStorage.getItem('token');
+    
+    axios({
+        method:'post',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+        data: {
+            username:username,
+            user_type:job
+        }
+    }).then((response)=>{
+        addPersonal(username,job)
+        clearInput();
+    }).catch((error) => {
+          console.log(error);
+        });
 
-    addRowTable(fullNameValue, jobValue, status, entryDateValue, companyValue, usernameValue);
+
+    // const status = "aktif";
+    // const entryDateValue = entryDate.value;
+    // const companyValue = company.value;
+    // const usernameValue = username.value;
+
 
     fullName.value = '';
     job.value = '';
@@ -45,11 +65,11 @@ addBtn.addEventListener('click', function() {
 
 
 
-function personalList (){
+function personalList (){                    //backend içindeki personel bilgilerini alma
     const apiUrl = "http://backend.norbit.com.tr/ems/list/";
     const token  = localStorage.getItem('token');
 
-    axios({
+    axios({                                          
         method: 'get',
         url: apiUrl,
         headers: {
@@ -65,8 +85,6 @@ function personalList (){
         console.error('hata oluştu',error);
     })
 }
-
-personalList();
 
 function addPersonal(personalData){
     tableBody.innerHTML = '';
@@ -94,15 +112,15 @@ function addPersonal(personalData){
         
     })
 }
-const situationButton = document.getElementById('situation');
-const isActive = document.querySelectorAll('.is_active')
+// const situationButton = document.getElementById('situation');
+// const isActive = document.querySelectorAll('.is_active')
 
-situationButton('click',function(){
-    isActive.forEach(data => {
-        data.textContent = data.textContent === 'true' ? 'false' : 'true';
-    });
+// situationButton('click',function(){
+//     isActive.forEach(data => {
+//         data.textContent = data.textContent === 'true' ? 'false' : 'true';
+//     });
 
-})
+// })
 window.onload = function () {
     personalList();
 }
