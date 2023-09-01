@@ -2056,7 +2056,7 @@ progress {
   --vz-table-hover-color: #fff;
   --vz-card-title-color: var(--vz-heading-color);
   border-color: var(--vz-table-border-color);
-  font-size: 0.925rem;
+  font-size: 14px;
   font-family: Inter, sans-serif;
 }
 .table-dark {
