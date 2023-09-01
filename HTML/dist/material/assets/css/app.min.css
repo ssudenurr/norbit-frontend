@@ -858,6 +858,12 @@
     }
 }
 
+@media screen and (max-width: 900px) {
+    .main-content {
+        width:100%;
+    }
+}
+
 .page-content {
     padding: calc(70px + 1.5rem) calc(1.5rem * 0.5) 60px calc(1.5rem * 0.5);
 }
