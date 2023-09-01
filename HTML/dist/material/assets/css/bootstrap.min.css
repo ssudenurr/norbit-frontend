@@ -1914,6 +1914,7 @@ progress {
   color: var(--vz-table-color);
   vertical-align: top;
   border-color: var(--vz-table-border-color);
+
 }
 .table > :not(caption) > * > * {
   padding: 0.75rem 0.6rem;
@@ -2053,8 +2054,10 @@ progress {
   --vz-table-active-color: #fff;
   --vz-table-hover-bg: black;
   --vz-table-hover-color: #fff;
-  color: var(--vz-table-color);
+  --vz-card-title-color: var(--vz-heading-color);
   border-color: var(--vz-table-border-color);
+  font-size: 0.925rem;
+  font-family: Inter, sans-serif;
 }
 .table-dark {
   --vz-table-color: #fff;

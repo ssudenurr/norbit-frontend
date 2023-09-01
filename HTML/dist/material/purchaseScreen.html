@@ -328,7 +328,6 @@
                             <nav class="navbar navbar-expand-lg bg-body-tertiary">
                                 <div class="container-fluid">
                                     <a class="mdi mdi-filter btn btn-primary btn-m"></a>
-
                                     <div class="app-search d-flex" id="navbarSupportedContent">
                                         <form class="d-flex" role="search">
                                             <input class="form-control me-2" type="search" placeholder="Search"
@@ -345,42 +344,21 @@
                                     </div>
                                 </div>
                                 <tr>
-                                    <th scope="col"><input class="form-check-input" type="checkbox" value=""
-                                            id="flexCheckDefault"> #</th>
-                                    <th scope="col">İsteyen Kişi</th>                                    
-                                    <th scope="col">Ürün Adı</th>                                    
-                                    <th scope="col">Fiyat</th>                                    
-                                    <th scope="col">Link</th>
-                                    <th scope="col">Açıklama</th>
+                                    <th scope="col" style="width: 50px;">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
+                                        </div>
+                                    </th>
+                                    <th scope="sort">İsteyen Kişi</th>                                    
+                                    <th scope="sort">Ürün Adı</th>                                    
+                                    <th scope="sort">Fiyat</th>                                    
+                                    <th scope="sort">Link</th>
+                                    <th scope="sort">Açıklama</th>
                                 </tr>
                             </nav>
                         </thead>
                         <tbody>
-                            <!-- <tr>
-                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
-                                        id="flexCheckDefault"> 1</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <th scope="row"> <input class="form-check-input" type="checkbox" value=""
-                                        id="flexCheckDefault"> 2</th>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr> -->
-
                         </tbody>
-                    </table>
-                </div>
-            </div>
-        </table>
-    </div>
     <!-- JAVASCRIPT -->
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/libs/simplebar/simplebar.min.js"></script>

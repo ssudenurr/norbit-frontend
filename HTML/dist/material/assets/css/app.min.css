@@ -841,11 +841,15 @@
 .main-content {
     background-color:white;
     width: 75%;
-    border: 2px solid rgb(161, 160, 160);
-    margin-top: 85px;  
+    border-radius: 8px;
+    margin-top: 85px;
     min-height: 84vh;
     -webkit-transition: all 0.1s ease-out;
     transition: all 0.1s ease-out;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px;
 }
 
 @media (min-width: 768px) {
@@ -18722,14 +18726,14 @@ span.flatpickr-weekday {
     margin-left: 250px;
     margin-top: 70px;
 }
-.personalMenu {
+/* .personalMenu {
     padding: 20px;
     margin-top: 40px;
     margin-left: 250px;
     min-height: 90vh;
     -webkit-transition: all 0.1s ease-out;
     transition: all 0.1s ease-out;
-}
+} */
 
 #logout{
     cursor: pointer;
