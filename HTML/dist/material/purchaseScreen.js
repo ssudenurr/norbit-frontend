@@ -2,25 +2,31 @@
 const addBtn = document.getElementById('addBtn')
 
 const personName = document.getElementById('personName')
+const account = document.getElementById('account')
 const productName = document.getElementById('productName');
 const price = document.getElementById('price');
+const count = document.getElementById('count')
 const link = document.getElementById('link');
+const purchasingDate = document.getElementById('purchasingDate')
 const description = document.getElementById('description');
+
 
 const modalContent = document.getElementById('modalContent');
 
-function addRowTable(personName,productName,price,link,description,purchasingDate){
+function addRowTable(personNameValue,accountValue,productNameValue,priceValue,countValue,linkValue,purchasingValue,descriptionValue){
     const tableBody = document.querySelector('#purchaseTable tbody')
 
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
     <td><input class="form-check-input" type="checkbox" value=""></td>
-    <td>${personName}</td>
-    <td>${productName}</td>
-    <td>${price}</td>
-    <td>${link}</td>
-    <td>${description}</td>
-    <td>${purchasingDate}</td>
+    <td>${personNameValue}</td>
+    <td>${accountValue}</td>
+    <td>${productNameValue}</td>
+    <td>${priceValue}</td>
+    <td>${countValue}</td>
+    <td>${linkValue}</td>
+    <td>${purchasingValue}</td>
+    <td>${descriptionValue}</td>
     <td><button id="editBtn">Edit</button></td>
     <td><button id="deleteBtn">Delete</button></td>
     `;
@@ -33,14 +39,17 @@ function addRowTable(personName,productName,price,link,description,purchasingDat
 addBtn.addEventListener('click', function() {
     
     const personNameValue = personName.value;
+    const accountValue = account.value;
     const productNameValue = productName.value;
     const priceValue = price.value;
+    const countValue = count.value;
     const linkValue = link.value;
+    const purchasingValue = purchasingDate.value;
     const descriptionValue = description.value;
-    const purchasingDate = "2022-07-11T09:40:00Z"
+
 
     const apiUrl= "http://backend.norbit.com.tr/purchase-request/list/"
-    const token  = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     axios ({
         method:'post',
         url: apiUrl,
@@ -48,15 +57,17 @@ addBtn.addEventListener('click', function() {
             "Authorization": `Token ${token}`
         },
         data: {
-            personName: personNameValue,
+            owner: personNameValue,
+            account: accountValue,
             product_name: productNameValue,
             price: priceValue,
+            count: countValue,
             e_commerce_site: linkValue,
+            purchasing_date: purchasingValue,
             description: descriptionValue,    
-            purchasing_date:purchasingDate
         }
     }).then((response)=>{
-        addRowTable(personNameValue, productNameValue, priceValue, linkValue, descriptionValue,purchasingDate)
+        addRowTable(personNameValue, accountValue, productNameValue, priceValue,countValue, linkValue, purchasingValue,descriptionValue)
         clearInput();
     }).catch((error) => {
           console.log(error);
@@ -69,18 +80,24 @@ addBtn.addEventListener('click', function() {
 
 
 
-function openEditModal(personNameValue,productNameValue,priceValue,linkValue,descriptionValue){
+function openEditModal(personNameValue,accountValue,productNameValue,priceValue,countValue,linkValue,purchasingValue,descriptionValue){
     personName.value = personNameValue;
+    account.value = accountValue;
     productName.value = productNameValue;
     price.value = priceValue;
+    count.value = countValue;
     link.value = linkValue;
+    purchasingDate.value = purchasingValue;
     description.value = descriptionValue;
 }
 function clearInput(){
     personName.value = '';
+    account.value = '';
     productName.value = '';
     price.value = '';   
+    count.value = '';
     link.value = '';
+    purchasingDate.value = '';
     description.value = '';
 }
 
