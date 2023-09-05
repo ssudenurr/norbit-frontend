@@ -67,13 +67,26 @@ addBtn.addEventListener('click', function() {
         }
     }).then((response)=>{
         addRowTable(firstNameValue,lastNameValue, jobValue,userTypesValue, "Status", entryDateValue, "", companyValue, usernameValue, passwordValue);
-        getJobTitle()
-        // clearInput();
+        getJobTitle();
+        getCompanyName();
+        clearInput();
     }).catch((error) => {
           console.log(error);
         });
 
 });
+
+function clearInput() {
+    firsName.value = '';
+    lastName.value = '';
+    job.value = '';
+    userTypes.value = '';
+    entryDate.value = '';
+    company.value = '';
+    username.value = '';
+    password.value = '';
+};
+
 
 function getJobTitle() {
     const apiUrl= "http://backend.norbit.com.tr/jobs/list/"
@@ -94,7 +107,6 @@ function getJobTitle() {
 
         jobList.forEach((job) => {
             const option = document.createElement('option');
-
             option.text = job.job_title;
             jobTitleList.appendChild(option);
         });
@@ -131,19 +143,37 @@ const getJobTitleId  = async (job_id) => {
         return e
     }
 };
-
-
 getJobTitleId();
-function clearInput() {
-    firsName.value = '';
-    lastName.value = '';
-    job.value = '';
-    userTypes.value = '';
-    entryDate.value = '';
-    company.value = '';
-    username.value = '';
-    password.value = '';
-};
+
+function getCompanyName() {
+    const apiUrl= "http://backend.norbit.com.tr/company/list/"
+    const token  = localStorage.getItem('token');
+
+    axios({
+        method:'get',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+    }).then((response)=>{
+        const companyData = response.data.results;
+        console.log(companyData);
+
+        const companyList = document.getElementById('inputCompany')
+        companyList.innerHTML = '';
+
+        companyData.forEach((company) => {
+            const option = document.createElement('option');
+
+            option.text = company.company_name;
+            companyList.appendChild(option);
+        });
+
+    }).catch((error) => {
+          console.log(error);
+        });
+}
+
 
 const personalList = () => {    //backend içindeki personel bilgilerini alma
     const apiUrl = "http://backend.norbit.com.tr/ems/list/";
@@ -171,12 +201,13 @@ const addPersonal = async (personalData) => {
     // <td class="is_active">${item.is_active}</td>
     personalData.forEach(async  item => {
         const newRow = document.createElement('tr');
-        const job = getJobTitleId().then((job_name) => { return job_name })
+        const job = await getJobTitleId(item.job_title); 
+        // const job = getJobTitleId().then((job_name) => { return job_name })
         newRow.innerHTML =  `
         <td><input class = "form-check-input" type = "checkbox" value=""</td>
         <td>${item.first_name}</td>
         <td>${item.last_name}</td>
-        <td>${await getJobTitleId(item.job_title)}</td>
+        <td>${job}</td>
         <td>${item.user}</td>
         <td class="is_active">${item.is_active}</td>
         <td>${item.job_start_date}</td>
@@ -197,6 +228,7 @@ const addPersonal = async (personalData) => {
 window.addEventListener("load", (event) => {
     personalList();
     getJobTitle();
+    getCompanyName();
 });
 
         // const deleteBtn = newRow.querySelector('.delete-btn');
