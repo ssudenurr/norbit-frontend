@@ -1,7 +1,7 @@
 const addBtn = document.getElementById('addBtn')
 const deleteBtn = document.getElementById('deleteBtn')
 
-const firsName = document.getElementById('inputFirstame');
+const firstName = document.getElementById('inputFirstame');
 const lastName = document.getElementById('inputLastname');
 const job = document.getElementById('inputJob');
 const userTypes = document.getElementById('inputUserType');
@@ -13,11 +13,11 @@ const password = document.getElementById('inputPassword')
 
 const tableBody = document.querySelector('#personalTable tbody')
 
-function addRowTable(firsName, lastName, job, userTypes, status, entryDate, exitDate, company, username, password){      //tabloya veri ekleme
+function addRowTable(firstName, lastName, job, userTypes, status, entryDate, exitDate, company, username, password){      //tabloya veri ekleme
     const newRow = document.createElement('tr');
     newRow.innerHTML = `
     <td><input class="form-check-input" type="checkbox" value=""></td>
-    <td>${firsName}</td>
+    <td>${firstName}</td>
     <td>${lastName}</td>
     <td>${job}</td>
     <td>${userTypes}</td>
@@ -35,7 +35,7 @@ function addRowTable(firsName, lastName, job, userTypes, status, entryDate, exit
 
 
 addBtn.addEventListener('click', function() {
-    const firstNameValue = firsName.value;
+    const firstNameValue = firstName.value;
     const lastNameValue = lastName.value;
     const jobValue = job.value;
     const userTypesValue = userTypes.value;
@@ -48,6 +48,9 @@ addBtn.addEventListener('click', function() {
     const apiUrl= "http://backend.norbit.com.tr/accounts/registration/"
     const token  = localStorage.getItem('token');
     
+   
+    const transDate = new Date(entryDateValue)
+    console.log(transDate)
     axios({
         method:'post',
         url:apiUrl,
@@ -59,7 +62,7 @@ addBtn.addEventListener('click', function() {
             last_name:lastNameValue,
             job_title:jobValue,
             user_type:userTypesValue,
-            job_start_date:entryDateValue,
+            job_start_date:transDate,
             company_name:companyValue,
             username:usernameValue,
             password1:passwordValue,
@@ -77,7 +80,7 @@ addBtn.addEventListener('click', function() {
 });
 
 function clearInput() {
-    firsName.value = '';
+    firstName.value = '';
     lastName.value = '';
     job.value = '';
     userTypes.value = '';
@@ -100,13 +103,14 @@ function getJobTitle() {
         },
     }).then((response)=>{
         const jobList = response.data.results;
-        console.log(jobList);
+
         const jobTitleList = document.getElementById('inputJob')
 
         jobTitleList.innerHTML = '';
 
         jobList.forEach((job) => {
             const option = document.createElement('option');
+            option.value = job.id;
             option.text = job.job_title;
             jobTitleList.appendChild(option);
         });
@@ -143,7 +147,6 @@ const getJobTitleId  = async (job_id) => {
         return e
     }
 };
-getJobTitleId();
 
 function getCompanyName() {
     const apiUrl= "http://backend.norbit.com.tr/company/list/"
@@ -157,14 +160,13 @@ function getCompanyName() {
         },
     }).then((response)=>{
         const companyData = response.data.results;
-        console.log(companyData);
-
+        console.log(companyData)
         const companyList = document.getElementById('inputCompany')
         companyList.innerHTML = '';
 
         companyData.forEach((company) => {
             const option = document.createElement('option');
-
+            option.value = company.id;
             option.text = company.company_name;
             companyList.appendChild(option);
         });
@@ -174,7 +176,72 @@ function getCompanyName() {
         });
 }
 
+const getCompanyNameId  = async (id) => {
+    const apiUrl= `http://backend.norbit.com.tr/company/${id}/`
+    const token  = localStorage.getItem('token');
 
+    const api = new Promise((resolve, reject) => {
+        axios({
+            method:'get',
+            url:apiUrl,
+            headers:{ 
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const companyList = response.data.company_name;
+            console.log(companyList)
+            resolve(companyList)
+        }).catch((error) => {
+            reject("null")
+        });
+    });
+
+    try {
+        const response = await api;
+        return response;
+    }
+    catch (e) {
+        return e
+    }
+};
+// const deleteRow = async(id) =>{
+
+//     const apiUrl = `http://backend.norbit.com.tr/ems/employee/${id}/`;
+//     const token  = localStorage.getItem('token');
+
+//     const api = new Promise((resolve, reject) => {
+//         axios({
+//             method:'delete',
+//             url:apiUrl,
+//             headers:{ 
+//                 "Authorization": `Token ${token}`
+//             },
+//         }).then((response)=>{
+//             console.log(response.data)
+//             if (response.status === 204) {
+
+//                 const rowToRemove = findRowByIndex(indexToDelete);
+//                 if (rowToRemove) {
+//                     rowToRemove.remove();
+//                 }
+//             } else {
+//                 console.error('Satır silinemedi.');
+//             }
+//             resolve(dataList)
+//         }).catch((error) => {
+//             reject("null")
+//         });
+//     });
+
+//     try {
+//         const response = await api;
+//         return response;
+//     }
+//     catch (e) {
+//         return e
+//     }
+// }
+// deleteRow();
 const personalList = () => {    //backend içindeki personel bilgilerini alma
     const apiUrl = "http://backend.norbit.com.tr/ems/list/";
     const token  = localStorage.getItem('token');
@@ -188,7 +255,7 @@ const personalList = () => {    //backend içindeki personel bilgilerini alma
     })
     .then(response =>{
         const personalData = response.data.results;
-        console.log(personalData)
+
         addPersonal(personalData)
     })
     .catch(error => {
@@ -202,7 +269,7 @@ const addPersonal = async (personalData) => {
     personalData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const job = await getJobTitleId(item.job_title); 
-        // const job = getJobTitleId().then((job_name) => { return job_name })
+        const company = await getCompanyNameId(item.company_name);
         newRow.innerHTML =  `
         <td><input class = "form-check-input" type = "checkbox" value=""</td>
         <td>${item.first_name}</td>
@@ -212,7 +279,7 @@ const addPersonal = async (personalData) => {
         <td class="is_active">${item.is_active}</td>
         <td>${item.job_start_date}</td>
         <td>${item.job_end_date}</td>
-        <td>${item.company_name}</td>
+        <td>${company}</td>
         <td>${item.username}</td>
         <td>${item.password}</td>
         <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
@@ -225,17 +292,23 @@ const addPersonal = async (personalData) => {
     })
 };
 
+
+
+
+// deleteBtn.addEventListener('click', function () {
+//     const indexToDelete = this.getAttribute('data-index');
+//      deleteRow(indexToDelete);
+//  });
+
 window.addEventListener("load", (event) => {
     personalList();
     getJobTitle();
+    getJobTitleId();
     getCompanyName();
+    getCompanyNameId();
 });
 
-        // const deleteBtn = newRow.querySelector('.delete-btn');
-        // deleteBtn.addEventListener('click', function () {
-        //     const indexToDelete = this.getAttribute('data-index');
-        //     deleteRow(indexToDelete);
-        // });
+
 // const situationButton = document.getElementById('situation');
 // const isActive = document.querySelectorAll('.is_active')
 
