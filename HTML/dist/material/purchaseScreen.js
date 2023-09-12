@@ -91,6 +91,7 @@ function openEditModal(personNameValue,accountValue,productNameValue,priceValue,
     description.value = descriptionValue;
 }
 function clearInput(){
+
     personName.value = '';
     account.value = '';
     productName.value = '';
@@ -108,67 +109,67 @@ function clearInput(){
 
 
 
-// function addPurchaseValue() {
-//     const apiUrl = "http://backend.norbit.com.tr/purchase-request/list/";
-//     const token  = localStorage.getItem('token');
+function addPurchaseValue() {
+    const apiUrl = "http://backend.norbit.com.tr/purchase-request/list/";
+    const token  = localStorage.getItem('token');
 
-//     axios({
-//         method: 'get',
-//         url: apiUrl,
-//         headers: {
-//             "Authorization": `Token ${token}`
-//         },
-//     })
-//     .then(response => {
-//         const purchaseData = response.data;
-//         console.log(purchaseData); 
-//         populateTable(purchaseData.results); 
-//     })
-//     .catch(error => {
-//         console.error('Hata oluştu', error);
-//     });
-// }
+    axios({
+        method: 'get',
+        url: apiUrl,
+        headers: {
+            "Authorization": `Token ${token}`
+        },
+    })
+    .then(response => {
+        const purchaseData = response.data;
+        console.log(purchaseData); 
+        populateTable(purchaseData.results); 
+    })
+    .catch(error => {
+        console.error('Hata oluştu', error);
+    });
+}
 
-// function populateTable(purchaseData) {
-//     const tableBody = document.querySelector('#purchaseTable tbody')
-//     tableBody.innerHTML = ''; 
+function populateTable(purchaseData) {
+    const tableBody = document.querySelector('#purchaseTable tbody')
+    tableBody.innerHTML = ''; 
 
-//     purchaseData.forEach(item => {
-//         const newRow = document.createElement('tr');
-//         newRow.innerHTML = `
-//             <td><input class="form-check-input" type="checkbox" value=""></td>
-//             <td>${item.personName}</td>
-//             <td>${item.product_name}</td>
-//             <td>${item.price}</td>
-//             <td>${item.e_commerce_site}</td>
-//             <td>${item.description}</td>
-//             <td>${item.purchasing_date}</td>
-//             <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
-//             <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn"  data-bs-toggle="modal"   >Delete</button></td>
-//         `;
+    purchaseData.forEach(item => {
+        const newRow = document.createElement('tr');
+        newRow.innerHTML = `
+            <td><input class="form-check-input" type="checkbox" value=""></td>
+            <td>${item.personName}</td>
+            <td>${item.product_name}</td>
+            <td>${item.price}</td>
+            <td>${item.e_commerce_site}</td>
+            <td>${item.description}</td>
+            <td>${item.purchasing_date}</td>
+            <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
+            <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn"  data-bs-toggle="modal"   >Delete</button></td>
+        `;
 
-//         tableBody.appendChild(newRow);
+        tableBody.appendChild(newRow);
 
-//         const editBtns = document.querySelectorAll('.edit-btn'); 
-//         editBtns.forEach(editBtn => {
-//             editBtn.addEventListener('click', () => {    
-//                 modalContent.style.display = "block";
+        const editBtns = document.querySelectorAll('.edit-btn'); 
+        editBtns.forEach(editBtn => {
+            editBtn.addEventListener('click', () => {    
+                modalContent.style.display = "block";
               
-//                 const personNameValue = row.querySelector('.person-name').textContent;
-//                 const productNameValue = row.querySelector('.product-name').textContent;
-//                 const priceValue = row.querySelector('.price').textContent;
-//                 const linkValue = row.querySelector('.link').textContent;
-//                 const descriptionValue = row.querySelector('.description').textContent;
+                const personNameValue = row.querySelector('.person-name').textContent;
+                const productNameValue = row.querySelector('.product-name').textContent;
+                const priceValue = row.querySelector('.price').textContent;
+                const linkValue = row.querySelector('.link').textContent;
+                const descriptionValue = row.querySelector('.description').textContent;
                 
-//                 openEditModal(personNameValue, productNameValue, priceValue, linkValue, descriptionValue);
-//             });
-//         });
-//     });
-// }
+                openEditModal(personNameValue, productNameValue, priceValue, linkValue, descriptionValue);
+            });
+        });
+    });
+}
 
-// window.onload = function () {
-//     addPurchaseValue();
-// }
+window.onload = function () {
+    addPurchaseValue();
+}
 
 
 // personName.value = newRow.querySelector()

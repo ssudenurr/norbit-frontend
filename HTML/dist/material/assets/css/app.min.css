@@ -837,10 +837,12 @@
     padding: 0 15px 10px 15px;
     margin-top: 70px;
 }
-
-.main-content {
+.main-content{
+    width: 77%;
+}
+.table-content {
     background-color:white;
-    width: 75%;
+    width: 100%;
     border-radius: 8px;
     margin-top: 85px;
     min-height: 84vh;
@@ -854,7 +856,7 @@
 
 @media (min-width: 768px) {
     .main-content {
-        margin-left: 295px;
+        margin-left: 280px;
     }
 }
 

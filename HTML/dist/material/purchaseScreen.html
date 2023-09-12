@@ -282,8 +282,52 @@
     </div>
 
     <div class="main-content" id="mainContent" >
-        <table class="table">
-            <div class="buttons">
+        <div class="table-content">
+            <div class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container">
+                    <a class="mdi mdi-filter btn btn-primary btn-m"></a>
+                    <div class="app-search d-flex" id="navbarSupportedContent">
+                        <form class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search"
+                                aria-label="Search">
+                            <button class="btn btn-dark" type="submit">Search</button>
+                        </form>
+                    </div>
+                    <div class="table-buttons">
+                        <a class="mdi mdi-thumb-up btn btn-success btn-mm"></a>
+                        <a class="mdi mdi-chevron-down btn btn-light btn-m"></a>
+                        <a class="mdi mdi-plus btn btn-info btn-m" id="add-btn" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"></a>
+
+                    </div>
+                </div>
+            </div>       
+            <div class="table">
+                <table class="table table-hover mb-0" id="purchaseTable">
+                    <thead class="table-light">
+                            <tr>
+                                <th scope="sort">ID</th> 
+                                <th scope="sort">İsteyen Kişi</th> 
+                                <th scope="sort">Sorumlu Kişi</th> 
+                                <th scope="sort">Durum</th>                                   
+                                <th scope="sort">Ürün Adı</th>                                    
+                                <th scope="sort">Fiyat</th>    
+                                <th scope="sort">Sayısı</th>                        
+                                <th scope="sort">Link</th>
+                                <th scope="sort">İstek Tarihi</th>
+                                <th scope="sort">Açıklama</th>
+                                <th scope="sort">Düzenleme</th>
+                            </tr>
+                        
+                    </thead>
+                    <tbody class="overflow-auto">
+                        <!-- datas come from js -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+            
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true" data-bs-backdrop="false">
                     <div class="modal-dialog">
@@ -321,7 +365,7 @@
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="inputAddress" class="form-label" >Sayısı</label>
-                                            <input type="url" class="form-control" id="count">
+                                            <input type="number" class="form-control" id="count">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="inputAddress2" class="form-label">İstek Tarihi</label>
@@ -340,52 +384,14 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
+                                <button type="button" class="btn btn-primary" id="editBtn">Ekle</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-hover " id="purchaseTable">
-                        <thead class="table-light">
-                            <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                                <div class="container">
-                                    <a class="mdi mdi-filter btn btn-primary btn-m"></a>
-                                    <div class="app-search d-flex" id="navbarSupportedContent">
-                                        <form class="d-flex" role="search">
-                                            <input class="form-control me-2" type="search" placeholder="Search"
-                                                aria-label="Search">
-                                            <button class="btn btn-dark" type="submit">Search</button>
-                                        </form>
-                                    </div>
-                                    <div class="table-buttons">
-                                        <a class="mdi mdi-thumb-up btn btn-success btn-mm"></a>
-                                        <a class="mdi mdi-chevron-down btn btn-light btn-m"></a>
-                                        <a class="mdi mdi-plus btn btn-info btn-m" id="add-btn" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal"></a>
+                </div>
+            
 
-                                    </div>
-                                </div>
-                                <tr>
-                                    <th scope="col" style="width: 50px;">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkAll" value="option">
-                                        </div>
-                                    </th>
-                                    <th scope="sort">İsteyen Kişi</th> 
-                                    <th scope="sort">Sorumlu Kişi</th> 
-                                    <th scope="sort">Durum</th>                                   
-                                    <th scope="sort">Ürün Adı</th>                                    
-                                    <th scope="sort">Fiyat</th>    
-                                    <th scope="sort">Sayısı</th>                        
-                                    <th scope="sort">Link</th>
-                                    <th scope="sort">İstek Tarihi</th>
-                                    <th scope="sort">Açıklama</th>
-                                    <th scope="sort">Düzenleme</th>
-                                </tr>
-                            </nav>
-                        </thead>
-                        <tbody class="overflow-auto">
-                            <!-- datas come from js -->
-                        </tbody>
     <!-- JAVASCRIPT -->
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/libs/simplebar/simplebar.min.js"></script>

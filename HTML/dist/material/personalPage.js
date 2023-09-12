@@ -1,5 +1,6 @@
 const addBtn = document.getElementById('addBtn')
-const deleteBtn = document.getElementById('deleteBtn')
+const editButton = document.getElementById('editBtn')
+editButton.style.display= 'none'
 
 const firstName = document.getElementById('inputFirstame');
 const lastName = document.getElementById('inputLastname');
@@ -27,14 +28,26 @@ function addRowTable(firstName, lastName, job, userTypes, status, entryDate, exi
     <td>${company}</td>
     <td>${username}</td>
     <td>${password}</td>
-    <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
-    <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn" data-bs-toggle="modal">Delete</button></td>
+    <td><button id="editBtn" class="btn btn-success btn-icon waves-effect waves-light edit-btn"data-user-id='${item.id} data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
+    <td><button class="btn btn-danger btn-icon waves-effect waves-light delete-btn" data-user-id='${item.id} ><i class="ri-delete-bin-5-line"></i></button></td>
+    
     `;
     tableBody.appendChild(newRow)
+
+    const deleteBtn = newRow.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', function () {
+    deleteRow(this);
+    });
+
+    const editBtn = newRow.querySelector('.edit-btn');
+    editBtn.addEventListener('click', function () {
+        window.location.search = '?type=edit'
+    editRow(this);
+});
 }
 
 
-addBtn.addEventListener('click', function() {
+addBtn.addEventListener('click', function() {  // BUTONA TIKLAYINCA MODAL İÇİNE GİRİLEN BİLGİLERİ TABLOYA EKLEME
     const firstNameValue = firstName.value;
     const lastNameValue = lastName.value;
     const jobValue = job.value;
@@ -50,7 +63,6 @@ addBtn.addEventListener('click', function() {
     
    
     const transDate = new Date(entryDateValue)
-    console.log(transDate)
     axios({
         method:'post',
         url:apiUrl,
@@ -69,7 +81,7 @@ addBtn.addEventListener('click', function() {
             password2:passwordValue
         }
     }).then((response)=>{
-        addRowTable(firstNameValue,lastNameValue, jobValue,userTypesValue, "Status", entryDateValue, "", companyValue, usernameValue, passwordValue);
+        addRowTable(firstNameValue,lastNameValue, jobValue,userTypesValue, "Status", entryDateValue, companyValue, usernameValue, passwordValue);
         getJobTitle();
         getCompanyName();
         clearInput();
@@ -79,7 +91,7 @@ addBtn.addEventListener('click', function() {
 
 });
 
-function clearInput() {
+function clearInput() {  // MODAL İÇİNE BİLGİ GİRİLİP ADD BUTONUNA BASILINCA KUTULARI TEMİZLEME
     firstName.value = '';
     lastName.value = '';
     job.value = '';
@@ -90,50 +102,29 @@ function clearInput() {
     password.value = '';
 };
 
+const deleteRow = async(delete_button) =>{     // iLGİLİ SATIRI SİLME
 
-function getJobTitle() {
-    const apiUrl= "http://backend.norbit.com.tr/jobs/list/"
-    const token  = localStorage.getItem('token');
-
-    axios({
-        method:'get',
-        url:apiUrl,
-        headers:{ 
-            "Authorization": `Token ${token}`
-        },
-    }).then((response)=>{
-        const jobList = response.data.results;
-
-        const jobTitleList = document.getElementById('inputJob')
-
-        jobTitleList.innerHTML = '';
-
-        jobList.forEach((job) => {
-            const option = document.createElement('option');
-            option.value = job.id;
-            option.text = job.job_title;
-            jobTitleList.appendChild(option);
-        });
-
-    }).catch((error) => {
-          console.log(error);
-        });
-}
-
-const getJobTitleId  = async (job_id) => {
-    const apiUrl= `http://backend.norbit.com.tr/jobs/${job_id}/`
+    userId = delete_button.getAttribute('data-user-id');
+    const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
     const token  = localStorage.getItem('token');
 
     const api = new Promise((resolve, reject) => {
         axios({
-            method:'get',
+            method:'delete',
             url:apiUrl,
             headers:{ 
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            const jobList = response.data.job_title;
-            resolve(jobList)
+            console.log(response.data)
+            if (response.status === 204) {
+
+                window.location.reload();
+               
+            } else {
+                console.error('Satır silinemedi.');
+            }
+            resolve(dataList)
         }).catch((error) => {
             reject("null")
         });
@@ -146,103 +137,122 @@ const getJobTitleId  = async (job_id) => {
     catch (e) {
         return e
     }
-};
-
-function getCompanyName() {
-    const apiUrl= "http://backend.norbit.com.tr/company/list/"
-    const token  = localStorage.getItem('token');
-
-    axios({
-        method:'get',
-        url:apiUrl,
-        headers:{ 
-            "Authorization": `Token ${token}`
-        },
-    }).then((response)=>{
-        const companyData = response.data.results;
-        console.log(companyData)
-        const companyList = document.getElementById('inputCompany')
-        companyList.innerHTML = '';
-
-        companyData.forEach((company) => {
-            const option = document.createElement('option');
-            option.value = company.id;
-            option.text = company.company_name;
-            companyList.appendChild(option);
-        });
-
-    }).catch((error) => {
-          console.log(error);
-        });
 }
 
-const getCompanyNameId  = async (id) => {
-    const apiUrl= `http://backend.norbit.com.tr/company/${id}/`
-    const token  = localStorage.getItem('token');
+function getRowData(userId){ 
 
-    const api = new Promise((resolve, reject) => {
+    userId = userId.getAttribute('data-user-id');
+    const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
+    const token  = localStorage.getItem('token');
         axios({
             method:'get',
             url:apiUrl,
             headers:{ 
                 "Authorization": `Token ${token}`
             },
-        }).then((response)=>{
-            const companyList = response.data.company_name;
-            console.log(companyList)
-            resolve(companyList)
+        })
+        .then((response)=>{
+            const userData = response.data
+            console.log(userData)
+
+            const nameData = userData.first_name;
+            const surnameData = userData.last_name;
+            const entryData = userData.job_start_date;
+            const jobData = userData.job_title;
+            const companyData = userData.company_name;
+            const typeData = userData.user;
+            const userNameData = userData.username;
+            const passwordData = userData.password;
+
+            firstName.value = nameData;
+            lastName.value = surnameData;
+            entryDate.value = entryData;
+            job.value = jobData;
+            company.value = companyData;
+            userTypes.value = typeData;
+            username.value = userNameData;
+            password.value = passwordData;
+
         }).catch((error) => {
-            reject("null")
+            console.error(`Edit button clicked for user with ID: ${userId}`)
         });
-    });
 
-    try {
-        const response = await api;
-        return response;
-    }
-    catch (e) {
-        return e
-    }
-};
-// const deleteRow = async(id) =>{
+}
+editButton.addEventListener('click',function(){
+    editRow
+})
+function editRow(userId){ 
 
-//     const apiUrl = `http://backend.norbit.com.tr/ems/employee/${id}/`;
-//     const token  = localStorage.getItem('token');
+    userId = userId.getAttribute('data-user-id');
+    const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
+    const token  = localStorage.getItem('token');
 
-//     const api = new Promise((resolve, reject) => {
-//         axios({
-//             method:'delete',
-//             url:apiUrl,
-//             headers:{ 
-//                 "Authorization": `Token ${token}`
-//             },
-//         }).then((response)=>{
-//             console.log(response.data)
-//             if (response.status === 204) {
+    const newFirstName = document.getElementById('inputFirstame');
+    const newLastName = document.getElementById('inputlastame');
+    const newEntryDate = document.getElementById('inputDate');
+    const newjob = document.getElementById('inputJob');
+    const newCompany = document.getElementById('inputCompany');
+    const newUserType = document.getElementById('inputUserType');
+    const newUsername = document.getElementById('inputUsername');
 
-//                 const rowToRemove = findRowByIndex(indexToDelete);
-//                 if (rowToRemove) {
-//                     rowToRemove.remove();
-//                 }
-//             } else {
-//                 console.error('Satır silinemedi.');
-//             }
-//             resolve(dataList)
-//         }).catch((error) => {
-//             reject("null")
-//         });
-//     });
+        axios({
+            method:'patch',
+            url:apiUrl,
+            headers:{ 
+                "Authorization": `Token ${token}`
+            },
+            data:{
+                first_name:newFirstName,
+                last_name:newLastName,
+                job_start_date:newEntryDate,
+                job_title:newjob ,
+                company_name:newCompany,
+                user:newUserType ,
+                username:newUsername,
+        
+            }
+        })
+        .then((response)=>{
+            const userData = response.data
+            console.log(userData)
 
-//     try {
-//         const response = await api;
-//         return response;
-//     }
-//     catch (e) {
-//         return e
-//     }
-// }
-// deleteRow();
-const personalList = () => {    //backend içindeki personel bilgilerini alma
+            getRowData(nameData,surnameData,entryData,jobData,companyData,typeData,userNameData,passwordData)
+
+            // const nameData = userData.first_name;
+            // const surnameData = userData.last_name;
+            // const entryData = userData.job_start_date;
+            // const jobData = userData.job_title;
+            // const companyData = userData.company_name;
+            // const typeData = userData.user;
+            // const userNameData = userData.username;
+            // const passwordData = userData.password;
+
+
+        }).catch((error) => {
+            console.error(`Edit button clicked for user with ID: ${userId}`)
+        });
+
+}
+
+            // firstName.value = nameData;
+            // lastName.value = surnameData;
+            // entryDate.value = entryData;
+            // job.value = jobData;
+            // company.value = companyData;
+            // userTypes.value = typeData;
+            // username.value = userNameData;
+            // password.value = passwordData;
+
+            
+            // userData.first_name.value = nameData;
+            // userData.last_name.value = surnameData;
+            // userData.job_start_date = entryData;
+            // userData.job_title = jobData;
+            // userData.company_name = companyData;
+            // userData.user = typeData;
+            // userData.username = userNameData;
+            // userData.password = passwordData;
+const personalList = () => {    // APİDEN GELEN KİŞİ BİLGİLERİNİ ALMA 
     const apiUrl = "http://backend.norbit.com.tr/ems/list/";
     const token  = localStorage.getItem('token');
        
@@ -282,23 +292,144 @@ const addPersonal = async (personalData) => {
         <td>${company}</td>
         <td>${item.username}</td>
         <td>${item.password}</td>
-        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
-        <td><button id="deleteBtn" class="btn btn-danger btn-sm delete-btn"  data-bs-toggle="modal">Delete</button></td>
+        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn"  data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
+        <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
 
-
         tableBody.appendChild(newRow);
-        
-    })
+        const deleteBtn = newRow.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', function () {
+            deleteRow(this);
+        });
+
+        const editBtn = newRow.querySelector('.edit-btn');
+        editBtn.addEventListener('click', function () {
+            addBtn.style.display = 'none'
+            editButton.style.display = 'block'
+            getRowData(this);
+
+        });
+    });
+};    
+
+
+
+
+function getJobTitle() {     // ÇALIŞAN ÜNVANLARINI ALMA
+    const apiUrl= "http://backend.norbit.com.tr/jobs/list/"
+    const token  = localStorage.getItem('token');
+
+    axios({
+        method:'get',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+    }).then((response)=>{
+        const jobList = response.data.results;
+
+        const jobTitleList = document.getElementById('inputJob')
+
+        jobTitleList.innerHTML = '';
+
+        jobList.forEach((job) => {
+            const option = document.createElement('option');
+            option.value = job.id;
+            option.text = job.job_title;
+            jobTitleList.appendChild(option);
+        });
+
+    }).catch((error) => {
+          console.log(error);
+        });
+}
+
+const getJobTitleId  = async (job_id) => {    //ÜNVANLARIN İD DEĞERLERİNİ ALMA 
+    const apiUrl= `http://backend.norbit.com.tr/jobs/${job_id}/`
+    const token  = localStorage.getItem('token');
+
+    const api = new Promise((resolve, reject) => {
+        axios({
+            method:'get',
+            url:apiUrl,
+            headers:{ 
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const jobList = response.data.job_title;
+            resolve(jobList)
+        }).catch((error) => {
+            reject("null")
+        });
+    });
+
+    try {
+        const response = await api;
+        return response;
+    }
+    catch (e) {
+        return e
+    }
+};
+
+function getCompanyName() {      // ŞİRKET İSİMLERİNİ ALMA
+    const apiUrl= "http://backend.norbit.com.tr/company/list/"
+    const token  = localStorage.getItem('token');
+
+    axios({
+        method:'get',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+    }).then((response)=>{
+        const companyData = response.data.results;
+        console.log(companyData)
+        const companyList = document.getElementById('inputCompany')
+        companyList.innerHTML = '';
+
+        companyData.forEach((company) => {
+            const option = document.createElement('option');
+            option.value = company.id;
+            option.text = company.company_name;
+            companyList.appendChild(option);
+        });
+
+    }).catch((error) => {
+          console.log(error);
+        });
+}
+
+const getCompanyNameId  = async (id) => {    // ŞİRKET İSİMLERİNİN İD DEĞERLERİNİ ALMA 
+    const apiUrl= `http://backend.norbit.com.tr/company/${id}/`
+    const token  = localStorage.getItem('token');
+
+    const api = new Promise((resolve, reject) => {
+        axios({
+            method:'get',
+            url:apiUrl,
+            headers:{ 
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const companyList = response.data.company_name;
+            console.log(companyList)
+            resolve(companyList)
+        }).catch((error) => {
+            reject("null")
+        });
+    });
+
+    try {
+        const response = await api;
+        return response;
+    }
+    catch (e) {
+        return e
+    }
 };
 
 
-
-
-// deleteBtn.addEventListener('click', function () {
-//     const indexToDelete = this.getAttribute('data-index');
-//      deleteRow(indexToDelete);
-//  });
 
 window.addEventListener("load", (event) => {
     personalList();
