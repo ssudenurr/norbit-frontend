@@ -1,6 +1,6 @@
-const addBtn = document.getElementById('addBtn')
-const editButton = document.getElementById('editBtn')
-editButton.style.display= 'none'
+
+const addRowButton = document.getElementById('add-btn')
+const modaltitle = document.getElementById('exampleModalLabel')
 
 const firstName = document.getElementById('inputFirstame');
 const lastName = document.getElementById('inputLastname');
@@ -10,86 +10,96 @@ const entryDate = document.getElementById('inputDate');
 const exitDate = document.getElementById('inputExitDate');
 const company = document.getElementById('inputCompany');
 const username = document.getElementById('inputUsername');
-const password = document.getElementById('inputPassword')
+const password = document.getElementById('inputPassword');
 
-const tableBody = document.querySelector('#personalTable tbody')
+const tableBody = document.querySelector('#personalTable tbody');
+const modalButtonBox = document.getElementById('button-box');
 
-function addRowTable(firstName, lastName, job, userTypes, status, entryDate, exitDate, company, username, password){      //tabloya veri ekleme
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-    <td><input class="form-check-input" type="checkbox" value=""></td>
-    <td>${firstName}</td>
-    <td>${lastName}</td>
-    <td>${job}</td>
-    <td>${userTypes}</td>
-    <td>${status}</td>
-    <td>${entryDate}</td>
-    <td>${exitDate}</td>
-    <td>${company}</td>
-    <td>${username}</td>
-    <td>${password}</td>
-    <td><button id="editBtn" class="btn btn-success btn-icon waves-effect waves-light edit-btn"data-user-id='${item.id} data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
-    <td><button class="btn btn-danger btn-icon waves-effect waves-light delete-btn" data-user-id='${item.id} ><i class="ri-delete-bin-5-line"></i></button></td>
-    
+const inputExitDate = document.getElementById('input-exit-date');
+
+
+addRowButton.addEventListener('click', () => {
+    clearInput();
+    inputExitDate.style.display = 'none'
+    modalButtonBox.innerHTML += `
+    <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPersonel()'>Ekle</button>
     `;
-    tableBody.appendChild(newRow)
 
-    const deleteBtn = newRow.querySelector('.delete-btn');
-    deleteBtn.addEventListener('click', function () {
-    deleteRow(this);
-    });
 
-    const editBtn = newRow.querySelector('.edit-btn');
-    editBtn.addEventListener('click', function () {
-        window.location.search = '?type=edit'
-    editRow(this);
-});
+})
+
+const closeBtn = document.getElementById('btn-close');
+closeBtn.addEventListener('click', () => {
+    modalButtonBox.innerHTML = ''
+})
+
+function createEditButton(userId){ 
+    document.getElementById('job-date').style.display = 'none'
+    // document.getElementById('duty').style.width = '2000px'
+    inputExitDate.style.display = 'block'
+    modalButtonBox.innerHTML += `
+        <button type="button" class="btn btn-primary" id="row-edit-btn" onclick='editPersonel(${userId})'>Düzenle</button>
+    `;   
+
+    modaltitle.innerHTML = "Personel Düzenleme Formu"
+    getRowData(userId)
 }
 
-
-addBtn.addEventListener('click', function() {  // BUTONA TIKLAYINCA MODAL İÇİNE GİRİLEN BİLGİLERİ TABLOYA EKLEME
-    const firstNameValue = firstName.value;
-    const lastNameValue = lastName.value;
-    const jobValue = job.value;
-    const userTypesValue = userTypes.value;
-    // const statusValue = 
-    const entryDateValue = entryDate.value;
-    const companyValue = company.value;
-    const usernameValue = username.value;
-    const passwordValue = password.value;
+function createPersonel(){
+    // create new personel
 
     const apiUrl= "http://backend.norbit.com.tr/accounts/registration/"
-    const token  = localStorage.getItem('token');
-    
-   
-    const transDate = new Date(entryDateValue)
-    axios({
-        method:'post',
-        url:apiUrl,
-        headers:{ 
-            "Authorization": `Token ${token}`
-        },
-        data: {
-            first_name:firstNameValue,
-            last_name:lastNameValue,
-            job_title:jobValue,
-            user_type:userTypesValue,
-            job_start_date:transDate,
-            company_name:companyValue,
-            username:usernameValue,
-            password1:passwordValue,
-            password2:passwordValue
-        }
-    }).then((response)=>{
-        addRowTable(firstNameValue,lastNameValue, jobValue,userTypesValue, "Status", entryDateValue, companyValue, usernameValue, passwordValue);
-        getJobTitle();
-        getCompanyName();
-        clearInput();
-    }).catch((error) => {
-          console.log(error);
-        });
+        const token  = localStorage.getItem('token');
+        
+       
+        const transDate = new Date(entryDate.value)
+        axios({
+            method:'post',
+            url:apiUrl,
+            headers:{ 
+                "Authorization": `Token ${token}`
+            },
+            data: {
+                first_name:firstName.value,
+                last_name:lastName.value,
+                job_title:job.value,
+                user_type:userTypes.value,
+                job_start_date:transDate,
+                company_name:company.value,
+                username:username.value,
+                password1:password.value,
+                password2:password.value
+            }
+        }).then((response)=>{
 
-});
+            getJobTitle();
+            getCompanyName();
+            clearInput();
+            window.location.reload();
+        }).catch((error) => {
+              console.log(error);
+            });
+    
+
+
+}
+
+function getModalValues(){
+    // get modal input values
+    const data = {
+        "firstName": firstName.value,
+        "lastName": lastName.value,
+        "job": job.value,
+        "userType" : userTypes.value,
+        "entryDate": entryDate.value,
+        "exitDate":exitDate.value,
+        "company": company.value,
+        "username": username.value,
+        // "password": password.value
+    }
+    return data;
+
+}
 
 function clearInput() {  // MODAL İÇİNE BİLGİ GİRİLİP ADD BUTONUNA BASILINCA KUTULARI TEMİZLEME
     firstName.value = '';
@@ -99,7 +109,7 @@ function clearInput() {  // MODAL İÇİNE BİLGİ GİRİLİP ADD BUTONUNA BASIL
     entryDate.value = '';
     company.value = '';
     username.value = '';
-    password.value = '';
+    // password.value = '';
 };
 
 const deleteRow = async(delete_button) =>{     // iLGİLİ SATIRI SİLME
@@ -140,8 +150,7 @@ const deleteRow = async(delete_button) =>{     // iLGİLİ SATIRI SİLME
 }
 
 function getRowData(userId){ 
-
-    userId = userId.getAttribute('data-user-id');
+    // get current row user's data 
     const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
     const token  = localStorage.getItem('token');
         axios({
@@ -154,47 +163,44 @@ function getRowData(userId){
         .then((response)=>{
             const userData = response.data
             console.log(userData)
-
             const nameData = userData.first_name;
             const surnameData = userData.last_name;
-            const entryData = userData.job_start_date;
+            const exitData = userData.job_end_date;
             const jobData = userData.job_title;
             const companyData = userData.company_name;
             const typeData = userData.user;
-            const userNameData = userData.username;
-            const passwordData = userData.password;
+            const userNameData = userData.username
+
+            const transDate = new Date(exitData);
+
 
             firstName.value = nameData;
             lastName.value = surnameData;
-            entryDate.value = entryData;
+            exitDate.value = transDate;
             job.value = jobData;
             company.value = companyData;
             userTypes.value = typeData;
             username.value = userNameData;
-            password.value = passwordData;
+
 
         }).catch((error) => {
             console.error(`Edit button clicked for user with ID: ${userId}`)
         });
 
 }
-editButton.addEventListener('click',function(){
-    editRow
-})
-function editRow(userId){ 
 
-    userId = userId.getAttribute('data-user-id');
-    const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
+function editPersonel(userID){ 
+    const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userID}/`; 
     const token  = localStorage.getItem('token');
 
     const newFirstName = document.getElementById('inputFirstame');
-    const newLastName = document.getElementById('inputlastame');
-    const newEntryDate = document.getElementById('inputDate');
+    const newLastName = document.getElementById('inputLastname');
+    const newExitDate = document.getElementById('inputExitDate');
     const newjob = document.getElementById('inputJob');
     const newCompany = document.getElementById('inputCompany');
     const newUserType = document.getElementById('inputUserType');
     const newUsername = document.getElementById('inputUsername');
-
+    const newPassword = document.getElementById('inputPassword')
         axios({
             method:'patch',
             url:apiUrl,
@@ -202,56 +208,28 @@ function editRow(userId){
                 "Authorization": `Token ${token}`
             },
             data:{
-                first_name:newFirstName,
-                last_name:newLastName,
-                job_start_date:newEntryDate,
-                job_title:newjob ,
-                company_name:newCompany,
-                user:newUserType ,
-                username:newUsername,
+                first_name:newFirstName.value,
+                last_name:newLastName.value,
+                job_title:newjob.value,
+                user:newUserType.value,
+                job_end_date:new Date(newExitDate.value),
+                company_name:newCompany.value,  
+                username:newUsername.value,
+                password1:newPassword.value,
+                password2:newPassword.value,
         
             }
         })
         .then((response)=>{
-            const userData = response.data
-            console.log(userData)
-
-            getRowData(nameData,surnameData,entryData,jobData,companyData,typeData,userNameData,passwordData)
-
-            // const nameData = userData.first_name;
-            // const surnameData = userData.last_name;
-            // const entryData = userData.job_start_date;
-            // const jobData = userData.job_title;
-            // const companyData = userData.company_name;
-            // const typeData = userData.user;
-            // const userNameData = userData.username;
-            // const passwordData = userData.password;
-
+            // const userData = response.data
+            window.location.reload();   
 
         }).catch((error) => {
-            console.error(`Edit button clicked for user with ID: ${userId}`)
+            console.error(`ID: ${userID}`)
         });
 
 }
-
-            // firstName.value = nameData;
-            // lastName.value = surnameData;
-            // entryDate.value = entryData;
-            // job.value = jobData;
-            // company.value = companyData;
-            // userTypes.value = typeData;
-            // username.value = userNameData;
-            // password.value = passwordData;
-
             
-            // userData.first_name.value = nameData;
-            // userData.last_name.value = surnameData;
-            // userData.job_start_date = entryData;
-            // userData.job_title = jobData;
-            // userData.company_name = companyData;
-            // userData.user = typeData;
-            // userData.username = userNameData;
-            // userData.password = passwordData;
 const personalList = () => {    // APİDEN GELEN KİŞİ BİLGİLERİNİ ALMA 
     const apiUrl = "http://backend.norbit.com.tr/ems/list/";
     const token  = localStorage.getItem('token');
@@ -266,16 +244,15 @@ const personalList = () => {    // APİDEN GELEN KİŞİ BİLGİLERİNİ ALMA
     .then(response =>{
         const personalData = response.data.results;
 
-        addPersonal(personalData)
+        showPersonal(personalData)
     })
     .catch(error => {
         console.error('hata oluştu',error);
     })
 };
 
-const addPersonal = async (personalData) => {
+const showPersonal = async (personalData) => {
     tableBody.innerHTML = '';
-    // <td class="is_active">${item.is_active}</td>
     personalData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const job = await getJobTitleId(item.job_title); 
@@ -286,13 +263,11 @@ const addPersonal = async (personalData) => {
         <td>${item.last_name}</td>
         <td>${job}</td>
         <td>${item.user}</td>
-        <td class="is_active">${item.is_active}</td>
         <td>${item.job_start_date}</td>
         <td>${item.job_end_date}</td>
         <td>${company}</td>
         <td>${item.username}</td>
-        <td>${item.password}</td>
-        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn"  data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
+        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
 
@@ -300,14 +275,6 @@ const addPersonal = async (personalData) => {
         const deleteBtn = newRow.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', function () {
             deleteRow(this);
-        });
-
-        const editBtn = newRow.querySelector('.edit-btn');
-        editBtn.addEventListener('click', function () {
-            addBtn.style.display = 'none'
-            editButton.style.display = 'block'
-            getRowData(this);
-
         });
     });
 };    
@@ -384,7 +351,7 @@ function getCompanyName() {      // ŞİRKET İSİMLERİNİ ALMA
         },
     }).then((response)=>{
         const companyData = response.data.results;
-        console.log(companyData)
+
         const companyList = document.getElementById('inputCompany')
         companyList.innerHTML = '';
 
@@ -413,7 +380,6 @@ const getCompanyNameId  = async (id) => {    // ŞİRKET İSİMLERİNİN İD DE�
             },
         }).then((response)=>{
             const companyList = response.data.company_name;
-            console.log(companyList)
             resolve(companyList)
         }).catch((error) => {
             reject("null")

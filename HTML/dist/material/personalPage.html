@@ -226,8 +226,8 @@
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
                                 aria-expanded="false" aria-controls="sidebarLayouts">
-                                <i class="mdi mdi-view-carousel-outline"></i> <span data-key="t-layouts">Datasheet
-                                    Ekranı</span>
+                                <i class="mdi mdi-view-carousel-outline"></i> <span data-key="t-layouts"> Projeler
+                                   </span>
                             </a>
 
                         </li>
@@ -309,12 +309,10 @@
                             <th scope="col">Soyad</th>
                             <th scope="col">Görevi</th>
                             <th scope="col">Kullanıcı Tipi</th>
-                            <th scope="col">Durum</th>
                             <th scope="col">İşe Giriş Tarihi</th>
                             <th scope="col">İşten Çıkış Tarihi</th>
                             <th scope="col">Şirketi</th>
-                            <th scope="col">Username</th>
-                            <th scope="col">Şifre</th>       
+                            <th scope="col">Username</th>    
                             <th scope="col">Düzenleme</th>
                             <th scope="col"></th>
 
@@ -334,7 +332,7 @@
         <div class="modal-content" id="modalContent">
             <div class="modal-header ">
                 <h1 class="modal-title fs-5" id="exampleModalLabel">Personel Oluşturma Formu</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                <button type="button" class="btn-close" id='btn-close' data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body " id="modalBody">
@@ -351,19 +349,19 @@
       
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="job-date">
                             <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
                             <input type="date" class="form-control" id="inputDate">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6" id="duty">
                             <label for="inputJob" class="form-label">Görevi</label>
                             <select type="text" class="form-select" id="inputJob">
                             </select>
                         </div>
-                        <!-- <div class="col-md-6">
+                        <div class="col-md-6" id="input-exit-date">
                             <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
                             <input type="date" class="form-control" id="inputExitDate">
-                        </div> -->
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
@@ -395,10 +393,10 @@
                 </form>
             </div>
             
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
-                <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+            <div class="modal-footer" id="button-box">
+                <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
+                <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button> -->
+                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button> -->
             </div>
         </div>
     </div>
