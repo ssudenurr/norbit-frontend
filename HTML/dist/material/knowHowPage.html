@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg"
     data-sidebar-image="none" data-preloader="disable">
 
@@ -31,7 +31,7 @@
 
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap/dist/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -52,20 +52,21 @@
                     <div class="d-flex">
                         <!-- LOGO -->
                         <div class="navbar-brand-box horizontal-logo">
-                            <a href="homePage.html " class="logo logo-dark">
-                                <span class="logo-sm">
+                            <a href="homePage.html" class="logo logo-dark">
+                                <span class="logo-sm" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="22">
+
                                 </span>
-                                <span class="logo-lg">
+                                <span class="logo-lg" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="17">
                                 </span>
                             </a>
 
-                            <a href="homePage.html" class="logo logo-light">
-                                <span class="logo-sm">
+                            <a href="homePage.html" class="logo logo-light" id="logo">
+                                <span class="logo-sm" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="22">
                                 </span>
-                                <span class="logo-lg">
+                                <span class="logo-lg" id="logo">
                                     <img src="assets/images/logo-removebg-preview.png" alt="" height="17">
                                 </span>
                             </a>
@@ -137,10 +138,8 @@
                                 <a class="dropdown-item" href="profilePage.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profiles</span></a>
                                 <a class="dropdown-item" ><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout" id="logout">Logout</span></a>
                                 
-                                
                                 </div>
                             </div>
-                        </div>
                     </div>
                 </div>
         </header>
@@ -148,7 +147,7 @@
         <!-- removeNotificationModal -->
         <div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" >
+                <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             id="NotificationModalbtn-close"></button>
@@ -178,19 +177,19 @@
             <div class="navbar-brand-box">
                 <!-- Dark Logo-->
                 <a href="homePage.html" class="logo logo-dark">
-                    <span class="logo-sm">
+                    <span class="logo-sm" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
-                    <span class="logo-lg">
+                    <span class="logo-lg" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
                 </a>
                 <!-- Light Logo-->
                 <a href="homePage.html" class="logo logo-light">
-                    <span class="logo-sm">
+                    <span class="logo-sm" id="logo" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
-                    <span class="logo-lg">
+                    <span class="logo-lg" id="logo" id="logo">
                         <img src="assets/images/logo-removebg-preview.png" alt="" height="35">
                     </span>
                 </a>
@@ -207,22 +206,22 @@
                     </div>
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link menu-link" id="homePage" href="homePage.html">
+                            <a class="nav-link menu-link" id="homePage" href="homePage.html" target="_self">
                                 <i class="mdi mdi-home"></i> <span data-key="t-dashboards">Home Page</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" id="buyScreen" href="purchaseScreen.html">
+                            <a class="nav-link menu-link" id="buyScreen" href="purchaseScreen.html" target="_self">
                                 <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Satın Alma İstek
                                     Ekranı</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" id="personalScreen" href="personalPage.html">
+                            <a class="nav-link menu-link" href="personalPage.html" target="_self">
                                 <i class="mdi mdi-account-multiple"></i> <span data-key="t-apps">Personel Ekranı</span>
                             </a>
-
                         </li>
+
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="#sidebarLayouts" data-bs-toggle="collapse" role="button"
@@ -274,113 +273,105 @@
 
 
     </div>
+
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                <div class="row">
+                <!-- start page title -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+                            <h4 class="mb-sm-0">Create Project</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Projects</a></li>
+                                    <li class="breadcrumb-item active">Create Project</li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title -->
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label" for="project-title-input">Problemin Konusu</label>
+                                    <input type="text" class="form-control" id="project-title-input" >
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label" for="project-thumbnail-img">Doküman</label>
+                                    <input class="form-control" id="project-thumbnail-img" type="file" >
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Açıklama</label>
+                                    <div id="ckeditor-classic">
+                                        <p>It will be as simple as occidental in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is. The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</p>
+                                        <ul>
+                                            <li>Product Design, Figma (Software), Prototype</li>
+                                            <li>Four Dashboards : Ecommerce, Analytics, Project etc.</li>
+                                            <li>Create calendar, chat and email app pages.</li>
+                                            <li>Add authentication pages</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                            <div class="text-end mb-4">
+                                <button type="submit" class="btn btn-danger w-sm">Delete</button>
+                                <button type="submit" class="btn btn-secondary w-sm">Edit</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- end col -->
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Tags</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="choices-categories-input" class="form-label">Categories</label>
+                                    <select class="form-select" data-choices data-choices-search-false id="choices-categories-input">
+                                        <option value="Designing" selected>Designing</option>
+                                        <option value="Development">Development</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="choices-text-input" class="form-label">Skills</label>
+                                    <input class="form-control" id="choices-text-input" data-choices data-choices-limit="Required Limit" placeholder="Enter Skills" type="text" value="UI/UX, Figma, HTML, CSS, Javascript, C#, Nodejs" />
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+
+                    </div>
+                    <!-- end col -->
+                </div>
+                <!-- end row -->
+                </div>
+            </div>
+            <!-- container-fluid -->
+        </div>
+    </div>
     <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
         <i class="ri-arrow-up-line"></i>
     </button>
     </div>
     </div>
 
-    <div class="main-content" id="mainContent">
-        <div class="container-fluid"> 
-            <div class="col">
-                <div class="p-2">
-                    <h3 class="text-white mb-1" id="userName"></h3>
-                    <p class="text-white text-opacity-75"></p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title mb-3 fs-2" >Kişi Bilgileri</h2>
-                        
-                        <div id="userDetails">
-                            <div class="modal" id="updateModal" tabindex="-1">
-                                
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Bilgi Güncelleme</h5>                               
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="updateForm">
-                                                <input type="text" id="newFirstName" placeholder="Yeni İsim" >
-                                                <input type="text" id="newLastName"placeholder="Yeni Soyisim" >                                            
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close">Kapat</button>
-                                            <button type="button" class="btn btn-primary" id="saveChangesBtn">Kaydet</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <table>
-                                <tbody>
-                                    <tr>
-                                    <th class="ps-0  fs-5" scope="row" id="userName">User Name :</th>
-                                    <td id="userNameValue"></td>
-                                    </tr>
-                                    <tr>
-                                    <th class="ps-0 fs-5" scope="row" id="firstName">First Name :</th>
-                                    <td id="firstNameValue"></td>  
-                                    </tr>
-                                    <tr>
-                                    <th class="ps-0 fs-5" scope="row" id="LastName">Last Name :</th>
-                                    <td id="lastNameValue"></td>
-                                    </tr>
-                                    <tr>
-                                    <th class="ps-0 fs-5" scope="row" id="lastName">Last Login :</th>
-                                    <td id="lastLoginValue"></td>
-                                    </tr>
-                                    <tr>
-                                    <th class="ps-0 fs-5" scope="row" id="email">E-mail :</th>
-                                    <td id="emailValue"></td>
-                                    </tr>
-                                    <tr>
-                                    <th class="ps-0 fs-5" scope="row" id="companyName">Company Name :</th>
-                                    <td id="companyNameValue"></td>
-                                    </tr>
-                                    <tr>
-                                    <th class="ps-0 fs-5" scope="row" id="userType">User Type :</th>
-                                    <td id="userTypeValue"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <br>
-                            <br>
-                        </div>
-                        <a class=" btn btn-success btn-m " id="updateBtn">Düzenle</a>
-                        <button class="btn btn-danger btn-m" data-bs-target="#passwordModal"  data-bs-toggle="modal" id="changePassword">Şifreyi Değiştir</button>
-                        <div class="modal fade" id="passwordModal" tabindex="-1" aria-labelledby="passwordModalLabel" aria-hidden="true" data-backdrop="static">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="passwordModalLabel">Şifre Değiştir</h5>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="changePasswordForm">
-                                            <div class="form-group">
-                                                <label for="newPassword1">Yeni Şifre</label>
-                                                <input type="password" class="form-control" id="newPassword1" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="newPassword2">Yeni Şifre Tekrar</label>
-                                                <input type="password" class="form-control" id="newPassword2" required>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeBtn">Kapat</button>
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal"  id="submitPassword">Kaydet</button>                      
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
-                </div><!-- end card body -->
-            </div><!-- end card -->
-        </div>
-    </div>
     <!-- JAVASCRIPT -->
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/libs/simplebar/simplebar.min.js"></script>
@@ -404,10 +395,10 @@
 
     <!-- App js -->
     <script src="assets/js/app.js"></script>
+    <script src="homePage.js"></script>
     <script src="logout.js"></script>
     <script src="profilePage.js"></script>
-    <script src="updateUserInfo.js"></script>
-    <script src="changePassword.js"></script>
+
 </body>
 
 </html>
