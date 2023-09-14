@@ -5,8 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password-input");
-  const loginBtn = document.getElementById('loginBtn');  
-
+  const loginBtn = document.getElementById('loginBtn'); 
   loginBtn.addEventListener('click', function (e) {
     e.preventDefault();
 
@@ -49,10 +48,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 })
 
-// function userControl() {
-//   const token = localStorage.getItem('token');
-//   if (token) {
-//     window.location.href = "/homePage.html";
-//   }
+const sendEmail = document.getElementById('send-email');
+const userEmail = document.getElementById('email').value;
+sendEmail.addEventListener('click', () => {
+  const apiUrl = "http://backend.norbit.com.tr/accounts/password/reset/"
+  const token = localStorage.getItem('token');
 
-// }
+axios({
+  method:'post',
+  url:apiUrl,
+  headers:{ 
+    "Authorization": `Token ${token}`
+    },
+    data: {
+      email: userEmail,
+    },
+}).then((response) => {
+  console.log('Password reset email sent successfully');
+}).catch((error) => {
+  console.log('Error sending password reset email:', error);
+})
+
+});

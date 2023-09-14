@@ -205,7 +205,7 @@ function editPersonel(userID){
             method:'patch',
             url:apiUrl,
             headers:{ 
-                "Authorization": `Token ${token}`
+                "Authoriza tion": `Token ${token}`
             },
             data:{
                 first_name:newFirstName.value,
