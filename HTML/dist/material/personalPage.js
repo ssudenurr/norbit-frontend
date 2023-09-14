@@ -24,8 +24,6 @@ addRowButton.addEventListener('click', () => {
     modalButtonBox.innerHTML += `
     <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPersonel()'>Ekle</button>
     `;
-
-
 })
 
 const closeBtn = document.getElementById('btn-close');
@@ -35,7 +33,6 @@ closeBtn.addEventListener('click', () => {
 
 function createEditButton(userId){ 
     document.getElementById('job-date').style.display = 'none'
-    // document.getElementById('duty').style.width = '2000px'
     inputExitDate.style.display = 'block'
     modalButtonBox.innerHTML += `
         <button type="button" class="btn btn-primary" id="row-edit-btn" onclick='editPersonel(${userId})'>Düzenle</button>
@@ -45,8 +42,7 @@ function createEditButton(userId){
     getRowData(userId)
 }
 
-function createPersonel(){
-    // create new personel
+function createPersonel(){ // CREATE NEW PERSONAL
 
     const apiUrl= "http://backend.norbit.com.tr/accounts/registration/"
         const token  = localStorage.getItem('token');
@@ -84,8 +80,7 @@ function createPersonel(){
 
 }
 
-function getModalValues(){
-    // get modal input values
+function getModalValues(){   // GET MODAL INPUT VALUES
     const data = {
         "firstName": firstName.value,
         "lastName": lastName.value,
@@ -101,7 +96,7 @@ function getModalValues(){
 
 }
 
-function clearInput() {  // MODAL İÇİNE BİLGİ GİRİLİP ADD BUTONUNA BASILINCA KUTULARI TEMİZLEME
+function clearInput() {  // CLEAR VALUE
     firstName.value = '';
     lastName.value = '';
     job.value = '';
@@ -112,7 +107,7 @@ function clearInput() {  // MODAL İÇİNE BİLGİ GİRİLİP ADD BUTONUNA BASIL
     // password.value = '';
 };
 
-const deleteRow = async(delete_button) =>{     // iLGİLİ SATIRI SİLME
+const deleteRow = async(delete_button) =>{     // DELETE TO PERSONAL
 
     userId = delete_button.getAttribute('data-user-id');
     const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
@@ -149,8 +144,7 @@ const deleteRow = async(delete_button) =>{     // iLGİLİ SATIRI SİLME
     }
 }
 
-function getRowData(userId){ 
-    // get current row user's data 
+function getRowData(userId){ // GET CURRENT ROW USER'S DATA 
     const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
     const token  = localStorage.getItem('token');
         axios({
@@ -189,7 +183,7 @@ function getRowData(userId){
 
 }
 
-function editPersonel(userID){ 
+function editPersonel(userID){ // EDİT PERSONAL DATA
     const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userID}/`; 
     const token  = localStorage.getItem('token');
 
@@ -205,7 +199,7 @@ function editPersonel(userID){
             method:'patch',
             url:apiUrl,
             headers:{ 
-                "Authoriza tion": `Token ${token}`
+                "Authorization": `Token ${token}`
             },
             data:{
                 first_name:newFirstName.value,
@@ -225,12 +219,12 @@ function editPersonel(userID){
             window.location.reload();   
 
         }).catch((error) => {
-            console.error(`ID: ${userID}`)
+            console.error(error)
         });
 
 }
             
-const personalList = () => {    // APİDEN GELEN KİŞİ BİLGİLERİNİ ALMA 
+const personalList = () => {    // GETTING CONTACT INFORMATION FROM API
     const apiUrl = "http://backend.norbit.com.tr/ems/list/";
     const token  = localStorage.getItem('token');
        
@@ -282,7 +276,7 @@ const showPersonal = async (personalData) => {
 
 
 
-function getJobTitle() {     // ÇALIŞAN ÜNVANLARINI ALMA
+function getJobTitle() {     // GET JOB TİTLE
     const apiUrl= "http://backend.norbit.com.tr/jobs/list/"
     const token  = localStorage.getItem('token');
 
@@ -311,7 +305,7 @@ function getJobTitle() {     // ÇALIŞAN ÜNVANLARINI ALMA
         });
 }
 
-const getJobTitleId  = async (job_id) => {    //ÜNVANLARIN İD DEĞERLERİNİ ALMA 
+const getJobTitleId  = async (job_id) => {    // GET JOB TİTLE ID
     const apiUrl= `http://backend.norbit.com.tr/jobs/${job_id}/`
     const token  = localStorage.getItem('token');
 
@@ -339,7 +333,7 @@ const getJobTitleId  = async (job_id) => {    //ÜNVANLARIN İD DEĞERLERİNİ A
     }
 };
 
-function getCompanyName() {      // ŞİRKET İSİMLERİNİ ALMA
+function getCompanyName() {      // GET COMPANY NAME
     const apiUrl= "http://backend.norbit.com.tr/company/list/"
     const token  = localStorage.getItem('token');
 
@@ -367,7 +361,7 @@ function getCompanyName() {      // ŞİRKET İSİMLERİNİ ALMA
         });
 }
 
-const getCompanyNameId  = async (id) => {    // ŞİRKET İSİMLERİNİN İD DEĞERLERİNİ ALMA 
+const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
     const apiUrl= `http://backend.norbit.com.tr/company/${id}/`
     const token  = localStorage.getItem('token');
 

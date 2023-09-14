@@ -68,5 +68,4 @@ axios({
 }).catch((error) => {
   console.log('Error sending password reset email:', error);
 })
-
 });
