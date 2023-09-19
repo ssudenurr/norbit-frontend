@@ -129,7 +129,7 @@ const deleteRow = async(delete_button) =>{     // DELETE TO PERSONAL
             } else {
                 console.error('Satır silinemedi.');
             }
-            resolve(dataList)
+            //resolve(dataList)
         }).catch((error) => {
             reject("null")
         });
