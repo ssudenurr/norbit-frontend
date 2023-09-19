@@ -1,5 +1,7 @@
-const userProfile = document.getElementById('userProfile')
 
-// userProfile.onclick = function(){
-//     window.location.href = "users.html"
-// }
+const getCalendar = ()=> {
+    const apiUrl= "http://backend.norbit.com.tr/calendar/"
+    const token  = localStorage.getItem('token');
+    
+   window.location.href = apiUrl
+}

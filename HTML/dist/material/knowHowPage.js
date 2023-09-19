@@ -131,12 +131,13 @@ const AddContent = (item) =>{
         
                         <div class="text-end mb-4">
                             <button type="submit" class="btn btn-danger w-sm delete-btn" data-user-id='${item.id}' id="delete-btn">Delete</button>
-                            <button type="submit" class="btn btn-secondary w-sm edit-btn" data-user-id='${item.id}'>Edit</button>
+                            
                         </div>
                     </div>
                 </div>
             </div>
         `;
+        // <button type="submit" class="btn btn-secondary w-sm edit-btn" data-user-id='${item.id}'>Edit</button>
         accordionBox.innerHTML += boxData;
         deleteClickFunction();
         //editClickFunction();
