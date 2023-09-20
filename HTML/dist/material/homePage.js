@@ -1,6 +1,6 @@
 
 const getCalendar = ()=> {
-    const apiUrl= "http://backend.norbit.com.tr/calendar/"
+    const apiUrl= "https://calendar.google.com/calendar/u/0/r"
     const token  = localStorage.getItem('token');
     
    window.location.href = apiUrl
