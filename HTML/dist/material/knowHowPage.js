@@ -130,6 +130,7 @@ const AddContent = (item) =>{
                         </div>
         
                         <div class="text-end mb-4">
+                       
                             <button type="submit" class="btn btn-danger w-sm delete-btn" data-user-id='${item.id}' id="delete-btn">Delete</button>
                             
                         </div>
@@ -137,7 +138,7 @@ const AddContent = (item) =>{
                 </div>
             </div>
         `;
-        // <button type="submit" class="btn btn-secondary w-sm edit-btn" data-user-id='${item.id}'>Edit</button>
+        // <button type="submit" class="btn btn-secondary w-sm edit-btn" data-user-id='${item.id}'>Edit</button>    
         accordionBox.innerHTML += boxData;
         deleteClickFunction();
         //editClickFunction();
@@ -193,13 +194,16 @@ const deleteProblem = async(pageId) =>{
 //     const editButtons = document.querySelectorAll('.edit-btn');
 //     editButtons.forEach((editButton) => {
 //         editButton.addEventListener('click',(event) => {
-//             const itemId = event.currentTarget.getAttribute('data-user-id');
+//             const problem = document.getElementById('problem-title-input')
+//             problem.classList.add('form-control');
+//             // const itemId = event.currentTarget.getAttribute('data-user-id');
 
 //             editToProblem(itemId);
 //         })
 //     })
 
 // }
+// editClickFunction();
 // const editToProblem = async (itemId) =>{
 //     const pageApi= `https://backend.norbit.com.tr/knowhow/detail/${itemId}/`;
 //     const token  = localStorage.getItem('token');

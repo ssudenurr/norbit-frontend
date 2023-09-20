@@ -3,19 +3,19 @@ function getUserInfo(){
     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
     const token  = localStorage.getItem('token');
 
-axios ({
-    method:'get',
-    url: apiUrl,
-    headers: {
-        "Authorization": `Token ${token}`
-    },
-}).then((response)=>{
-    const userData = response.data;
-    userDetails(userData);
-    console.log(userData)
-}).catch((error) => {
-      console.log(error);
-    });
+    axios ({
+        method:'get',
+        url: apiUrl,
+        headers: {
+            "Authorization": `Token ${token}`
+        },
+    }).then((response)=>{
+        const userData = response.data;
+        userDetails(userData);
+        console.log(userData)
+    }).catch((error) => {
+        console.log(error);
+        });
 }
 async function userDetails(userData){
 
