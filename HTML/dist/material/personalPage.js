@@ -1,6 +1,6 @@
 
-const addRowButton = document.getElementById('add-btn')
-const modaltitle = document.getElementById('exampleModalLabel')
+const addRowButton = document.getElementById('add-btn');
+const modaltitle = document.getElementById('exampleModalLabel');
 
 const firstName = document.getElementById('inputFirstame');
 const lastName = document.getElementById('inputLastname');
@@ -274,8 +274,6 @@ const showPersonal = async (personalData) => {
 };    
 
 
-
-
 function getJobTitle() {     // GET JOB TİTLE
     const apiUrl= "http://backend.norbit.com.tr/jobs/list/"
     const token  = localStorage.getItem('token');
@@ -399,6 +397,35 @@ window.addEventListener("load", (event) => {
     getCompanyNameId();
 });
 
+
+const searchBtn = document.getElementById('search-btn')
+const searchBox = document.getElementById('search-box')
+
+searchBtn.addEventListener('click', (event) => {
+event.preventDefault();
+    const searchTerm = searchBox.value.trim();
+    makeSearch(searchTerm);
+});
+function makeSearch(searchTerm){
+
+    const rows = document.querySelectorAll('#personalTable tbody tr');  
+    rows.forEach((personal) => {
+
+        const searchText = personal.textContent.toLowerCase();
+
+        if(searchText.includes(searchTerm.toLowerCase())){
+            personal.style.display = 'table-row';
+
+        }else{
+            
+            personal.style.display = 'none';
+        }
+
+        // if(searchBox.value=''){
+        //     personal.style.display = 'table-row';
+        // }
+    });
+}
 
 // const situationButton = document.getElementById('situation');
 // const isActive = document.querySelectorAll('.is_active')
