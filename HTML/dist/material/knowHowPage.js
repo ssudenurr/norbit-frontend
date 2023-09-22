@@ -26,6 +26,7 @@ const getData = async (url=null) => {
         })
         .then((response)=>{
             const data =response.data;
+            console.log(data)
             resolve(data)
             
     
@@ -80,6 +81,7 @@ const addToProblemSolve = () => {
         }
     })
     .then((response)=>{
+
         window.location.reload()
 
 
@@ -101,65 +103,167 @@ const writeContent = async ()=>{
     }, 100)
 
 }
-
-const AddContent = (item) =>{
-    const accordionBox = document.getElementById('accordionExample');
-
-        const boxData = `
-        <div class="accordion-item">
-                <h2 class="accordion-header" id="accordionHeader">
-                    <button class="accordion-button" id="problemContent" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-${item.id}" aria-expanded="true" aria-controls="accordion-${item.id}">
-                        ${item.problem}
-                    </button>
-                </h2>
-                <div id="accordion-${item.id}" class="accordion-collapse collapse" aria-labelledby="accordionHeader">
-                    <div class="accordion-body">
-                        <div class="mb-3">
-                            <label class="form-label" for="problem-title-input">Problemin Konusu</label>
-                            <p type="text" id="problem-title-input">${item.problem}</p>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label" for="project-thumbnail-img">Doküman</label>
-                            <p  id="solution-file" type="file">${item.upload}</p>
-                        </div>
-        
-                        <div class="mb-3">
-                            <label class="form-label">Açıklama</label>
-                            <p type="text" id="solution-description">${item.solve_text}</p>
-                        </div>
-        
-                        <div class="text-end mb-4">
-                       
-                            <button type="submit" class="btn btn-danger w-sm delete-btn" data-user-id='${item.id}' id="delete-btn">Delete</button>
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        // <button type="submit" class="btn btn-secondary w-sm edit-btn" data-user-id='${item.id}'>Edit</button>    
-        accordionBox.innerHTML += boxData;
-        deleteClickFunction();
-        //editClickFunction();
-    };
-
-
-
-const deleteClickFunction = () => {
+const deleteClickFunction = async () => {
     const deleteButtons = document.querySelectorAll('.delete-btn');
-    deleteButtons.forEach((deleteButton) => {
+
+    deleteButtons.forEach( async (deleteButton) => {
+        const loginnedUserId = await getUserInfoId()
         deleteButton.addEventListener('click', (event) => {
-            const pageId = event.currentTarget.getAttribute('data-user-id');
-            deleteProblem(pageId);
+            const pageId = event.currentTarget.getAttribute('data-accordion-id');
+            const userId = event.currentTarget.getAttribute('data-user-id');
+            console.log(userId, loginnedUserId)
+
+            if(loginnedUserId==userId){
+                deleteProblem(pageId);
+            }else {
+                console.log('You are not authorized to delete this item.');
+            }
         });
     });
 }
+const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
+    const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+    const token  = localStorage.getItem('token');
+    const api = new Promise((resolve, reject) => {
+        axios ({
+            method:'get',
+            url: apiUrl,
+            headers: {
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const loginId = response.data.id;
+            resolve(loginId);
+
+            // console.log(fullName)
+        }).catch((error) => {
+            reject(error);
+            });
+    });
+
+    try{
+        const res = await api;
+        return res;
+    }
+    catch (e){
+        console.log(e)
+    }
     
+}  
+const getOwner = async (id) => {
+    const apiUrl= `http://backend.norbit.com.tr/ems/employee/${id}/`
+    const token  = localStorage.getItem('token');
+    const api = new Promise((resolve, reject) => {
+    axios ({
+        method:'get',
+        url: apiUrl,
+        headers: {
+            "Authorization": `Token ${token}`
+        },
+    }).then((response)=>{
+        resolve(response.data)
+        // console.log(ownerData)
+    }).catch((error) => {
+        reject("null")
+        console.log(error);
+
+        });
+    });
+    try {
+        const response = await api;
+        return response;
+    }
+    catch (e) {
+        return e
+    }
+}  
+const AddContent = async (item) => {
+    const accordionBox = document.getElementById('accordionExample');
+    const userId = await getUserInfoId();
+    const owner = await getOwner(item.owner)
+    // const ownerUser = await getAddedByUserId(item.owner);
+    console.log()
+    const boxData = `
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="accordionHeader">
+            <button class="accordion-button" id="problemContent" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-${item.id}" aria-expanded="true" aria-controls="accordion-${item.id}">
+                ${item.problem}
+            </button>
+        </h2>
+        <div id="accordion-${item.id}" class="accordion-collapse collapse" aria-labelledby="accordionHeader">
+            <div class="accordion-body">
+                <div class="mb-3">
+                    <label class="form-label" for="problem-title-input">Problemin Konusu</label>
+                    <p type="text" id="problem-title-input">${item.problem}</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="project-thumbnail-img">Doküman</label>
+                    <p id="solution-file" type="file">${item.upload}</p>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Açıklama</label>
+                    <p type="text" id="solution-description">${item.solve_text}</p>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Ekleyen Kişi</label>
+                    <p type="text" id="owner">${owner.first_name} ${owner.last_name}</p>
+                </div>
+
+                <div class="text-end mb-4">
+                    <button type="submit" class="btn btn-danger w-sm delete-btn" data-accordion-id='${item.id}' data-user-id=${item.owner} id="delete-btn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+
+    accordionBox.innerHTML += boxData;
+    deleteClickFunction(owner);
+}
+
+
+// async function getOwnerId(ownerId){
+//     const apiUrl= `http://backend.norbit.com.tr/knowhow/detail/`
+//     const token  = localStorage.getItem('token');
+//     const api = new Promise((resolve, reject) => {
+//     axios({
+//         method:'get',
+//         url:apiUrl,
+//         headers:{ 
+//             "Authorization": `Token ${token}`
+//         },
+//     }).then((response)=>{
+//         const ownerData = response.data.results;
+        
+//         ownerData.forEach((item) => {
+//             const owner = item.owner;
+//             console.log(owner);
+//         });
+//         resolve(ownerData)
+//         console.log(ownerData)
+//     }).catch((error) => {
+//         reject("null")
+//           console.log(error);
+//         });
+//     });
+//     try {
+//         const response = await api;
+//         return response;
+//     }
+//     catch (e) {
+//         return e
+//     }
+// }
+// getOwnerId()
+
+
 
 const deleteProblem = async(pageId) =>{
     const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
-    const token  = localStorage.getItem('token');
+    const token  = localStorage.getItem('token');  
 
     const removeData = new Promise ((resolve,reject) =>{
 
@@ -179,7 +283,7 @@ const deleteProblem = async(pageId) =>{
             }
             resolve();
         }).catch((error) =>{
-            reject(error,'ncjhasvgjl');
+            reject(error,'error');
         })
     });
     try {
@@ -246,12 +350,72 @@ const deleteProblem = async(pageId) =>{
 // }
 
 
+// function getAddedByUser(){
+//     const apiUrl= "http://backend.norbit.com.tr/ems/list/"
+//     const token  = localStorage.getItem('token');
+
+//     axios({
+//         method:'get',
+//         url:apiUrl,
+//         headers:{ 
+//             "Authorization": `Token ${token}`
+//         },
+//     }).then((response)=>{
+//         const user = response.data.results;
+
+//         console.log(user)
+//         // const fullName = document.getElementById('inputCompany')
 
 
+//         user.forEach(async (ownerUser) => {
+//             const firstName = getAddedByUserId(ownerUser.owner);
+//             const userName = document.getElementById("owner");
+//             userName.textContent = firstName;
 
+//         });
+
+//     }).catch((error) => {
+//           console.log(error);
+//         });
+// }
+
+// const getAddedByUserId = async (id) =>{
+//     const apiUrl= `http://backend.norbit.com.tr/ems/employee/${id}/`
+//     const token  = localStorage.getItem('token');
+
+//     const api = new Promise((resolve, reject) => {
+//         axios({
+//             method:'get',
+//             url:apiUrl,
+//             headers:{ 
+//                 "Authorization": `Token ${token}`
+//             },
+//         }).then((response)=>{
+//             const firstName = response.data.first_name;
+//             // const lastName = response.data.last_name;
+//             // const fullName = `${firstName} ${lastName}`;
+//             console.log(firstName)
+//             resolve(firstName)
+//         }).catch((error) => {
+//             reject("null")
+//         });
+//     });
+
+//     try {
+//         const response = await api;
+//         return response;
+//     }
+//     catch (e) {
+//         return e
+//     }
+// }
 
 window.addEventListener("load", (event)  =>  {
     writeContent();
+    getOwner();
+  
+    // getAddedByUser();
+
 });
 
 {/* <div class="accordion-item">
