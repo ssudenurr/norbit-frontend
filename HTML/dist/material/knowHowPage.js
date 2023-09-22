@@ -225,42 +225,6 @@ const AddContent = async (item) => {
 }
 
 
-// async function getOwnerId(ownerId){
-//     const apiUrl= `http://backend.norbit.com.tr/knowhow/detail/`
-//     const token  = localStorage.getItem('token');
-//     const api = new Promise((resolve, reject) => {
-//     axios({
-//         method:'get',
-//         url:apiUrl,
-//         headers:{ 
-//             "Authorization": `Token ${token}`
-//         },
-//     }).then((response)=>{
-//         const ownerData = response.data.results;
-        
-//         ownerData.forEach((item) => {
-//             const owner = item.owner;
-//             console.log(owner);
-//         });
-//         resolve(ownerData)
-//         console.log(ownerData)
-//     }).catch((error) => {
-//         reject("null")
-//           console.log(error);
-//         });
-//     });
-//     try {
-//         const response = await api;
-//         return response;
-//     }
-//     catch (e) {
-//         return e
-//     }
-// }
-// getOwnerId()
-
-
-
 const deleteProblem = async(pageId) =>{
     const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
     const token  = localStorage.getItem('token');  
@@ -414,37 +378,5 @@ window.addEventListener("load", (event)  =>  {
     writeContent();
     getOwner();
   
-    // getAddedByUser();
 
 });
-
-{/* <div class="accordion-item">
-<h2 class="accordion-header" id="accordionHeader">
-    <button class="accordion-button" id="problemContent" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-${item.id}" aria-expanded="true" aria-controls="accordion-${item.id}">
-        ${item.problem}
-    </button>
-</h2>
-<div id="accordion-${item.id}" class="accordion-collapse collapse" aria-labelledby="accordionHeader">
-    <div class="accordion-body">
-        <div class="mb-3">
-            <label class="form-label" for="problem-title-input">Problemin Konusu</label>
-            <textarea type="text" class="form-control" id="problem-title-input">${item.problem}</textarea>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" for="project-thumbnail-img">Doküman</label>
-            <input class="form-control" id="solution-file" type="file">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Açıklama</label>
-            <textarea type="text" class="form-control" style="height: 200px;" id="solution-description">${item.solve_text}</textarea>
-        </div>
-
-        <div class="text-end mb-4">
-            <button type="submit" class="btn btn-danger w-sm delete-btn" data-user-id='${item.id}' id="delete-btn">Delete</button>
-            <button type="submit" class="btn btn-secondary w-sm edit-btn" data-user-id='${item.id}'>Edit</button>
-        </div>
-    </div>
-</div>
-</div> */}
