@@ -17,21 +17,22 @@ const modalButtonBox = document.getElementById('button-box');
 
 const inputExitDate = document.getElementById('input-exit-date');
 
-
 addRowButton.addEventListener('click', () => {
     clearInput();
-    inputExitDate.style.display = 'none'
+    inputExitDate.style.display = 'none';
     modalButtonBox.innerHTML += `
     <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPersonel()'>Ekle</button>
     `;
-})
+});
+
+
 
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () => {
     modalButtonBox.innerHTML = ''
 })
 
-function createEditButton(userId){ 
+async function createEditButton(userId){ 
     document.getElementById('job-date').style.display = 'none'
     inputExitDate.style.display = 'block'
     modalButtonBox.innerHTML += `
@@ -48,7 +49,12 @@ function createPersonel(){ // CREATE NEW PERSONAL
         const token  = localStorage.getItem('token');
         
        
-        const transDate = new Date(entryDate.value)
+        const transDate = new Date(entryDate);
+
+        const year = transDate.getFullYear();
+        const month = transDate.getMonth();
+        const day = transDate.getDay();
+        const fullDate = `${year}-${month < 10 ? `0${month}` : month }-${day < 10 ?  `0${day}` : day}`;
         axios({
             method:'post',
             url:apiUrl,
@@ -60,11 +66,11 @@ function createPersonel(){ // CREATE NEW PERSONAL
                 last_name:lastName.value,
                 job_title:job.value,
                 user_type:userTypes.value,
-                job_start_date:transDate,
+                job_start_date:fullDate,
                 company_name:company.value,
                 username:username.value,
                 password1:password.value,
-                password2:password.value
+                password2:password.value,
             }
         }).then((response)=>{
 
@@ -154,8 +160,8 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
                 "Authorization": `Token ${token}`
             },
         })
-        .then((response)=>{
-            const userData = response.data
+        .then( async (response)=>{
+            const userData = response.data;
             console.log(userData)
             const nameData = userData.first_name;
             const surnameData = userData.last_name;
@@ -163,14 +169,19 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
             const jobData = userData.job_title;
             const companyData = userData.company_name;
             const typeData = userData.user;
-            const userNameData = userData.username
+            const userNameData = userData.username;
 
             const transDate = new Date(exitData);
 
+            const year = transDate.getFullYear();
+            const month = transDate.getMonth();
+            const day = transDate.getDay();
+            const fullDate = `${year}-${month < 10 ? `0${month}` : month }-${day < 10 ?  `0${day}` : day}`;
+            console.log(fullDate)
 
             firstName.value = nameData;
             lastName.value = surnameData;
-            exitDate.value = transDate;
+            exitDate.value = fullDate;
             job.value = jobData;
             company.value = companyData;
             userTypes.value = typeData;
@@ -207,8 +218,7 @@ function editPersonel(userID){ // EDİT PERSONAL DATA
                 job_title:newjob.value,
                 user:newUserType.value,
                 job_end_date:new Date(newExitDate.value),
-                company_name:newCompany.value,  
-                username:newUsername.value,
+                company_name:newCompany.value,               
                 password1:newPassword.value,
                 password2:newPassword.value,
         
@@ -264,15 +274,31 @@ const showPersonal = async (personalData) => {
         <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
-
+        editClickFunction();
         tableBody.appendChild(newRow);
         const deleteBtn = newRow.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', function () {
             deleteRow(this);
         });
+
     });
 };    
+const editClickFunction = async () =>{
+    const editButtons = document.querySelectorAll('edit-btn');
+    
+    editButtons.forEach( async (editBtn) => {
+        const loginnedUserId = await getUserInfoId()
+        editBtn.addEventListener('click', (event) => {
+            const userId = event.currentTarget.getAttribute('data-user-id');
 
+            if(loginnedUserId==userId){
+                editPersonel(userId);
+            }else {
+                console.log('You are not authorized to delete this item.');
+            }
+        });
+    })
+}
 
 function getJobTitle() {     // GET JOB TİTLE
     const apiUrl= "http://backend.norbit.com.tr/jobs/list/"
@@ -395,37 +421,91 @@ window.addEventListener("load", (event) => {
     getJobTitleId();
     getCompanyName();
     getCompanyNameId();
+
+
 });
 
+const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
+    const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+    const token  = localStorage.getItem('token');
+    const api = new Promise((resolve, reject) => {
+        axios ({
+            method:'get',
+            url: apiUrl,
+            headers: {
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const loginId = response.data.id;
+            resolve(loginId);
 
-const searchBtn = document.getElementById('search-btn')
-const searchBox = document.getElementById('search-box')
-
-searchBtn.addEventListener('click', (event) => {
-event.preventDefault();
-    const searchTerm = searchBox.value.trim();
-    makeSearch(searchTerm);
-});
-function makeSearch(searchTerm){
-
-    const rows = document.querySelectorAll('#personalTable tbody tr');  
-    rows.forEach((personal) => {
-
-        const searchText = personal.textContent.toLowerCase();
-
-        if(searchText.includes(searchTerm.toLowerCase())){
-            personal.style.display = 'table-row';
-
-        }else{
-            
-            personal.style.display = 'none';
-        }
-
-        // if(searchBox.value=''){
-        //     personal.style.display = 'table-row';
-        // }
+        }).catch((error) => {
+            reject(error);
+            });
     });
+
+    try{
+        const res = await api;
+        return res;
+    }
+    catch (e){
+        console.log(loginId)
+    }
+    
 }
+getUserInfoId();
+// const searchBtn = document.getElementById('search-btn')
+// const searchBox = document.getElementById('search-box')
+
+// searchBtn.addEventListener('click', (event) => {
+// event.preventDefault();
+//     const searchTerm = searchBox.value.trim();
+//     makeSearch(searchTerm);
+// });
+// function makeSearch(searchTerm){
+
+//     const rows = document.querySelectorAll('#personalTable tbody tr');  
+//     rows.forEach((personal) => {
+
+//         const searchText = personal.textContent.toLowerCase();
+
+//         if(searchText.includes(searchTerm.toLowerCase())){
+//             personal.style.display = 'table-row';
+
+//         }else{
+            
+//             personal.style.display = 'none';
+//         }
+
+//         // if(searchBox.value=''){
+//         //     personal.style.display = 'table-row';
+//         // }
+//     });
+// }
+// function getUserType(){
+//     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+//     const token  = localStorage.getItem('token');
+
+//     axios ({
+//         method:'get',
+//         url: apiUrl,
+//         headers: {
+//             "Authorization": `Token ${token}`
+//         },
+//     }).then((response)=>{
+//         const userType = response.data.user_type;
+//         if (userType === "NormalUser") {
+//             console.log(userType);
+//             addRowButton.disabled = true; 
+//         } else {
+//             addRowButton.disabled = false;
+//         }
+        
+//     }).catch((error) => {
+//         console.log(error);
+//     });
+// }
+// getUserType();
 
 // const situationButton = document.getElementById('situation');
 // const isActive = document.querySelectorAll('.is_active')
