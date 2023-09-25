@@ -274,123 +274,129 @@
 
 
     </div>
-    <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
-        <i class="ri-arrow-up-line"></i>
-    </button>
-    </div>
-    </div>
-
-    <div class="main-content" id="mainContent" >
-        <div class="page-content">
-            <div class="container-fluid">
-                <div class="row">
-        <div class="table-content">
-            <div class="navbar navbar-expand-lg bg-body-tertiary">
-                <div class="container">
-                    <!-- <a class="mdi mdi-filter btn btn-primary btn-m"></a> -->
-                    <div class="app-search d-flex" id="navbarSupportedContent">
-                        <!-- <form class="d-flex" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search"
-                                aria-label="Search">
-                            <button class="btn btn-dark" type="submit">Search</button>
-                        </form> -->
-                    </div>
-                    <div class="table-buttons">
-                        <!-- <a class="mdi mdi-thumb-up btn btn-success btn-mm"></a>
-                        <a class="mdi mdi-chevron-down btn btn-light btn-m"></a> -->
-                        <a class="mdi mdi-plus btn btn-info btn-m" id="add-btn" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"></a>
-
-                    </div>
-                </div>
-            </div>       
-            <div class="table">
-                <table class="table table-hover mb-0" id="purchaseTable">
-                    <thead class="table-light">
-                            <tr>
-                                <th scope="sort">ID</th> 
-                                <th scope="sort">İsteyen Kişi</th> 
-                                <th scope="sort">Sorumlu Kişi</th> 
-                                <th scope="sort">Durum</th>                                   
-                                <th scope="sort">Ürün Adı</th>                                    
-                                <th scope="sort">Fiyat</th>    
-                                <th scope="sort">Sayısı</th>                        
-                                <th scope="sort">Link</th>
-                                <th scope="sort">İstek Tarihi</th>
-                                <th scope="sort">Açıklama</th>
-                                <th scope="sort">Düzenleme</th>
-                                <th scope="col"></th>  
-                            </tr>
-                        
-                    </thead>
-                    <tbody class="overflow-auto">
-                        <!-- datas come from js -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+        <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
+            <i class="ri-arrow-up-line"></i>
+        </button>
+<div class="main-content" id="mainContent">
+    <div class="page-content">
+        <div class="container-fluid">
+            <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                    <h4>Satın Alım İstekleri </h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="purchase-request-list">
+                                    <div class="g-4 mb-3 row">
+                                        <div class="col-sm-auto col">
+                                            <div class="table-buttons col-sm-2">
+                                                
+                                                <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>
+                                                <a class="mdi mdi-chevron-down btn btn-light btn-m" id="situation"></a> -->
+                                                <a class="mdi mdi-plus btn btn-info btn-m " id="add-btn" data-bs-toggle="modal"
+                                                    data-bs-target="#exampleModal"></a>
             
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true" data-bs-backdrop="false">
-                    <div class="modal-dialog">
-                        <div class="modal-content" id="modalContent">
-                            <div class="modal-header ">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Satın Alma İsteği Oluşturma Formu</h1>
-                                <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form class="row g-3" id="purchaseForm">
-
-                                    <br>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="inputName4" class="form-label" >Sorumlu Kişi</label>
-                                            <input type="text" class="form-control" id="responsible-person">
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label for="inputEmail4" class="form-label" >Ürün İsmi</label>
-                                            <input type="text" class="form-control" id="productName">
-                                        </div>
+                                        <div class="col-sm col">
+                                            <div class="d-flex justify-content-sm-end">
+                                                <div class="search-box ms-2">
+                                                    <input type="text" class="form-control search" placeholder="Search...">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>  
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="inputPassword4" class="form-label" >Fiyat</label>
-                                            <input type="number" class="form-control" id="price">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputAddress" class="form-label" >Sayısı</label>
-                                            <input type="number" class="form-control" id="count">
-                                        </div>
+                                    <div class="table-responsive table-card mt-3 mb-1">
+                                        <table class="table align-middle table-nowrap" id="personalTable">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="sort">ID</th> 
+                                                    <th scope="sort">İsteği Yapan Kişi</th> 
+                                                    <th scope="sort">İsteyen Kişi</th> 
+                                                    <th scope="sort">Durum</th>                                   
+                                                    <th scope="sort">Ürün Adı</th>                                    
+                                                    <th scope="sort">Fiyat</th>    
+                                                    <th scope="sort">Sayısı</th>                        
+                                                    <th scope="sort">Link</th>
+                                                    <th scope="sort">İstek Tarihi</th>
+                                                    <th scope="sort">Açıklama</th>
+                                                    <th scope="sort">Düzenleme</th>
+                                                    <th scope="col"></th>  
+                                                </tr>
+                                            </thead>
+                                            <tbody class="list form-check-all">
+                                                <!-- Add Personal Data-->
+                                            </tbody>
+                                        </table>
+    
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label for="inputAddress2" class="form-label">İstek Tarihi</label>
-                                            <input type="date" class="form-control"  id="purchasingDate">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="inputAddress" class="form-label" >Link</label>
-                                            <input type="url" class="form-control" id="link">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <label for="inputAddress2" class="form-label">Açıklama</label>
-                                        <input type="text" class="form-control"  id="description">
-                                    </div>
-                            </div>
-                            <div class="modal-footer" id="button-box">
-                                <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button> -->
-                                <!-- <button type="button" class="btn btn-primary" id="editBtn">Ekle</button> -->
+                                </div>
                             </div>
                         </div>
                     </div>
+            </div>
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true" data-bs-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content" id="modalContent">
+                    <div class="modal-header ">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Satın Alma İsteği Oluşturma Formu</h1>
+                        <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form class="row g-3" id="purchaseForm">
+        
+                            <br>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="inputName4" class="form-label" >Sorumlu Kişi</label>
+                                    <input type="text" class="form-control" id="responsible-person">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputEmail4" class="form-label" >Ürün İsmi</label>
+                                    <input type="text" class="form-control" id="productName">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="inputPassword4" class="form-label" >Fiyat</label>
+                                    <input type="number" class="form-control" id="price">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputAddress" class="form-label" >Sayısı</label>
+                                    <input type="number" class="form-control" id="count">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="inputAddress2" class="form-label">İstek Tarihi</label>
+                                    <input type="date" class="form-control"  id="purchasingDate">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="inputAddress" class="form-label" >Link</label>
+                                    <input type="url" class="form-control" id="link">
+                                </div>
+                            </div>
+        
+                            <div class="col-md-12">
+                                <label for="inputAddress2" class="form-label">Açıklama</label>
+                                <input type="text" class="form-control"  id="description">
+                            </div>
+                    </div>
+                    <div class="modal-footer" id="button-box">
+                        <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button> -->
+                        <!-- <button type="button" class="btn btn-primary" id="editBtn">Ekle</button> -->
+                    </div>
                 </div>
             </div>
         </div>
+        </div>
     </div>
-            
+</div>
+
 
     <!-- JAVASCRIPT -->
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>

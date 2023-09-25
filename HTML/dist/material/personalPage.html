@@ -126,17 +126,22 @@
                                         <!-- <img class="rounded-circle header-profile-user"
                                             src="assets/images/users/avatar-1.jpg" alt="Header Avatar"> -->
                                         <span class="text-start ms-xl-2">
-                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="userName"></span>
-                                            <span
-                                                class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text" id="userType"></span>
+                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
+                                                id="userName"></span>
+                                            <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text"
+                                                id="userType"></span>
                                         </span>
                                     </span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                <!-- item-->
-                                <a class="dropdown-item" href="profilePage.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profiles</span></a>
-                                <a class="dropdown-item" ><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout" id="logout">Logout</span></a>
-                                
+                                    <!-- item-->
+                                    <a class="dropdown-item" href="profilePage.html"><i
+                                            class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                            class="align-middle">Profiles</span></a>
+                                    <a class="dropdown-item"><i
+                                            class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
+                                            class="align-middle" data-key="t-logout" id="logout">Logout</span></a>
+
                                 </div>
                             </div>
                         </div>
@@ -147,7 +152,7 @@
         <!-- removeNotificationModal -->
         <div id="removeNotificationModal" class="modal fade zoomIn" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" >
+                <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                             id="NotificationModalbtn-close"></button>
@@ -270,8 +275,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
     <button onclick="topFunction()" class="btn btn-danger btn-icon" id="back-to-top">
         <i class="ri-arrow-up-line"></i>
@@ -283,131 +286,195 @@
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
-            <div class="table-content">
-                <div class="navbar navbar-expand-lg bg-body-tertiary">
-                    <div class="container">
-                        <!-- <a class="mdi mdi-filter btn btn-primary btn-m"></a>
-                        <div class="app-search d-flex" id="navbarSupportedContent">
-                            <form class="d-flex" role="search">
-                                <input class="form-control me-2" id="search-box" type="search" placeholder="Search"
-                                    aria-label="Search">
-                                <button class="btn btn-dark" id="search-btn" type="submit">Search</button>
-                            </form>
-                        </div> -->
-                        <div class="table-buttons col-sm-2">
-                            <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>
-                            <a class="mdi mdi-chevron-down btn btn-light btn-m" id="situation"></a> -->
-                            <a class="mdi mdi-plus btn btn-info btn-m " id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header">
+                                <h4>Personel Ekranı </h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="personal-list">
+                                <div class="g-4 mb-3 row">
+                                    <div class="col-sm-auto col">
+                                        <div class="table-buttons col-sm-2">
+                                            
+                                            <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>
+                                            <a class="mdi mdi-chevron-down btn btn-light btn-m" id="situation"></a> -->
+                                            <a class="mdi mdi-plus btn btn-info btn-m " id="add-btn" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal"></a>
+        
+                                        </div>
+                                    </div>
+                                    <div class="col-sm col">
+                                        <div class="d-flex justify-content-sm-end">
+                                            <div class="search-box ms-2">
+                                                <input type="text" class="form-control search" placeholder="Search...">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>  
+                                </div>
+                                <div class="table-responsive table-card mt-3 mb-1">
+                                    <table class="table align-middle table-nowrap" id="personalTable">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th scope="col">ID</th>
+                                                <th scope="col">Ad</th>
+                                                <th scope="col">Soyad</th>
+                                                <th scope="col">Görevi</th>
+                                                <th scope="col">Kullanıcı Tipi</th>
+                                                <th scope="col">İşe Giriş Tarihi</th>
+                                                <th scope="col">İşten Çıkış Tarihi</th>
+                                                <th scope="col">Şirketi</th>
+                                                <th scope="col">Username</th>
+                                                <th scope="col">Username</th>
+                                                <th scope="col">Düzenleme</th>
+                                                <th scope="col"></th>
+                                
+                                            </tr>
+                                        </thead>
+                                        <tbody class="list form-check-all">
+                                            <!-- Add Personal Data-->
+                                        </tbody>
+                                    </table>
 
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="table">
-                    <table class="table table-hover mb-0" id="personalTable">
-                        <thead class="table-light">
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">Ad</th>
-                                    <th scope="col">Soyad</th>
-                                    <th scope="col">Görevi</th>
-                                    <th scope="col">Kullanıcı Tipi</th>
-                                    <th scope="col">İşe Giriş Tarihi</th>
-                                    <th scope="col">İşten Çıkış Tarihi</th>
-                                    <th scope="col">Şirketi</th>
-                                    <th scope="col">Username</th>    
-                                    <th scope="col">Username</th>    
-                                    <th scope="col">Düzenleme</th>
-                                    <th scope="col"></th>  
 
-                                </tr>
-                            
-                        </thead>
-                        <tbody>
-                            <!-- Add Personal Data-->
-                        </tbody>
-                    </table>
                 </div>
             </div>
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true" data-bs-backdrop="false">
-                <div class="modal-dialog">
-                    <div class="modal-content" id="modalContent">
-                        <div class="modal-header ">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Personel Oluşturma Formu</h1>
-                            <button type="button" class="btn-close" id='btn-close' data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body " id="modalBody">
-                            <form class="row g-3">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="inputEmail4" class="form-label">Ad</label>
-                                        <input type="text" class="form-control" id="inputFirstame">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="inputEmail4" class="form-label">Soyad</label>
-                                        <input type="text" class="form-control" id="inputLastname">
-                                    </div>
-                
+            aria-hidden="true" data-bs-backdrop="false">
+            <div class="modal-dialog">
+                <div class="modal-content" id="modalContent">
+                    <div class="modal-header ">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Personel Oluşturma Formu</h1>
+                        <button type="button" class="btn-close" id='btn-close' data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body " id="modalBody">
+                        <form class="row g-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="inputEmail4" class="form-label">Ad</label>
+                                    <input type="text" class="form-control" id="inputFirstame">
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-6" id="job-date">
-                                        <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
-                                        <input type="date" class="form-control" id="inputDate">
-                                    </div>
-                                    <div class="col-md-6" id="duty">
-                                        <label for="inputJob" class="form-label">Görevi</label>
-                                        <select type="text" class="form-select" id="inputJob">
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6" id="input-exit-date">
-                                        <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
-                                        <input type="date" class="form-control" id="inputExitDate">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="inputCompany" class="form-label">Şirketi</label>
-                                        <select type="text" class="form-select" id="inputCompany">
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="col-md-6">
-                                        <label for="inputUserType" class="form-label">Kullanıcı Tipi</label>
-                                        <select class="form-select" id="inputUserType">
-                                            <option value="AU">AU</option>
-                                            <option value="NU">NU</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label for="inputUsername" class="form-label">Username</label>
-                                        <input type="text" class="form-control" id="inputUsername">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="inputPassword" class="form-label">Şifre</label>
-                                        <input type="text" class="form-control" id="inputPassword">
-                                    </div>
+                                <div class="col-md-6">
+                                    <label for="inputEmail4" class="form-label">Soyad</label>
+                                    <input type="text" class="form-control" id="inputLastname">
                                 </div>
 
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6" id="job-date">
+                                    <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
+                                    <input type="date" class="form-control" id="inputDate">
+                                </div>
+                                <div class="col-md-6" id="duty">
+                                    <label for="inputJob" class="form-label">Görevi</label>
+                                    <select type="text" class="form-select" id="inputJob">
+                                    </select>
+                                </div>
+                                <div class="col-md-6" id="input-exit-date">
+                                    <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
+                                    <input type="date" class="form-control" id="inputExitDate">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="inputCompany" class="form-label">Şirketi</label>
+                                    <select type="text" class="form-select" id="inputCompany">
+                                    </select>
+                                </div>
 
-                            </form>
-                        </div>
-                        
-                        <div class="modal-footer" id="button-box">
-                            <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
-                            <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button> -->
-                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button> -->
-                        </div>
+                                <div class="col-md-6">
+                                    <label for="inputUserType" class="form-label">Kullanıcı Tipi</label>
+                                    <select class="form-select" id="inputUserType">
+                                        <option value="AU">AU</option>
+                                        <option value="NU">NU</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="inputUsername" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="inputUsername">
+                                </div>
+                                <div class="col-md-6" id="password-content">
+                                    <label for="inputPassword" class="form-label">Şifre</label>
+                                    <input type="text" class="form-control" id="inputPassword">
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+
+                    <div class="modal-footer" id="button-box">
+                        <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
+                <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button> -->
+                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button> -->
                     </div>
                 </div>
             </div>
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         </div>
-        </div>  
+        </div>
     </div>
 </div>
-
     <!-- JAVASCRIPT -->
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="assets/libs/simplebar/simplebar.min.js"></script>
