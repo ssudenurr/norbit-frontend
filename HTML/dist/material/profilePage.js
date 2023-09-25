@@ -28,6 +28,7 @@ async function userDetails(userData){
     document.getElementById("emailValue").textContent = userData.email;
     document.getElementById("companyNameValue").textContent = company;
     document.getElementById("userTypeValue").textContent = userData.user_type;
+    document.getElementById('job-title').textContent = userData.job_title;
 
 }
 function getCompanyName() {      // GET COMPANY NAME
