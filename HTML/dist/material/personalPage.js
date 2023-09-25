@@ -204,8 +204,6 @@ function editPersonel(userID){ // EDİT PERSONAL DATA
     const newjob = document.getElementById('inputJob');
     const newCompany = document.getElementById('inputCompany');
     const newUserType = document.getElementById('inputUserType');
-    const newUsername = document.getElementById('inputUsername');
-    const newPassword = document.getElementById('inputPassword')
         axios({
             method:'patch',
             url:apiUrl,
@@ -219,8 +217,7 @@ function editPersonel(userID){ // EDİT PERSONAL DATA
                 user:newUserType.value,
                 job_end_date:new Date(newExitDate.value),
                 company_name:newCompany.value,               
-                password1:newPassword.value,
-                password2:newPassword.value,
+
         
             }
         })
@@ -285,6 +282,8 @@ const showPersonal = async (personalData) => {
 };    
 const editClickFunction = async () =>{
     const editButtons = document.querySelectorAll('edit-btn');
+    const passwordContent = document.getElementById('password-content')
+    passwordContent.style.display = "none"
     
     editButtons.forEach( async (editBtn) => {
         const loginnedUserId = await getUserInfoId()
