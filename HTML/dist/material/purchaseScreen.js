@@ -18,9 +18,40 @@ const modalContent = document.getElementById('modalContent');
 // statusBtn.className('badge bg-success-subtle text-success text-uppercase')   
 const statusBtn = document.getElementById('situation');
 
-// statusBtn.addEventListener('click', () => {
+statusBtn.addEventListener('click', () => {
+updatePurchaseStatus();
+});
+async function updatePurchaseStatus(requestId){
+    const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
+    const token = localStorage.getItem('token');
 
-// })
+    axios({
+        method:'patch',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+         data:{
+            status: 'COM',
+        }
+
+    }).then((response)=>{
+        console.log(response.data)
+        if (response.status === 200) {
+            console.log('Status updated successfully:', response.data);
+            window.location.reload();
+
+        } else {
+            console.error('Status update failed:', response);
+        }
+
+    }).catch((error) => {
+
+        console.error('An error occurred while updating the status:', error);
+
+    })
+}
+
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () => {
     modalButtonBox.innerHTML = ''
@@ -145,7 +176,7 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
         console.error('hata oluştu',error);
     })
 };
-const showPurchase = async (requestData) => {
+const showPurchase = async (requestData,requestId) => {
     tableBody.innerHTML ='';
     const loginnedUserId = await getUserInfoId();
     requestData.forEach(async  item => {
@@ -153,7 +184,7 @@ const showPurchase = async (requestData) => {
         const owner = await getOwnerNameId(item.owner)
         const responsiblePerson = await getResponsibleId(item.responsible_person);
 
-        // console.log(requestData)
+        console.log(requestData)
         newRow.innerHTML =  `
         <td><input class ="form-check-input" type ="checkbox" id="checkbox" value=""</td>
         <td>${owner}</td>
@@ -163,7 +194,7 @@ const showPurchase = async (requestData) => {
         <td>${item.price}</td>
         <td>${item.count}</td>
         <td>${item.e_commerce_site}</td>
-        <td>${item.purchasing_date}</td>
+        <td>${item.purchasing_date}</td>  
         <td>${item.description}</td>
         <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
@@ -174,6 +205,18 @@ const showPurchase = async (requestData) => {
         deleteBtn.addEventListener('click', function () {
             deletePurchase(this, loginnedUserId);   
         });
+
+        const checkbox = newRow.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                const itemId = item.id;
+
+                console.log("Seçilen satırın ID'si: " + itemId);
+                updatePurchaseStatus(itemId);
+            }   
+
+            });
+            
     });
 };  
 
