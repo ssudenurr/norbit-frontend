@@ -15,6 +15,12 @@ const modalButtonBox = document.getElementById('button-box');
 
 const modalContent = document.getElementById('modalContent');
 
+// statusBtn.className('badge bg-success-subtle text-success text-uppercase')   
+const statusBtn = document.getElementById('situation');
+
+statusBtn.addEventListener('click', () => {
+
+})
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () => {
     modalButtonBox.innerHTML = ''
@@ -25,16 +31,12 @@ addBtn.addEventListener('click', () =>{
     <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPurchase()'>Ekle</button>
     `;
 })
-function createPurchase(){
+
+async function createPurchase(){
     const apiUrl= "http://backend.norbit.com.tr/purchase-request/list/"
     const token = localStorage.getItem('token');
 
-    const transDate = new Date(purchasingDate);
 
-    const year = transDate.getFullYear();
-    const month = transDate.getMonth();
-    const day = transDate.getDay();
-    const fullDate = `${year}-${month < 10 ? `0${month}` : month }-${day < 10 ?  `0${day}` : day}`;
     axios ({
         method:'post',
         url: apiUrl,
@@ -42,17 +44,17 @@ function createPurchase(){
             "Authorization": `Token ${token}`
         },
         data: {
-            // owner: personName.value,
+            responsible_person:responsiblePerson.value,
             product_name: productName.value,
             price: price.value,
             count: count.value,
+            purchasing_date: purchasingDate.value,
             e_commerce_site: link.value,
-            purchasing_date: fullDate,
             description: description.value,  
-            responsible_person:responsiblePerson.value,
+
         }
-    }).then((response)=>{
-        console.log(response.data)
+    }).then(async (response)=>{
+        getResponsiblePerson();
         clearInput();
         window.location.reload();
     }).catch((error) => {
@@ -60,7 +62,19 @@ function createPurchase(){
         });
 
 }
-const getPurchaseData =(purchaseId) => {
+function formatDateToCustomFormat(date) {
+    var yyyy = date.getFullYear();
+    var MM = String(date.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
+    var dd = String(date.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
+    var hh = String(date.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
+    var mm = String(date.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
+  
+    // Sonuç formatını birleştiriyoruz
+    var formattedDate = yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm;
+  
+    return formattedDate;
+  }
+const getPurchaseData = (purchaseId) => {
     const apiUrl = `http://backend.norbit.com.tr/purchase-request/${purchaseId}/`;
     const token  = localStorage.getItem('token');
 
@@ -73,30 +87,29 @@ const getPurchaseData =(purchaseId) => {
     })
     .then(async (response) => {
         const purchaseData =response.data;
+        console.log(purchaseData);
+
         const responsiblePersonData = await getResponsibleId(purchaseData.responsible_person);
+
         const productNameData = purchaseData.product_name;
         const priceData = purchaseData.price;
         const countData = purchaseData.count;
         const purchasingDateData = purchaseData.purchasing_date;
+        console.log(purchasingDateData)
         const linkData = purchaseData.e_commerce_site;
         const descriptionData = purchaseData.description;
 
-        const transDate = new Date(purchasingDateData);
+        const transDate = new Date (purchasingDateData);
 
-        const year = transDate.getFullYear();
-        const month = transDate.getMonth();
-        const day = transDate.getDay();
-        const fullDate = `${year}-${month < 10 ? `0${month}` : month }-${day < 10 ?  `0${day}` : day}`;
-
-        responsiblePerson.value = responsiblePersonData;
-
+        responsiblePerson.value = responsiblePersonData;    
         productName.value = productNameData;
         price.value = priceData;
         count.value = countData;
-        purchasingDate.value = fullDate;
+        purchasingDate.value = formatDateToCustomFormat(transDate);
+        console.log(purchasingDate)
         link.value = linkData;
         description.value = descriptionData;
-
+        getResponsiblePerson(purchaseData.responsible_person);
     })
     .catch((error) => {
         console.error(error)
@@ -129,7 +142,6 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
     })
     .then(response =>{
         const requestData = response.data.results;
-
         showPurchase(requestData)
     })
     .catch(error => {
@@ -137,15 +149,16 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
     })
 };
 const showPurchase = async (requestData) => {
-    tableBody.innerHTML = '';
+    tableBody.innerHTML ='';
+    const loginnedUserId = await getUserInfoId();
     requestData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const owner = await getOwnerNameId(item.owner)
         const responsiblePerson = await getResponsibleId(item.responsible_person);
-        
-        console.log(responsiblePerson)
+
+        // console.log(requestData)
         newRow.innerHTML =  `
-        <td><input class = "form-check-input" type = "checkbox" value=""</td>
+        <td><input class ="form-check-input" type ="checkbox" id="checkbox" value=""</td>
         <td>${owner}</td>
         <td>${responsiblePerson}</td>
         <td>${item.status}</td>
@@ -162,13 +175,13 @@ const showPurchase = async (requestData) => {
         tableBody.appendChild(newRow);
         const deleteBtn = newRow.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', function () {
-            deletePurchase(this);
+            deletePurchase(this, loginnedUserId);   
         });
     });
 };  
 
 const getOwnerNameId = async (id) => {
-    const apiUrl= `http://backend.norbit.com.tr/ems/employee/${id}/`
+    const apiUrl= `http://backend.norbit.com.tr/ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
 
     const api = new Promise((resolve, reject) => {
@@ -179,10 +192,18 @@ const getOwnerNameId = async (id) => {
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            const firstname = response.data.first_name
-            const lastname = response.data.last_name;
-            const ownerData = firstname + ' ' + lastname;
-            resolve(ownerData)
+            const responseData = response.data.results
+
+
+            const ownerData = responseData.map((item) => {
+                const ownerID = item.id;
+                const firstname = item.first_name;
+                const lastname = item.last_name;
+                return firstname + ' ' + lastname
+                
+            });
+
+            resolve(ownerData);
         }).catch((error) => {
             reject("null")
         });
@@ -197,7 +218,7 @@ const getOwnerNameId = async (id) => {
     }
 } 
 const getResponsibleId = async (id) => {
-    const apiUrl= `http://backend.norbit.com.tr/ems/employee/${id}/`
+    const apiUrl= `http://backend.norbit.com.tr/ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
 
     const api = new Promise((resolve, reject) => {
@@ -208,12 +229,18 @@ const getResponsibleId = async (id) => {
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            const firstname = response.data.first_name
-            const lastname = response.data.last_name;
-            const ownerData = firstname + ' ' + lastname;
-            resolve(ownerData)
+            const responseData = response.data.results
+
+            const ownerData = responseData.map((item) => {
+                const firstname = item.first_name;
+                const lastname = item.last_name;
+                return firstname + ' ' + lastname;
+            });
+
+            resolve(ownerData);
         }).catch((error) => {
-            reject("null")
+            reject(error)
+        
         });
     });
 
@@ -226,7 +253,7 @@ const getResponsibleId = async (id) => {
     }
 } 
 
-function getOwnerName(){
+function getResponsiblePerson(purchaseId){
     const apiUrl= "http://backend.norbit.com.tr/ems/list/"
     const token  = localStorage.getItem('token');
 
@@ -238,12 +265,18 @@ function getOwnerName(){
         },
     }).then((response)=>{
         const personNameData = response.data.results;
-        console.log(personNameData)
-        personNameData.forEach((person) => {
-            const nameContent = document.getElementById('personName');
-            nameContent.value= person.id;
-            nameContent.text = person.first_name;
 
+        const personList = document.getElementById('responsible-person');
+        personList.innerHTML = '';
+
+        personNameData.forEach((person) => {
+            const option = document.createElement('option');
+            option.value= person.id;
+            option.text = person.first_name + ' ' + person.last_name;
+            if (person.id === purchaseId) {
+                option.selected = true; // Seçilen kişiyi seçili olarak işaretle
+              }
+            personList.appendChild(option)
         });
 
     }).catch((error) => {
@@ -276,7 +309,7 @@ function editPurchaseRequest(purchaseId){
             product_name: newProductName.value,
             price: newPrice.value,
             count: newCount.value,
-            purchasing_date: new Date (newPurchaseDate.value),
+            purchasing_date: newPurchaseDate.value,
             link: newLink.value,
             description:newDescription.value,
         }
@@ -300,7 +333,11 @@ function createEditButton(purchaseId){
 
 const deletePurchase = async(delete_button) => {
 
-    Id = delete_button.getAttribute('data-user-id');
+    const ownerId = await getOwnerNameId();
+    const loginnedUserId = await getUserInfoId();
+
+    if (loginnedUserId === ownerId) {
+     Id = delete_button.getAttribute('data-user-id');
     const apiUrl = `http://backend.norbit.com.tr/purchase-request/${Id}/`;
     const token  = localStorage.getItem('token');
 
@@ -313,7 +350,8 @@ const deletePurchase = async(delete_button) => {
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            console.log(response.data)
+            const dataList = response.data;
+
             if (response.status === 204) {
 
                 window.location.reload();
@@ -321,7 +359,8 @@ const deletePurchase = async(delete_button) => {
             } else {
                 console.error('Satır silinemedi.');
             }
-            //resolve(dataList)
+            console.log(dataList)
+            resolve(dataList)
         }).catch((error) => {
             reject("null")
         });
@@ -334,6 +373,27 @@ const deletePurchase = async(delete_button) => {
     catch (e) {
         return e
     }
+
+}
+}
+const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
+    const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+    const token  = localStorage.getItem('token');
+    const api = new Promise((resolve, reject) => {
+        axios ({
+            method:'get',
+            url: apiUrl,
+            headers: {
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const loginnedUserId = response.data.id;
+            resolve(loginnedUserId);
+
+        }).catch((error) => {
+            reject(error);
+            });
+    });
 }
 function clearInput(){
 
@@ -348,5 +408,6 @@ function clearInput(){
 window.addEventListener("load", (event) => {
     purchaseList();
     getOwnerNameId();
-    getOwnerName();
+    getResponsiblePerson();
+
 })

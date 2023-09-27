@@ -290,12 +290,12 @@
                                 <div class="purchase-request-list">
                                     <div class="g-4 mb-3 row">
                                         <div class="col-sm-auto col">
-                                            <div class="table-buttons col-sm-2">
+                                            <div class="table-buttons">
                                                 
-                                                <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>
-                                                <a class="mdi mdi-chevron-down btn btn-light btn-m" id="situation"></a> -->
-                                                <a class="mdi mdi-plus btn btn-info btn-m " id="add-btn" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModal"></a>
+                                                <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>-->
+                                                <a class="mdi mdi-chevron-down btn btn-light btn-m" id="situation"></a> 
+                                                <a class="mdi mdi-plus btn btn-info btn-m " id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+                                                    
             
                                             </div>
                                         </div>
@@ -303,13 +303,13 @@
                                             <div class="d-flex justify-content-sm-end">
                                                 <div class="search-box ms-2">
                                                     <input type="text" class="form-control search" placeholder="Search...">
-                                                    
+                                                    <i class="ri-search-line search-icon"></i>
                                                 </div>
                                             </div>
                                         </div>  
                                     </div>
                                     <div class="table-responsive table-card mt-3 mb-1">
-                                        <table class="table align-middle table-nowrap" id="personalTable">
+                                        <table class="table align-middle table-nowrap" id="purchaseTable">
                                             <thead class="table-light">
                                                 <tr>
                                                     <th scope="sort">ID</th> 
@@ -352,8 +352,8 @@
                             <br>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="inputName4" class="form-label" >Sorumlu Kişi</label>
-                                    <input type="text" class="form-control" id="responsible-person">
+                                    <label for="responsible-person" class="form-label" >İsteyen Kişi</label>
+                                    <select type="text" class="form-select" id="responsible-person"></select>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="inputEmail4" class="form-label" >Ürün İsmi</label>
@@ -372,8 +372,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="inputAddress2" class="form-label">İstek Tarihi</label>
-                                    <input type="date" class="form-control"  id="purchasingDate">
+                                    <label for="purchasingDate" class="form-label">İstek Tarihi</label>
+                                    <input type="datetime-local" name="datetime" class="form-control"  id="purchasingDate">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="inputAddress" class="form-label" >Link</label>
