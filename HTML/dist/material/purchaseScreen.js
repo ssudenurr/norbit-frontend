@@ -18,9 +18,9 @@ const modalContent = document.getElementById('modalContent');
 // statusBtn.className('badge bg-success-subtle text-success text-uppercase')   
 const statusBtn = document.getElementById('situation');
 
-statusBtn.addEventListener('click', () => {
+// statusBtn.addEventListener('click', () => {
 
-})
+// })
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () => {
     modalButtonBox.innerHTML = ''
@@ -87,7 +87,6 @@ const getPurchaseData = (purchaseId) => {
     })
     .then(async (response) => {
         const purchaseData =response.data;
-        console.log(purchaseData);
 
         const responsiblePersonData = await getResponsibleId(purchaseData.responsible_person);
 
@@ -95,7 +94,6 @@ const getPurchaseData = (purchaseId) => {
         const priceData = purchaseData.price;
         const countData = purchaseData.count;
         const purchasingDateData = purchaseData.purchasing_date;
-        console.log(purchasingDateData)
         const linkData = purchaseData.e_commerce_site;
         const descriptionData = purchaseData.description;
 
@@ -106,7 +104,6 @@ const getPurchaseData = (purchaseId) => {
         price.value = priceData;
         count.value = countData;
         purchasingDate.value = formatDateToCustomFormat(transDate);
-        console.log(purchasingDate)
         link.value = linkData;
         description.value = descriptionData;
         getResponsiblePerson(purchaseData.responsible_person);
@@ -373,8 +370,7 @@ const deletePurchase = async(delete_button) => {
     catch (e) {
         return e
     }
-
-}
+    }   
 }
 const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
@@ -388,6 +384,11 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
             },
         }).then((response)=>{
             const loginnedUserId = response.data.id;
+            const loginnedUserType = response.data.user_type;
+            
+            if (loginnedUserType === "AdminUser"){
+                statusBtn.style.display = "block"
+            }
             resolve(loginnedUserId);
 
         }).catch((error) => {
@@ -395,6 +396,7 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
             });
     });
 }
+
 function clearInput(){
 
     productName.value = '';
@@ -405,9 +407,63 @@ function clearInput(){
     description.value = '';
     responsiblePerson.value ='';
 }
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
+
+searchButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    const searchTerm = searchInput.value.trim();    
+    if (searchTerm === ''){
+        alert('Lütfen bir arama terimi giriniz')
+        return; 
+    }
+    searchResults(searchTerm)
+});
+
+    // async function searchData(search){
+
+
+    //     const apiUrl = `http://backend.norbit.com.tr/purchase-request/?search=${search}`;
+    //     const token  = localStorage.getItem('token');
+
+    //     axios({
+    //         method:'get',
+    //         url:apiUrl,
+    //         headers:{ 
+    //             "Authorization": `Token ${token}`
+    //         },
+    //     }).then(response => {
+    //         const searchData = response.data;
+    //         searchResults(searchData, searchTerm);
+
+    //     })
+    //     .catch(error => {
+    //         console.error('Arama sırasında hata oluştu: ', error);
+    //     });
+    // }
+
+function searchResults(searchTerm){
+    const tableRows = document.querySelectorAll('#purchaseTable tbody tr');
+
+    tableRows.forEach(row => {
+        const rowData = row.textContent.toLowerCase(); // Satır verilerini küçük harfe çevirin.
+
+        if (rowData.includes(searchTerm.toLowerCase())) {
+            row.style.display = 'table-row'; // Eğer arama terimi bulunursa satırı gösterin.
+        } else {
+            row.style.display = 'none'; // Eğer arama terimi bulunmazsa satırı gizleyin.
+        }
+        if (searchInput.value === '') {
+                row.style.display = 'table-row';
+        }
+
+})
+}
 window.addEventListener("load", (event) => {
+    getUserInfoId();
     purchaseList();
     getOwnerNameId();
     getResponsiblePerson();
+
 
 })
