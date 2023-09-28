@@ -26,18 +26,35 @@ addRowButton.addEventListener('click', () => {
 });
 
 
-
+function formatDateToCustomFormat(date) {
+    var yyyy = date.getFullYear();
+    var MM = String(date.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
+    var dd = String(date.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
+    var hh = String(date.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
+    var mm = String(date.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
+  
+    // Sonuç formatını birleştiriyoruz
+    var formattedDate = yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm;
+  
+    return formattedDate;
+  }
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () => {
     modalButtonBox.innerHTML = ''
+    clearInput();
 })
 
 async function createEditButton(userId){ 
+    editClickFunction();
     document.getElementById('job-date').style.display = 'none'
     inputExitDate.style.display = 'block'
     modalButtonBox.innerHTML += `
         <button type="button" class="btn btn-primary" id="row-edit-btn" onclick='editPersonel(${userId})'>Düzenle</button>
     `;   
+    const rowEditBtn = document.getElementById('row-edit-btn');
+    rowEditBtn.addEventListener('click', () => {
+        clearInput();   
+    })
 
     modaltitle.innerHTML = "Personel Düzenleme Formu"
     getRowData(userId)
@@ -49,12 +66,7 @@ function createPersonel(){ // CREATE NEW PERSONAL
         const token  = localStorage.getItem('token');
         
        
-        const transDate = new Date(entryDate);
-
-        const year = transDate.getFullYear();
-        const month = transDate.getMonth();
-        const day = transDate.getDay();
-        const fullDate = `${year}-${month < 10 ? `0${month}` : month }-${day < 10 ?  `0${day}` : day}`;
+        const transDate = new Date (entryDate.value);
         axios({
             method:'post',
             url:apiUrl,
@@ -66,7 +78,7 @@ function createPersonel(){ // CREATE NEW PERSONAL
                 last_name:lastName.value,
                 job_title:job.value,
                 user_type:userTypes.value,
-                job_start_date:fullDate,
+                job_start_date:formatDateToCustomFormat(transDate),
                 company_name:company.value,
                 username:username.value,
                 password1:password.value,
@@ -166,6 +178,7 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
             const nameData = userData.first_name;
             const surnameData = userData.last_name;
             const exitData = userData.job_end_date;
+
             const jobData = userData.job_title;
             const companyData = userData.company_name;
             const typeData = userData.user;
@@ -173,15 +186,10 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
 
             const transDate = new Date(exitData);
 
-            const year = transDate.getFullYear();
-            const month = transDate.getMonth();
-            const day = transDate.getDay();
-            const fullDate = `${year}-${month < 10 ? `0${month}` : month }-${day < 10 ?  `0${day}` : day}`;
-            console.log(fullDate)
 
             firstName.value = nameData;
             lastName.value = surnameData;
-            exitDate.value = fullDate;
+            exitDate.value = formatDateToCustomFormat(transDate);
             job.value = jobData;
             company.value = companyData;
             userTypes.value = typeData;
@@ -271,13 +279,16 @@ const showPersonal = async (personalData) => {
         <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
-        editClickFunction();
         tableBody.appendChild(newRow);
         const deleteBtn = newRow.querySelector('.delete-btn');
         deleteBtn.addEventListener('click', function () {
             deleteRow(this);
         });
-
+        const userTypes = await getUserInfoId();
+        const editButton = document.querySelectorAll('.edit-btn')
+        if(userTypes === 'NormalUser'){
+            editButton.style.display = 'none';            
+        }
     });
 };    
 const editClickFunction = async () =>{
@@ -436,6 +447,10 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
             },
         }).then((response)=>{
             const loginId = response.data.id;
+            const userType = response.data.user_type;
+            console.log(userType)
+
+
             resolve(loginId);
 
         }).catch((error) => {
