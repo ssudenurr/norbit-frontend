@@ -13,14 +13,13 @@ const responsiblePerson = document.getElementById('responsible-person');
 const tableBody = document.querySelector('#purchaseTable tbody');
 const modalButtonBox = document.getElementById('button-box');
 
-const modalContent = document.getElementById('modalContent');
+const modalContent = document.getElementById('exampleModal');
 
-// statusBtn.className('badge bg-success-subtle text-success text-uppercase')   
 const statusBtn = document.getElementById('situation');
-
 statusBtn.addEventListener('click', () => {
-updatePurchaseStatus();
-});
+    updatePurchaseStatus();
+    });
+
 async function updatePurchaseStatus(requestId){
     const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
     const token = localStorage.getItem('token');
@@ -54,7 +53,8 @@ async function updatePurchaseStatus(requestId){
 
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () => {
-    modalButtonBox.innerHTML = ''
+    modalButtonBox.innerHTML = '';
+    clearInput();
 })
 addBtn.addEventListener('click', () =>{
     clearInput();
@@ -170,21 +170,19 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
     })
     .then(response =>{
         const requestData = response.data.results;
-        showPurchase(requestData)
+        showPurchaseRequest(requestData)
     })
     .catch(error => {
         console.error('hata oluştu',error);
     })
 };
-const showPurchase = async (requestData,requestId) => {
+const showPurchaseRequest = async (requestData) => {
     tableBody.innerHTML ='';
     const loginnedUserId = await getUserInfoId();
     requestData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const owner = await getOwnerNameId(item.owner)
         const responsiblePerson = await getResponsibleId(item.responsible_person);
-
-        console.log(requestData)
         newRow.innerHTML =  `
         <td><input class ="form-check-input" type ="checkbox" id="checkbox" value=""</td>
         <td>${owner}</td>
@@ -196,7 +194,7 @@ const showPurchase = async (requestData,requestId) => {
         <td>${item.e_commerce_site}</td>
         <td>${item.purchasing_date}</td>  
         <td>${item.description}</td>
-        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
+        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-bs-toggle ="modal"data-bs-target="#exampleModal" data-user-id='${item.id}' >Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
 
@@ -208,14 +206,19 @@ const showPurchase = async (requestData,requestId) => {
 
         const checkbox = newRow.querySelector('input[type="checkbox"]');
         checkbox.addEventListener('change', function () {
+            const itemId = item.id;
             if (this.checked) {
-                const itemId = item.id;
 
                 console.log("Seçilen satırın ID'si: " + itemId);
-                updatePurchaseStatus(itemId);
             }   
+            statusBtn.addEventListener('click', () => {
+                updatePurchaseStatus(itemId);
+                });
 
             });
+
+clearInput();
+        
             
     });
 };  
@@ -362,14 +365,20 @@ function editPurchaseRequest(purchaseId){
         console.error(error)
     });
 }
-function createEditButton(purchaseId){ 
+async function createEditButton(purchaseId,loginnedUserId,ownerID) { 
+    // const loginnedUserId = await getUserInfoId();    
+    // const ownerID = await getOwnerNameId();
+    // console.log(ownerID,loginnedUserId)
+    // if(loginnedUserId === ownerID){
     modalButtonBox.innerHTML += `
       <button type="button" class="btn btn-primary" id="row-edit-btn" onclick='editPurchaseRequest(${purchaseId})'>Düzenle</button>
     `;   
 
-    modaltitle.innerHTML = "istek Düzenleme Formu"
-    getPurchaseData(purchaseId)
+    modaltitle.innerHTML = "İstek Düzenleme Formu";
+    getPurchaseData(purchaseId);
+
 }
+
 
 const deletePurchase = async(delete_button) => {
 
@@ -456,10 +465,10 @@ const searchButton = document.getElementById('search-button');
 searchButton.addEventListener('click', (event) => {
     event.preventDefault();
     const searchTerm = searchInput.value.trim();    
-    if (searchTerm === ''){
-        alert('Lütfen bir arama terimi giriniz')
-        return; 
-    }
+    // if (searchTerm === ''){
+    //     alert('Lütfen bir arama terimi giriniz')
+    //     return; 
+    // }
     searchResults(searchTerm)
 });
 
@@ -489,12 +498,12 @@ function searchResults(searchTerm){
     const tableRows = document.querySelectorAll('#purchaseTable tbody tr');
 
     tableRows.forEach(row => {
-        const rowData = row.textContent.toLowerCase(); // Satır verilerini küçük harfe çevirin.
+        const rowData = row.textContent.toLowerCase(); 
 
-        if (rowData.includes(searchTerm.toLowerCase())) {
-            row.style.display = 'table-row'; // Eğer arama terimi bulunursa satırı gösterin.
+        if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
+            row.style.display = 'table-row'; 
         } else {
-            row.style.display = 'none'; // Eğer arama terimi bulunmazsa satırı gizleyin.
+            row.style.display = 'none'; 
         }
         if (searchInput.value === '') {
                 row.style.display = 'table-row';
@@ -507,6 +516,4 @@ window.addEventListener("load", (event) => {
     purchaseList();
     getOwnerNameId();
     getResponsiblePerson();
-
-
 })
