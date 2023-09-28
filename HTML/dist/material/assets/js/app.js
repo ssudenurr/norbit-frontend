@@ -1772,32 +1772,32 @@
     });
 
     
-// const userName = document.getElementById('userName')
-// const userType = document.getElementById('userType')
+const userName = document.getElementById('userName')
+const userType = document.getElementById('userType')
 
-//     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
-//     const token  = localStorage.getItem('token');
+    const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+    const token  = localStorage.getItem('token');
 
-// axios ({
-//     method:'get',
-//     url: apiUrl,
-//     headers: {
-//         "Authorization": `Token ${token}`
-//     },
-// }).then((response)=>{
-//     const userData = response.data;
-//     personalInfo(userData);
+axios ({
+    method:'get',
+    url: apiUrl,
+    headers: {
+        "Authorization": `Token ${token}`
+    },
+}).then((response)=>{
+    const userData = response.data;
+    personalInfo(userData);
 
-// }).catch((error) => {
-//       console.log(error);
-//     });
+}).catch((error) => {
+      console.log(error);
+    });
 
-// function personalInfo(userData){
-//     userName.textContent = userData.first_name + ' ' + userData.last_name;
-//     userType.textContent = userData.user_type;
-// }
+function personalInfo(userData){
+    userName.textContent = userData.first_name + ' ' + userData.last_name;
+    userType.textContent = userData.user_type;
+}
 
-// window.onload = function () {
-//     personalInfo();
-// };
+window.onload = function () {
+    personalInfo();
+};
   
