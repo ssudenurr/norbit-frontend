@@ -261,14 +261,13 @@
 
                         </li>
 
-
+                        -->
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarUI" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarUI">
+                            <a class="nav-link menu-link" href="purchasePage.html" aria-expanded="false" aria-controls="sidebarUI">
                                 <i class="mdi mdi-cube-outline"></i> <span data-key="t-base-ui">Satın Alım
                                     Bilgileri</span>
                             </a>
-                        </li> -->
+                        </li> 
 
 
                     </ul>
@@ -314,7 +313,7 @@
                                     </div>  
                                 </div>
                                 <div class="table-responsive table-card mt-3 mb-1">
-                                    <table class="table align-middle table-nowrap" id="personalTable">
+                                    <table class="table align-middle" id="personalTable">
                                         <thead class="table-light">
                                             <tr>
                                                 <th scope="col">ID</th>
@@ -325,7 +324,6 @@
                                                 <th scope="col">İşe Giriş Tarihi</th>
                                                 <th scope="col">İşten Çıkış Tarihi</th>
                                                 <th scope="col">Şirketi</th>
-                                                <th scope="col">Username</th>
                                                 <th scope="col">Username</th>
                                                 <th scope="col">Düzenleme</th>
                                                 <th scope="col"></th>
@@ -369,7 +367,7 @@
                             <div class="row">
                                 <div class="col-md-6" id="job-date">
                                     <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
-                                    <input type="date" class="form-control" id="inputDate">
+                                    <input type="datetime-local" name="datetime" class="form-control" id="inputDate">
                                 </div>
                                 <div class="col-md-6" id="duty">
                                     <label for="inputJob" class="form-label">Görevi</label>
@@ -378,7 +376,7 @@
                                 </div>
                                 <div class="col-md-6" id="input-exit-date">
                                     <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
-                                    <input type="date" class="form-control" id="inputExitDate">
+                                    <input type="datetime-local" class="form-control" id="inputExitDate">
                                 </div>
                             </div>
                             <div class="row">
