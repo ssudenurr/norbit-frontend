@@ -178,7 +178,6 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
 };
 const showPurchaseRequest = async (requestData) => {
     tableBody.innerHTML ='';
-    const loginnedUserId = await getUserInfoId();
     requestData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const owner = await getOwnerNameId(item.owner)
@@ -194,15 +193,39 @@ const showPurchaseRequest = async (requestData) => {
         <td>${item.e_commerce_site}</td>
         <td>${item.purchasing_date}</td>  
         <td>${item.description}</td>
-        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-bs-toggle ="modal"data-bs-target="#exampleModal" data-user-id='${item.id}' >Edit</button></td>
+        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn"  data-bs-toggle ="modal" data-bs-target="#exampleModal" data-user-id='${item.id}' >Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
 
         tableBody.appendChild(newRow);
         const deleteBtn = newRow.querySelector('.delete-btn');
-        deleteBtn.addEventListener('click', function () {
-            deletePurchase(this, loginnedUserId);   
-        });
+        const editBtn = newRow.querySelector('.edit-btn')
+
+        const ownerid = item.owner;
+        const loginnedUser = await getUserInfoId();
+        const loginnedUserId = loginnedUser.id;
+        const loginnedUserType = loginnedUser.user_type;
+        
+        
+        if(loginnedUserId === ownerid || loginnedUserType ==='AdminUser'){
+
+            deleteBtn.addEventListener('click', function () {
+                deletePurchase(this, loginnedUserId);   
+            });
+
+            editBtn.addEventListener('click', ()=>{
+                createEditButton(item.id)
+            });
+
+        }else{
+            editBtn.removeAttribute('onclick');
+            editBtn.classList.add('disabled');
+
+            deleteBtn.removeAttribute('onclick');
+            deleteBtn.classList.add('disabled');
+        }
+
+
 
         const checkbox = newRow.querySelector('input[type="checkbox"]');
         checkbox.addEventListener('change', function () {
@@ -382,10 +405,6 @@ async function createEditButton(purchaseId,loginnedUserId,ownerID) {
 
 const deletePurchase = async(delete_button) => {
 
-    const ownerId = await getOwnerNameId();
-    const loginnedUserId = await getUserInfoId();
-
-    if (loginnedUserId === ownerId) {
      Id = delete_button.getAttribute('data-user-id');
     const apiUrl = `http://backend.norbit.com.tr/purchase-request/${Id}/`;
     const token  = localStorage.getItem('token');
@@ -422,8 +441,8 @@ const deletePurchase = async(delete_button) => {
     catch (e) {
         return e
     }
-    }   
-}
+}   
+
 const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
     const token  = localStorage.getItem('token');
@@ -435,18 +454,25 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            const loginnedUserId = response.data.id;
-            const loginnedUserType = response.data.user_type;
-            
-            if (loginnedUserType === "AdminUser"){
+            const userInfo = response.data;
+
+            if (userInfo.user_type === "AdminUser"){
                 statusBtn.style.display = "block"
             }
-            resolve(loginnedUserId);
+            resolve(userInfo);
 
         }).catch((error) => {
             reject(error);
             });
     });
+    
+    try{
+        const res = await api;
+        return res;
+    }
+    catch (e){
+        console.log(e)
+    }
 }
 
 function clearInput(){
@@ -472,6 +498,23 @@ searchButton.addEventListener('click', (event) => {
     searchResults(searchTerm)
 });
 
+function searchResults(searchTerm){
+    const tableRows = document.querySelectorAll('#purchaseTable tbody tr');
+
+    tableRows.forEach(row => {
+        const rowData = row.textContent.toLowerCase(); 
+
+        if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
+            row.style.display = 'table-row'; 
+        } else {
+            row.style.display = 'none'; 
+        }
+        if (searchInput.value === '') {
+                row.style.display = 'table-row';
+        }
+
+})
+}
     // async function searchData(search){
 
 
@@ -494,23 +537,6 @@ searchButton.addEventListener('click', (event) => {
     //     });
     // }
 
-function searchResults(searchTerm){
-    const tableRows = document.querySelectorAll('#purchaseTable tbody tr');
-
-    tableRows.forEach(row => {
-        const rowData = row.textContent.toLowerCase(); 
-
-        if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
-            row.style.display = 'table-row'; 
-        } else {
-            row.style.display = 'none'; 
-        }
-        if (searchInput.value === '') {
-                row.style.display = 'table-row';
-        }
-
-})
-}
 window.addEventListener("load", (event) => {
     getUserInfoId();
     purchaseList();
