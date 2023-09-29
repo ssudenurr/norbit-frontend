@@ -26,7 +26,6 @@ const getData = async (url=null) => {
         })
         .then((response)=>{
             const data =response.data;
-            console.log(data)
             resolve(data)
             
     
@@ -64,26 +63,29 @@ const addToProblemSolve = () => {
     const apiUrl = `http://backend.norbit.com.tr/knowhow/list/`; 
     const token  = localStorage.getItem('token');
     
-    const problemTitle = document.getElementById('problem-title-input');
-    const solutionDescription = document.getElementById('solution-description') 
-    const solutionFile = document.getElementById('solution-file');
+    const problemTitle = document.getElementById('problem-title-input').value;
+    const solutionDescription = document.getElementById('solution-description').value; 
+    const solutionFileInput = document.getElementById('solution-file');
+
+    console.log(problemTitle);
+
+    const solutionFile = solutionFileInput.files[0];
+    const formData = new FormData();
+    
+    formData.append('problem', problemTitle);
+    formData.append('solve_text', solutionDescription);
+    formData.append('upload', solutionFile);
   
-    axios({
-        method:'post',
-        url:apiUrl,
+    axios.post(apiUrl, formData, {
         headers:{ 
-            "Authorization": `Token ${token}`
-        },
-        data: {
-            'problem': problemTitle.value,
-            'upldoad': solutionFile.value,
-            'solve_text': solutionDescription.value,
-        }
+            "Authorization": `Token ${token}`,
+            "Content-Type": "multipart/form-data"
+        } 
     })
     .then((response)=>{
 
         window.location.reload()
-
+        // console.log(response.data);
 
     }).catch((error) => {
         console.log(error)
@@ -110,7 +112,6 @@ const deleteClickFunction = async () => {
     const userInfo = await getUserInfoId();
     const loginnedUserId = userInfo.id;
     const userType = userInfo.user_type;
-    console.log(loginnedUserId, userType);
 
     deleteButtons.forEach( async (deleteButton) => {
         deleteButton.addEventListener('click', (event) => {
@@ -138,7 +139,6 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
             },
         }).then((response)=>{
             const loginInfo = response.data;
-            console.log(loginInfo)
 
             resolve(loginInfo);
 
@@ -169,7 +169,7 @@ const getOwner = async (id) => {
         },
     }).then((response)=>{
         const responseData = response.data.results;
-        console.log(responseData)
+
 
         const ownerData = responseData.map((item) => {
             const firstname = item.first_name;
@@ -177,7 +177,7 @@ const getOwner = async (id) => {
             return firstname + ' ' + lastname
             
         });
-        console.log(ownerData)
+
         resolve(ownerData);
         // console.log(ownerData)
     }).catch((error) => {
@@ -198,8 +198,7 @@ const AddContent = async (item) => {
     const accordionBox = document.getElementById('accordionExample');
     const userId = await getUserInfoId();
     const owner = await getOwner(item.owner);
-    // const ownerUser = await getAddedByUserId(item.owner);
-    console.log()
+
     const boxData = `
     <div class="accordion-item">
         <h2 class="accordion-header" id="accordionHeader">
@@ -216,7 +215,7 @@ const AddContent = async (item) => {
 
                 <div class="mb-3">
                     <label class="form-label" for="project-thumbnail-img">Doküman</label>
-                    <p id="solution-file" type="file">${item.upload}</p>
+                    <a href="${item.upload}" download>${item.upload}</a>
                 </div>
 
                 <div class="mb-3">
@@ -240,6 +239,7 @@ const AddContent = async (item) => {
     accordionBox.innerHTML += boxData;
     deleteClickFunction(owner);
 }
+
 
 
 const deleteProblem = async(pageId) =>{
