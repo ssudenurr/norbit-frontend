@@ -103,17 +103,22 @@ const writeContent = async ()=>{
     }, 100)
 
 }
+
 const deleteClickFunction = async () => {
     const deleteButtons = document.querySelectorAll('.delete-btn');
 
+    const userInfo = await getUserInfoId();
+    const loginnedUserId = userInfo.id;
+    const userType = userInfo.user_type;
+    console.log(loginnedUserId, userType);
+
     deleteButtons.forEach( async (deleteButton) => {
-        const loginnedUserId = await getUserInfoId()
         deleteButton.addEventListener('click', (event) => {
             const pageId = event.currentTarget.getAttribute('data-accordion-id');
             const userId = event.currentTarget.getAttribute('data-user-id');
             console.log(userId, loginnedUserId)
 
-            if(loginnedUserId==userId){
+            if(loginnedUserId==userId || userType === 'AdminUser'){
                 deleteProblem(pageId);
             }else {
                 console.log('You are not authorized to delete this item.');
@@ -132,8 +137,10 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            const loginId = response.data.id;
-            resolve(loginId);
+            const loginInfo = response.data;
+            console.log(loginInfo)
+
+            resolve(loginInfo);
 
             // console.log(fullName)
         }).catch((error) => {
@@ -151,7 +158,7 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
     
 }  
 const getOwner = async (id) => {
-    const apiUrl= `http://backend.norbit.com.tr/ems/employee/${id}/`
+    const apiUrl= `http://backend.norbit.com.tr/ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
     const api = new Promise((resolve, reject) => {
     axios ({
@@ -161,7 +168,17 @@ const getOwner = async (id) => {
             "Authorization": `Token ${token}`
         },
     }).then((response)=>{
-        resolve(response.data)
+        const responseData = response.data.results;
+        console.log(responseData)
+
+        const ownerData = responseData.map((item) => {
+            const firstname = item.first_name;
+            const lastname = item.last_name;
+            return firstname + ' ' + lastname
+            
+        });
+        console.log(ownerData)
+        resolve(ownerData);
         // console.log(ownerData)
     }).catch((error) => {
         reject("null")
@@ -180,7 +197,7 @@ const getOwner = async (id) => {
 const AddContent = async (item) => {
     const accordionBox = document.getElementById('accordionExample');
     const userId = await getUserInfoId();
-    const owner = await getOwner(item.owner)
+    const owner = await getOwner(item.owner);
     // const ownerUser = await getAddedByUserId(item.owner);
     console.log()
     const boxData = `
@@ -209,7 +226,7 @@ const AddContent = async (item) => {
                 
                 <div class="mb-3">
                     <label class="form-label">Ekleyen Kişi</label>
-                    <p type="text" id="owner">${owner.first_name} ${owner.last_name}</p>
+                    <p type="text" id="owner">${owner}</p>
                 </div>
 
                 <div class="text-end mb-4">
