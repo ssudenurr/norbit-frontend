@@ -1,5 +1,6 @@
 
 const addRowButton = document.getElementById('add-btn');
+
 const modaltitle = document.getElementById('exampleModalLabel');
 
 const firstName = document.getElementById('inputFirstame');
@@ -174,11 +175,10 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
         })
         .then( async (response)=>{
             const userData = response.data;
-            console.log(userData)
             const nameData = userData.first_name;
             const surnameData = userData.last_name;
             const exitData = userData.job_end_date;
-
+            
             const jobData = userData.job_title;
             const companyData = userData.company_name;
             const typeData = userData.user;
@@ -261,13 +261,17 @@ const personalList = () => {    // GETTING CONTACT INFORMATION FROM API
 };
 
 const showPersonal = async (personalData) => {
+    
     tableBody.innerHTML = '';
+    const loginnedUser = await getUserInfoId();
+    const loginnedUserType = loginnedUser.user_type;
+    
     personalData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const job = await getJobTitleId(item.job_title); 
         const company = await getCompanyNameId(item.company_name);
         newRow.innerHTML =  `
-        <td><input class = "form-check-input" type = "checkbox" value=""</td>
+        <td><input class = "form-check-input" type ="checkbox"  value=""</td>
         <td>${item.first_name}</td>
         <td>${item.last_name}</td>
         <td>${job}</td>
@@ -280,7 +284,23 @@ const showPersonal = async (personalData) => {
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
         tableBody.appendChild(newRow);
+        const checkBox = newRow.querySelector('.form-check-input');
+        const editBtn = newRow.querySelector('.edit-btn');
         const deleteBtn = newRow.querySelector('.delete-btn');
+        const editCol = document.getElementById('editCol');
+        const colId = document.getElementById('colId');
+        if(loginnedUserType === 'AdminUser'){
+            addRowButton.style.display = ''
+        }
+        if(loginnedUserType === 'NormalUser'){
+            editBtn.style.display = 'none';
+            deleteBtn.style.display = 'none';
+            editCol.style.display = 'none';
+            checkBox.style.display = 'none';
+            colId.innerHTML='';
+
+        }
+
         deleteBtn.addEventListener('click', function () {
             deleteRow(this);
         });
@@ -423,18 +443,6 @@ const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
     }
 };
 
-
-
-window.addEventListener("load", (event) => {
-    personalList();
-    getJobTitle();
-    getJobTitleId();
-    getCompanyName();
-    getCompanyNameId();
-
-
-});
-
 const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
     const token  = localStorage.getItem('token');
@@ -446,12 +454,10 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            const loginId = response.data.id;
-            const userType = response.data.user_type;
-            console.log(userType)
+            const userInfo = response.data;
 
 
-            resolve(loginId);
+            resolve(userInfo);
 
         }).catch((error) => {
             reject(error);
@@ -467,7 +473,37 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
     }
     
 }
-getUserInfoId();
+
+const searchInput = document.getElementById('search-input');
+const searchButton = document.getElementById('search-button');
+
+searchButton.addEventListener('click', (event) => {
+    event.preventDefault();
+    const searchTerm = searchInput.value.trim();    
+    // if (searchTerm === ''){
+    //     alert('Lütfen bir arama terimi giriniz')
+    //     return; 
+    // }
+    searchResults(searchTerm)
+});
+
+function searchResults(searchTerm){
+    const tableRows = document.querySelectorAll('#personalTable tbody tr');
+
+    tableRows.forEach(row => {
+        const rowData = row.textContent.toLowerCase(); 
+
+        if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
+            row.style.display = 'table-row'; 
+        } else {
+            row.style.display = 'none'; 
+        }
+        if (searchInput.value === '') {
+                row.style.display = 'table-row';
+        }
+
+})
+}
 // const searchBtn = document.getElementById('search-btn')
 // const searchBox = document.getElementById('search-box')
 
@@ -530,3 +566,13 @@ getUserInfoId();
 //     });
 
 // })
+window.addEventListener("load", async (event) => {
+
+    personalList();
+    getJobTitle();
+    getJobTitleId();
+    getCompanyName();
+    getCompanyNameId();
+
+
+});
