@@ -268,18 +268,25 @@ const showPersonal = async (personalData) => {
     
     personalData.forEach(async  item => {
         const newRow = document.createElement('tr');
-        const job = await getJobTitleId(item.job_title); 
-        const company = await getCompanyNameId(item.company_name);
+        const job = await getJobTitleId(item.job_title) || '-'; 
+        const company = await getCompanyNameId(item.company_name) || '-';
+        const first_name = item.first_name || '-';
+        const last_name = item.last_name || '-';
+        const user = item.user || '-';
+        const job_start_date = item.job_start_date || '-';
+        const job_end_date = item.job_end_date || '-';
+        const username = item.username || '-';
+
         newRow.innerHTML =  `
         <td><input class = "form-check-input" type ="checkbox"  value=""</td>
-        <td>${item.first_name}</td>
-        <td>${item.last_name}</td>
+        <td>${first_name}</td>
+        <td>${last_name}</td>
         <td>${job}</td>
-        <td>${item.user}</td>
-        <td>${item.job_start_date}</td>
-        <td>${item.job_end_date}</td>
+        <td>${user}</td>
+        <td>${job_start_date}</td>
+        <td>${job_end_date}</td>
         <td>${company}</td>
-        <td>${item.username}</td>
+        <td>${username}</td>
         <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
