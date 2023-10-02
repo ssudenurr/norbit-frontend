@@ -197,30 +197,33 @@ const getOwner = async (id) => {
 const AddContent = async (item) => {
     const accordionBox = document.getElementById('accordionExample');
     const userId = await getUserInfoId();
-    const owner = await getOwner(item.owner);
+    const owner = await getOwner(item.owner) || '-';
 
+    const problem = item.problem || '-';
+    const upload = item.upload || '-';
+    const solve_text = item.solve_text || '-';
     const boxData = `
     <div class="accordion-item">
         <h2 class="accordion-header" id="accordionHeader">
             <button class="accordion-button" id="problemContent" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-${item.id}" aria-expanded="true" aria-controls="accordion-${item.id}">
-                ${item.problem}
+                ${problem}
             </button>
         </h2>
         <div id="accordion-${item.id}" class="accordion-collapse collapse" aria-labelledby="accordionHeader">
             <div class="accordion-body">
                 <div class="mb-3">
                     <label class="form-label" for="problem-title-input">Problemin Konusu</label>
-                    <p type="text" id="problem-title-input">${item.problem}</p>
+                    <p type="text" id="problem-title-input">${problem}</p>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="project-thumbnail-img">Doküman</label>
-                    <a href="${item.upload}" download>${item.upload}</a>
+                    <p><a href="${upload}" >${upload}</a></p>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Açıklama</label>
-                    <p type="text" id="solution-description">${item.solve_text}</p>
+                    <p type="text" id="solution-description">${solve_text}</p>
                 </div>
                 
                 <div class="mb-3">
