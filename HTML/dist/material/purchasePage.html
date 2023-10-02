@@ -252,16 +252,15 @@
                             </a>
 
                         </li>
-
+                        -->
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarLanding" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarLanding">
+                            <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
                             </a>
 
                         </li>
 
-                        -->
+                        
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="purchasePage.html" aria-expanded="false" aria-controls="sidebarUI">
                                 <i class="mdi mdi-cube-outline"></i> <span data-key="t-base-ui">Satın Alım
@@ -288,47 +287,46 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                                <h4>Satın Alım Bilgileri</h4>
+                                <h4>Satın Alım İstekleri </h4>
                         </div>
                         <div class="card-body">
-                            <div class="personal-list">
+                            <div class="purchase-request-list">
                                 <div class="g-4 mb-3 row">
                                     <div class="col-sm-auto col">
-                                        <div class="table-buttons col-sm-2">
+                                        <div class="table-buttons">
                                             
-                                            <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>
-                                            <a class="mdi mdi-chevron-down btn btn-light btn-m" id="situation"></a> -->
-                                            <!-- <a class="mdi mdi-plus btn btn-info btn-m " id="add-btn" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"></a> -->
+                                            <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>-->
+                                            <a class="mdi mdi-reply btn btn-success btn-m" id="reply"></a> 
+                                            <a class="mdi mdi-check btn btn-info btn-m " id="situation" data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+                                            <a class="mdi mdi-close btn btn-danger btn-m" id="cancel" ></a> 
+                                                
         
                                         </div>
                                     </div>
                                     <div class="col-sm col">
                                         <div class="d-flex justify-content-sm-end">
-                                            <!-- <div class="search-box ms-2">
-                                                <input type="text" class="form-control search" id="search-input" placeholder="Search...">
+                                            <div class="search-box ms-2">
+                                                <input type="text" class="form-control search" id="search-input"placeholder="Search...">
                                                 <i class="ri-search-line search-icon" id="search-button"  style="cursor: pointer;" ></i>
-                                            </div> -->
+                                            </div>
                                         </div>
                                     </div>  
                                 </div>
-                                <div class="table-responsive table-card mt-3 mb-1" >
-                                    <table class="table align-middle table-nowrap table-light" id="purchase-table">
+                                <div class="table-responsive table-card mt-3 mb-1">
+                                    <table class="table align-middle" id="purchase-table">
                                         <thead class="table-light">
                                             <tr>
-                                                <!-- <th scope="sort">ID</th>  -->
-                                                <th scope="sort">İsteği Yapan Kişi</th> 
-                                                <!-- <th scope="sort">İsteyen Kişi</th>  -->
-                                                <th scope="sort">Durum</th>                                   
+                                                <th scope="sort">ID</th> 
+                                                <th scope="sort">Sorumlu Kişi</th> 
+                                                <th scope="sort" >Durum</th>                                   
                                                 <th scope="sort">Ürün Adı</th>                                    
                                                 <th scope="sort">Fiyat</th>    
                                                 <th scope="sort">Sayısı</th>                        
                                                 <th scope="sort">Link</th>
                                                 <th scope="sort">İstek Tarihi</th>
-                                                <!-- <th scope="sort">Açıklama</th> -->
-                                                <!-- <th scope="sort">Düzenleme</th> -->
-                                                <th scope="col"></th>  
-                                
+                                                <!-- <th scope="sort">Açıklama</th>
+                                                <th scope="sort">Düzenleme</th>
+                                                <th scope="col"></th>   -->
                                             </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
@@ -340,9 +338,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
-            </div>
+        </div>
 
         </div>
         </div>
