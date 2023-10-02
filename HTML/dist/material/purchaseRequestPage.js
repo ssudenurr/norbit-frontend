@@ -15,11 +15,44 @@ const modalButtonBox = document.getElementById('button-box');
 
 const modalContent = document.getElementById('exampleModal');
 
+const cancelBtn = document.getElementById('cancel');
+
 const statusBtn = document.getElementById('situation');
+statusBtn.style.display = "none"
+
 statusBtn.addEventListener('click', () => {
     updatePurchaseStatus();
     });
+async function cancelRequest(requestId){
+    const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
+    const token = localStorage.getItem('token');
 
+    axios({
+        method:'patch',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+            data:{
+            status: 'İptal Edildi',
+        }
+
+    }).then((response)=>{
+        console.log(response.data)
+        if (response.status === 200) {
+            console.log('Status updated successfully:', response.data);
+            window.location.reload();
+
+        } else {
+            console.error('Status update failed:', response);
+        }
+
+    }).catch((error) => {
+
+        console.error('An error occurred while updating the status:', error);
+
+    })
+}
 async function updatePurchaseStatus(requestId){
     const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
     const token = localStorage.getItem('token');
@@ -31,7 +64,7 @@ async function updatePurchaseStatus(requestId){
             "Authorization": `Token ${token}`
         },
          data:{
-            status: 'COM',
+            status: 'Onaylandı',
         }
 
     }).then((response)=>{
@@ -179,20 +212,28 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
 const showPurchaseRequest = async (requestData) => {
     tableBody.innerHTML ='';
     requestData.forEach(async  item => {
-        const newRow = document.createElement('tr');
-        const owner = await getOwnerNameId(item.owner)
-        const responsiblePerson = await getResponsibleId(item.responsible_person);
+        const newRow = document.createElement('tr') ;
+        const owner = await getOwnerNameId(item.owner) || '-';
+        const responsiblePerson = await getResponsibleId(item.responsible_person) || '-';
+
+        // const status = item.status || '-';
+        const productName = item.product_name || '-';
+        const price = item.price || '-';
+        const count = item.count || '-';
+        const e_commerce_site = item.e_commerce_site || '-';
+        const purchasing_date = item.purchasing_date || '-';
+        const description = item.description || '-';
         newRow.innerHTML =  `
         <td><input class ="form-check-input" type ="checkbox" id="checkbox" value=""</td>
         <td>${owner}</td>
         <td>${responsiblePerson}</td>
         <td>${item.status}</td>
-        <td>${item.product_name}</td>
-        <td>${item.price}</td>
-        <td>${item.count}</td>
-        <td>${item.e_commerce_site}</td>
-        <td>${item.purchasing_date}</td>  
-        <td>${item.description}</td>
+        <td>${productName}</td>
+        <td>${price}</td>
+        <td>${count}</td>
+        <td><a href="${e_commerce_site}" target="_blank" style="text-decoration:underline!important">${e_commerce_site}</a></td>  
+        <td>${purchasing_date}</td>  
+        <td>${description}</td>
         <td><button id="editBtn" class="btn btn-success btn-sm edit-btn"  data-bs-toggle ="modal" data-bs-target="#exampleModal" data-user-id='${item.id}' >Edit</button></td>
         <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
         `;
@@ -225,10 +266,9 @@ const showPurchaseRequest = async (requestData) => {
             deleteBtn.classList.add('disabled');
         }
 
-
-
         const checkbox = newRow.querySelector('input[type="checkbox"]');
-        checkbox.addEventListener('change', function () {
+        checkbox.addEventListener('change', function (e) {
+            e.preventDefault();
             const itemId = item.id;
             if (this.checked) {
 
@@ -237,7 +277,10 @@ const showPurchaseRequest = async (requestData) => {
             statusBtn.addEventListener('click', () => {
                 updatePurchaseStatus(itemId);
                 });
-
+            
+            cancelBtn.addEventListener('click', () =>{
+                cancelRequest(itemId);
+            });
             });
 
 clearInput();
@@ -457,7 +500,7 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
             const userInfo = response.data;
 
             if (userInfo.user_type === "AdminUser"){
-                statusBtn.style.display = "block"
+                statusBtn.style.display = "inline-block "
             }
             resolve(userInfo);
 
