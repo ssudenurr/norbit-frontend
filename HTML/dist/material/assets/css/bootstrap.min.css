@@ -5699,7 +5699,7 @@ fieldset:disabled .btn {
   outline: 0;
 }
 .modal-dialog {
-  background-color:#add8e6 ;
+  /* background-color:#add8e6 ; */
   position: relative;
   width: 800px;
   margin: var(--vz-modal-margin);
