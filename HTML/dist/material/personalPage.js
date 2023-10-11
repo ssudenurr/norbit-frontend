@@ -19,6 +19,8 @@ const modalButtonBox = document.getElementById('button-box');
 const inputExitDate = document.getElementById('input-exit-date');
 
 addRowButton.addEventListener('click', () => {
+    document.getElementById('job-date').style.display = 'block'
+    document.getElementById('password-content').style.display = 'block';
     clearInput();
     inputExitDate.style.display = 'none';
     modalButtonBox.innerHTML += `
@@ -26,19 +28,23 @@ addRowButton.addEventListener('click', () => {
     `;
 });
 
-
+function formatTarih(tarih) {
+    const tarihParcalari = tarih.split('T');
+    return tarihParcalari[0];
+}
 function formatDateToCustomFormat(date) {
-    var yyyy = date.getFullYear();
-    var MM = String(date.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
-    var dd = String(date.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
-    var hh = String(date.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
-    var mm = String(date.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
+    let date2 = new Date(date)
+    var yyyy = date2.getFullYear();
+    var MM = String(date2.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
+    var dd = String(date2.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
+    var hh = String(date2.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
+    var mm = String(date2.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
   
     // Sonuç formatını birleştiriyoruz
     var formattedDate = yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm;
   
     return formattedDate;
-  }
+}
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () => {
     modalButtonBox.innerHTML = ''
@@ -54,10 +60,13 @@ async function createEditButton(userId){
     `;   
     const rowEditBtn = document.getElementById('row-edit-btn');
     rowEditBtn.addEventListener('click', () => {
+        modal.hide();
         clearInput();   
+
     })
 
-    modaltitle.innerHTML = "Personel Düzenleme Formu"
+    modaltitle.innerHTML = "Personel Düzenleme Formu";
+    
     getRowData(userId)
 }
 
@@ -175,21 +184,18 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
         })
         .then( async (response)=>{
             const userData = response.data;
-            const nameData = userData.first_name;
-            const surnameData = userData.last_name;
-            const exitData = userData.job_end_date;
-            
-            const jobData = userData.job_title;
-            const companyData = userData.company_name;
-            const typeData = userData.user;
-            const userNameData = userData.username;
 
-            const transDate = new Date(exitData);
-
-
+            const nameData = userData.first_name || '';
+            const surnameData = userData.last_name || '';
+            const exitData = userData.job_end_date || '';
+            const jobData = userData.job_title || '';
+            const companyData = userData.company_name || '';
+            const typeData = userData.user || '';
+            const userNameData = userData.username || '';
+    
             firstName.value = nameData;
             lastName.value = surnameData;
-            exitDate.value = formatDateToCustomFormat(transDate);
+            exitDate.value = formatTarih(exitData);
             job.value = jobData;
             company.value = companyData;
             userTypes.value = typeData;
@@ -197,47 +203,54 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
 
 
         }).catch((error) => {
-            console.error(`Edit button clicked for user with ID: ${userId}`)
-        });
-
-}
-
-function editPersonel(userID){ // EDİT PERSONAL DATA
-    const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userID}/`; 
-    const token  = localStorage.getItem('token');
-
-    const newFirstName = document.getElementById('inputFirstame');
-    const newLastName = document.getElementById('inputLastname');
-    const newExitDate = document.getElementById('inputExitDate');
-    const newjob = document.getElementById('inputJob');
-    const newCompany = document.getElementById('inputCompany');
-    const newUserType = document.getElementById('inputUserType');
-        axios({
-            method:'patch',
-            url:apiUrl,
-            headers:{ 
-                "Authorization": `Token ${token}`
-            },
-            data:{
-                first_name:newFirstName.value,
-                last_name:newLastName.value,
-                job_title:newjob.value,
-                user:newUserType.value,
-                job_end_date:new Date(newExitDate.value),
-                company_name:newCompany.value,               
-
-        
-            }
-        })
-        .then((response)=>{
-            // const userData = response.data
-            window.location.reload();   
-
-        }).catch((error) => {
             console.error(error)
         });
 
 }
+
+function editPersonel(userID) {
+    const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userID}/`;
+    const token = localStorage.getItem('token');
+
+    const newFirstName = document.getElementById('inputFirstame');
+    const newLastName = document.getElementById('inputLastname');
+    const newjob = document.getElementById('inputJob');
+    const newCompany = document.getElementById('inputCompany');
+    const newUserType = document.getElementById('inputUserType');
+
+    const newExitDate = document.getElementById('inputExitDate');
+    const exitDateValue = newExitDate.value.trim();
+
+    const data = {
+        first_name: newFirstName.value,
+        last_name: newLastName.value,
+        job_title: newjob.value,
+        user: newUserType.value,
+        company_name: newCompany.value,
+    };
+
+
+    if (exitDateValue) {
+        data.job_end_date = formatDateToCustomFormat(exitDateValue);
+    }
+
+    axios({
+        method: 'patch',
+        url: apiUrl,
+        headers: {
+            "Authorization": `Token ${token}`
+        },
+        data: data,
+    })
+    .then((response) => {
+        // const userData = response.data
+        window.location.reload();
+    })
+    .catch((error) => {
+        console.error(error);
+    });
+}
+
             
 const personalList = () => {    // GETTING CONTACT INFORMATION FROM API
     const apiUrl = "http://backend.norbit.com.tr/ems/list/";
@@ -252,6 +265,7 @@ const personalList = () => {    // GETTING CONTACT INFORMATION FROM API
     })
     .then(response =>{
         const personalData = response.data.results;
+        console.log(personalData)
 
         showPersonal(personalData)
     })
@@ -269,16 +283,17 @@ const showPersonal = async (personalData) => {
     personalData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const job = await getJobTitleId(item.job_title) || '-'; 
+        console.log(job)
         const company = await getCompanyNameId(item.company_name) || '-';
         const first_name = item.first_name || '-';
         const last_name = item.last_name || '-';
         const user = item.user || '-';
-        const job_start_date = item.job_start_date || '-';
-        const job_end_date = item.job_end_date || '-';
+        const job_start_date = formatTarih(item.job_start_date) || '-';
+        const job_end_date = item.job_end_date ? formatTarih(item.job_end_date) : '-';
         const username = item.username || '-';
+        // <td><input class = "form-check-input" type ="checkbox"  value=""</td>
 
         newRow.innerHTML =  `
-        <td><input class = "form-check-input" type ="checkbox"  value=""</td>
         <td>${first_name}</td>
         <td>${last_name}</td>
         <td>${job}</td>
@@ -310,11 +325,13 @@ const showPersonal = async (personalData) => {
 
         deleteBtn.addEventListener('click', function () {
             deleteRow(this);
+
         });
         const userTypes = await getUserInfoId();
         const editButton = document.querySelectorAll('.edit-btn')
         if(userTypes === 'NormalUser'){
-            editButton.style.display = 'none';            
+            editButton.style.display = 'none';    
+  
         }
     });
 };    
@@ -333,6 +350,7 @@ const editClickFunction = async () =>{
             }else {
                 console.log('You are not authorized to delete this item.');
             }
+            
         });
     })
 }
@@ -367,6 +385,9 @@ function getJobTitle() {     // GET JOB TİTLE
 }
 
 const getJobTitleId  = async (job_id) => {    // GET JOB TİTLE ID
+    if (job_id === undefined || job_id === null) {
+        throw new Error('Geçersiz iş başlığı IDsi');
+      }
     const apiUrl= `http://backend.norbit.com.tr/jobs/${job_id}/`
     const token  = localStorage.getItem('token');
 
@@ -378,8 +399,11 @@ const getJobTitleId  = async (job_id) => {    // GET JOB TİTLE ID
                 "Authorization": `Token ${token}`
             },
         }).then((response)=>{
-            const jobList = response.data.job_title;
-            resolve(jobList)
+            const jobList = response.data;
+            console.log(jobList)
+            const jobId =jobList.id;
+            const jobName = jobList.job_title;
+            resolve(jobName)
         }).catch((error) => {
             reject("null")
         });
@@ -484,95 +508,57 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 
-searchButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    const searchTerm = searchInput.value.trim();    
-    // if (searchTerm === ''){
-    //     alert('Lütfen bir arama terimi giriniz')
-    //     return; 
-    // }
-    searchResults(searchTerm)
+searchButton.addEventListener('click', () => {
+    const searchTerm = searchInput.value.trim();   
+    searchData(searchTerm);
+  });
+async function searchData(searchTerm){
+    const apiUrl = `http://backend.norbit.com.tr/ems/list/?search=${searchTerm}`;
+    const token  = localStorage.getItem('token');
+
+    axios({
+        method:'get',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+    }).then(response => {
+        const searchData = response.data.results;
+        const tableRows = document.querySelectorAll('#personalTable tbody tr');
+        
+        tableRows.forEach(row => {
+            const rowData = row.textContent.toLowerCase(); 
+    
+            if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
+                row.style.display = 'table-row'; 
+            } else {
+                row.style.display = 'none'; 
+            }
+            if (searchInput.value === '') {
+                    row.style.display = 'table-row';
+            }
+    
+    })
+        showPersonal(searchData); 
+
+    })
+    .catch(error => {
+        console.error('Arama sırasında hata oluştu: ', error);
+    });
+}
+searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.trim();
+    if (searchTerm === '') {
+
+        const tableRows = document.querySelectorAll('#personalTable tbody tr');
+        tableRows.forEach(row => {
+            row.style.display = 'table-row';
+        });
+    } else {
+        searchData(searchTerm);
+    }
 });
 
-function searchResults(searchTerm){
-    const tableRows = document.querySelectorAll('#personalTable tbody tr');
-
-    tableRows.forEach(row => {
-        const rowData = row.textContent.toLowerCase(); 
-
-        if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
-            row.style.display = 'table-row'; 
-        } else {
-            row.style.display = 'none'; 
-        }
-        if (searchInput.value === '') {
-                row.style.display = 'table-row';
-        }
-
-})
-}
-// const searchBtn = document.getElementById('search-btn')
-// const searchBox = document.getElementById('search-box')
-
-// searchBtn.addEventListener('click', (event) => {
-// event.preventDefault();
-//     const searchTerm = searchBox.value.trim();
-//     makeSearch(searchTerm);
-// });
-// function makeSearch(searchTerm){
-
-//     const rows = document.querySelectorAll('#personalTable tbody tr');  
-//     rows.forEach((personal) => {
-
-//         const searchText = personal.textContent.toLowerCase();
-
-//         if(searchText.includes(searchTerm.toLowerCase())){
-//             personal.style.display = 'table-row';
-
-//         }else{
-            
-//             personal.style.display = 'none';
-//         }
-
-//         // if(searchBox.value=''){
-//         //     personal.style.display = 'table-row';
-//         // }
-//     });
-// }
-// function getUserType(){
-//     const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
-//     const token  = localStorage.getItem('token');
-
-//     axios ({
-//         method:'get',
-//         url: apiUrl,
-//         headers: {
-//             "Authorization": `Token ${token}`
-//         },
-//     }).then((response)=>{
-//         const userType = response.data.user_type;
-//         if (userType === "NormalUser") {
-//             console.log(userType);
-//             addRowButton.disabled = true; 
-//         } else {
-//             addRowButton.disabled = false;
-//         }
-        
-//     }).catch((error) => {
-//         console.log(error);
-//     });
-// }
-// getUserType();
-
-// const situationButton = document.getElementById('situation');
-// const isActive = document.querySelectorAll('.is_active')
-
-// situationButton('click',function(){
-//     isActive.forEach(data => {
-//         data.textContent = data.textContent === 'true' ? 'false' : 'true';
-//     });
-
-// })
 window.addEventListener("load", async (event) => {
 
     personalList();
