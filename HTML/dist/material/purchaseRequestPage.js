@@ -112,7 +112,7 @@ async function createPurchase(){
             product_name: productName.value,
             price: price.value,
             count: count.value,
-            purchasing_date: purchasingDate.value,
+            purchasing_date: formatDateToCustomFormat(purchasingDate.value),
             e_commerce_site: link.value,
             description: description.value,  
 
@@ -126,55 +126,60 @@ async function createPurchase(){
         });
 
 }
+function formatTarih(tarih) {
+    const tarihParcalari = tarih.split('T');
+    return tarihParcalari[0];
+}
 function formatDateToCustomFormat(date) {
-    var yyyy = date.getFullYear();
-    var MM = String(date.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
-    var dd = String(date.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
-    var hh = String(date.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
-    var mm = String(date.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
+    let date2 = new Date(date)
+    var yyyy = date2.getFullYear();
+    var MM = String(date2.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
+    var dd = String(date2.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
+    var hh = String(date2.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
+    var mm = String(date2.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
   
     // Sonuç formatını birleştiriyoruz
     var formattedDate = yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm;
   
     return formattedDate;
-  }
+}
 const getPurchaseData = (purchaseId) => {
-    const apiUrl = `http://backend.norbit.com.tr/purchase-request/${purchaseId}/`;
-    const token  = localStorage.getItem('token');
+const apiUrl = `http://backend.norbit.com.tr/purchase-request/${purchaseId}/`;
+const token  = localStorage.getItem('token');
 
-    axios({
-        method:'get',
-        url:apiUrl,
-        headers:{ 
-            "Authorization": `Token ${token}`
-        },
-    })
-    .then(async (response) => {
-        const purchaseData =response.data;
+axios({
+    method:'get',
+    url:apiUrl,
+    headers:{ 
+        "Authorization": `Token ${token}`
+    },
+})
+.then(async (response) => {
+    const purchaseData =response.data;
 
-        const responsiblePersonData = await getResponsibleId(purchaseData.responsible_person);
+    const responsiblePersonData = await getResponsibleId(purchaseData.responsible_person);
 
-        const productNameData = purchaseData.product_name;
-        const priceData = purchaseData.price;
-        const countData = purchaseData.count;
-        const purchasingDateData = purchaseData.purchasing_date;
-        const linkData = purchaseData.e_commerce_site;
-        const descriptionData = purchaseData.description;
+    const productNameData = purchaseData.product_name;
+    const priceData = purchaseData.price;
+    const countData = purchaseData.count;
+    const purchasingDateData = purchaseData.purchasing_date;
+    const linkData = purchaseData.e_commerce_site;
+    const descriptionData = purchaseData.description;
 
-        const transDate = new Date (purchasingDateData);
+    // const transDate = new Date (purchasingDateData);
 
-        responsiblePerson.value = responsiblePersonData;    
-        productName.value = productNameData;
-        price.value = priceData;
-        count.value = countData;
-        purchasingDate.value = formatDateToCustomFormat(transDate);
-        link.value = linkData;
-        description.value = descriptionData;
-        getResponsiblePerson(purchaseData.responsible_person);
-    })
-    .catch((error) => {
-        console.error(error)
-    });
+    responsiblePerson.value = responsiblePersonData;    
+    productName.value = productNameData;
+    price.value = priceData;
+    count.value = countData;
+    purchasingDate.value = formatTarih(purchasingDateData);
+    link.value = linkData;
+    description.value = descriptionData;
+    getResponsiblePerson(purchaseData.responsible_person);
+})
+.catch((error) => {
+    console.error(error)
+});
 }
 function getModalValues(){
     const data = {
@@ -210,7 +215,7 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
     })
 };
 const showPurchaseRequest = async (requestData) => {
-    tableBody.innerHTML ='';
+    // tableBody.innerHTML ='';
     requestData.forEach(async  item => {
         const newRow = document.createElement('tr') ;
         const owner = await getOwnerNameId(item.owner) || '-';
@@ -221,7 +226,7 @@ const showPurchaseRequest = async (requestData) => {
         const price = item.price || '-';
         const count = item.count || '-';
         const e_commerce_site = item.e_commerce_site || '-';
-        const purchasing_date = item.purchasing_date || '-';
+        const purchasing_date = formatTarih(item.purchasing_date) || '-';
         const description = item.description || '-';
         newRow.innerHTML =  `
         <td><input class ="form-check-input" type ="checkbox" id="checkbox" value=""</td>
@@ -418,7 +423,7 @@ function editPurchaseRequest(purchaseId){
             product_name: newProductName.value,
             price: newPrice.value,
             count: newCount.value,
-            purchasing_date: newPurchaseDate.value,
+            purchasing_date: formatDateToCustomFormat(newPurchaseDate.value),
             link: newLink.value,
             description:newDescription.value,
         }
@@ -531,33 +536,56 @@ function clearInput(){
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 
-searchButton.addEventListener('click', (event) => {
-    event.preventDefault();
-    const searchTerm = searchInput.value.trim();    
-    // if (searchTerm === ''){
-    //     alert('Lütfen bir arama terimi giriniz')
-    //     return; 
-    // }
-    searchResults(searchTerm)
-});
+searchButton.addEventListener('click', () => {
+    const searchTerm = searchInput.value.trim();   
+    searchData(searchTerm);
+  });
+async function searchData(searchTerm){
+    const apiUrl = `http://backend.norbit.com.tr/ems/list/?search=${searchTerm}`;
+    const token  = localStorage.getItem('token');
 
-function searchResults(searchTerm){
-    const tableRows = document.querySelectorAll('#purchaseTable tbody tr');
+    axios({
+        method:'get',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+    }).then(response => {
+        const searchData = response.data.results;
+        const tableRows = document.querySelectorAll('#purchaseTable tbody tr');
+        
+        tableRows.forEach(row => {
+            const rowData = row.textContent.toLowerCase(); 
+    
+            if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
+                row.style.display = 'table-row'; 
+            } else {
+                row.style.display = 'none'; 
+            }
+            if (searchInput.value === '') {
+                    row.style.display = 'table-row';
+            }
+    
+    })
+        showPurchaseRequest(searchData); 
 
-    tableRows.forEach(row => {
-        const rowData = row.textContent.toLowerCase(); 
-
-        if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
-            row.style.display = 'table-row'; 
-        } else {
-            row.style.display = 'none'; 
-        }
-        if (searchInput.value === '') {
-                row.style.display = 'table-row';
-        }
-
-})
+    })
+    .catch(error => {
+        console.error('Arama sırasında hata oluştu: ', error);
+    });
 }
+searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.trim();
+    if (searchTerm === '') {
+
+        const tableRows = document.querySelectorAll('#purchaseTable tbody tr');
+        tableRows.forEach(row => {
+            row.style.display = 'table-row';
+        });
+    } else {
+        searchData(searchTerm);
+    }
+});
     // async function searchData(search){
 
 
