@@ -1,11 +1,17 @@
 
 const addButton = document.getElementById('addBtn')
 addButton.addEventListener('click', () => {
+    
   addToProblemSolve();                                                                                                                                                                                 
 })
+const problemTitle = document.getElementById('problem-title-input');
+const solutionDescription = document.getElementById('solution-description'); 
+const solutionFileInput = document.getElementById('solution-file');
 
+const saveButton  = document.getElementById('save-btn');
 
 let dataList = [];
+
 const getData = async (url=null) => {   
     let urlApi;
     if (url === null) {
@@ -25,8 +31,9 @@ const getData = async (url=null) => {
             },
         })
         .then((response)=>{
-            const data =response.data;
-            resolve(data)
+            const knowHowData =response.data.results;
+            AddContent(knowHowData)
+            resolve(knowHowData)
             
     
         }).catch((error) => {
@@ -36,10 +43,10 @@ const getData = async (url=null) => {
 
     try{
         const response = await api;
-        const results = response.results;
+        const results = response.data;
         const nextPage = response.next;
 
-        results.map((item) => {
+        results.forEach((item) => {
             dataList.push(item);
         });
 
@@ -58,7 +65,69 @@ const getData = async (url=null) => {
     }
    
 }
+const AddContent = async (knowHowData) => {
+    
+    const knowHowList= document.getElementById('knowHow-list');
+    knowHowList.innerHTML = '';
+    const userId = await getUserInfoId();
 
+
+    // console.log(knowHowData.owner);
+
+    knowHowData.forEach(async item  => {
+        const itemId = item.id;
+        const knowHowDiv = document.createElement('div');
+        knowHowDiv.classList.add('card', 'mb-3');
+        const owner = await getOwner(item.owner) || '-';
+        knowHowDiv.innerHTML = `
+        <div class="card-body">
+            <div class="text-muted">
+                <div class="pt-3 border-top border-top-dashed mt-4 ">
+                    <div class="row">
+                        <div class="col-lg-4 col-sm-6">
+                            <div>
+                                <h6 class="form-label mb-3 fw-semibold text-uppercase ">Problem Adı</h6>
+                                <p class="mb-3 fw-semibold text-uppercase custom-p">${item.problem || '-'}</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div>
+                                <h6 class="form-label mb-3 fw-semibold text-uppercase">Problem Açıklaması</h6>
+                                <p>${item.solve_text || '-'}</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-sm-6">
+                            <div>
+                            <h6 class="form-label mb-3 fw-semibold text-uppercase ">Ekleyen Kişi</h6>
+                            <p class="mb-3 fw-semibold text-uppercase custom-p">${owner || '-'}</p>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div>
+                                <h6 class="form-label mb-3 fw-semibold text-uppercase" id="uploaded-file-container-${item.id}">Doküman</h6>
+                                <li><a href="${item.upload}" type="file" class="form-label" id="problem-file-input-${item.id}">${item.upload}</a></li>    
+                            </div>
+                        </div>
+                        <div class="mt-auto d-flex justify-content-end align-items-end">
+                            <div>
+                                <button id="editBtn" class="btn btn-success btn-m edit-btn" onclick='createEditButton(${item.id})' data-user-id='${userId}' data-bs-toggle="modal" data-bs-target="#exampleModal">Düzenle</button>
+                                <button class="btn btn-danger btn-mm delete-btn" onclick='deleteClickFunction(${item.id})' data-user-id='${item.id}'>Sil</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    deleteClickFunction(owner);
+    knowHowList.appendChild(knowHowDiv);
+
+    
+});
+
+    // editClickFunction(item.id);
+}
 const addToProblemSolve = () => {
     const apiUrl = `http://backend.norbit.com.tr/knowhow/list/`; 
     const token  = localStorage.getItem('token');
@@ -74,7 +143,12 @@ const addToProblemSolve = () => {
     
     formData.append('problem', problemTitle);
     formData.append('solve_text', solutionDescription);
-    formData.append('upload', solutionFile);
+
+    if (solutionFile) {
+        formData.append('upload', solutionFile);
+    } else {
+        formData.append('upload', '');
+    }
   
     axios.post(apiUrl, formData, {
         headers:{ 
@@ -115,16 +189,17 @@ const deleteClickFunction = async () => {
 
     deleteButtons.forEach( async (deleteButton) => {
         deleteButton.addEventListener('click', (event) => {
-            const pageId = event.currentTarget.getAttribute('data-accordion-id');
+            const pageId = event.currentTarget.getAttribute('data-user-id'); // Use 'data-user-id' here
             const userId = event.currentTarget.getAttribute('data-user-id');
             console.log(userId, loginnedUserId)
-
-            if(loginnedUserId==userId || userType === 'AdminUser'){
+        
+            if (loginnedUserId == userId || userType === 'AdminUser') {
                 deleteProblem(pageId);
-            }else {
+            } else {
                 console.log('You are not authorized to delete this item.');
             }
         });
+
     });
 }
 const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
@@ -170,7 +245,6 @@ const getOwner = async (id) => {
     }).then((response)=>{
         const responseData = response.data.results;
 
-
         const ownerData = responseData.map((item) => {
             const firstname = item.first_name;
             const lastname = item.last_name;
@@ -178,8 +252,9 @@ const getOwner = async (id) => {
             
         });
 
-        resolve(ownerData);
         // console.log(ownerData)
+        resolve(ownerData);
+
     }).catch((error) => {
         reject("null")
         console.log(error);
@@ -194,56 +269,6 @@ const getOwner = async (id) => {
         return e
     }
 }  
-const AddContent = async (item) => {
-    const accordionBox = document.getElementById('accordionExample');
-    const userId = await getUserInfoId();
-    const owner = await getOwner(item.owner) || '-';
-
-    const problem = item.problem || '-';
-    const upload = item.upload || '-';
-    const solve_text = item.solve_text || '-';
-    const boxData = `
-    <div class="accordion-item">
-        <h2 class="accordion-header" id="accordionHeader">
-            <button class="accordion-button" id="problemContent" type="button" data-bs-toggle="collapse" data-bs-target="#accordion-${item.id}" aria-expanded="true" aria-controls="accordion-${item.id}">
-                ${problem}
-            </button>
-        </h2>
-        <div id="accordion-${item.id}" class="accordion-collapse collapse" aria-labelledby="accordionHeader">
-            <div class="accordion-body">
-                <div class="mb-3">
-                    <label class="form-label" for="problem-title-input">Problemin Konusu</label>
-                    <p type="text" id="problem-title-input">${problem}</p>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="project-thumbnail-img">Doküman</label>
-                    <p><a href="${upload}" >${upload}</a></p>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Açıklama</label>
-                    <p type="text" id="solution-description">${solve_text}</p>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">Ekleyen Kişi</label>
-                    <p type="text" id="owner">${owner}</p>
-                </div>
-
-                <div class="text-end mb-4">
-                    <button type="submit" class="btn btn-danger w-sm delete-btn" data-accordion-id='${item.id}' data-user-id=${item.owner} id="delete-btn">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-
-    accordionBox.innerHTML += boxData;
-    deleteClickFunction(owner);
-}
-
-
 
 const deleteProblem = async(pageId) =>{
     const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
@@ -278,125 +303,99 @@ const deleteProblem = async(pageId) =>{
         return e
     }
 }
-// const editClickFunction = () =>{
-//     const editButtons = document.querySelectorAll('.edit-btn');
-//     editButtons.forEach((editButton) => {
-//         editButton.addEventListener('click',(event) => {
-//             const problem = document.getElementById('problem-title-input')
-//             problem.classList.add('form-control');
-//             // const itemId = event.currentTarget.getAttribute('data-user-id');
 
-//             editToProblem(itemId);
-//         })
-//     })
+const editToProblem = async (itemId) => {
+    console.log(itemId);
+    const pageApi = `https://backend.norbit.com.tr/knowhow/detail/${itemId}/`;
+    const token = localStorage.getItem('token');
+  
+    const newProblemContent = document.getElementById(`problem-title-input`).value;
+    const newDocumention =document.getElementById(`solution-file`);
+    const fileInput = newDocumention.files[0];
+    const newDescription = document.getElementById(`solution-description`).value;
 
-// }
-// editClickFunction();
-// const editToProblem = async (itemId) =>{
-//     const pageApi= `https://backend.norbit.com.tr/knowhow/detail/${itemId}/`;
-//     const token  = localStorage.getItem('token');
+    const formData = new FormData();
+    formData.append('problem', newProblemContent);
+    formData.append('solve_text', newDescription);
+    if (fileInput) {
+        formData.append('upload', fileInput);
+    } else {
+        formData.append('upload', '');
+    }
+    try {
+      const response = await axios.patch(pageApi, formData, {
+        headers: {
+          "Authorization": `Token ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-//     const newProblemContent = document.getElementById('problem-title-input');
-//     const newDocumention = document.getElementById('solution-file');
-//     const newDescription = document.getElementById('solution-description');
+  
+      console.log(response.data);
+  
+      return response;
+    } catch (error) {
+      console.error('EditToProblem Error:', error);
+      return error;
+    }
+  }
 
-//     const editData = new Promise ((resolve,reject) =>{
+async function createEditButton(pageId) {
+document.querySelector('.modal-title').innerHTML = '';
 
-//     axios({
-//         method:'patch',
-//         url:pageApi,
-//         headers:{ 
-//             "Authorization": `Token ${token}`
-//         },
-//         data:{
-//             'problem': newProblemContent.value,
-//             'upload': newDocumention.value,
-//             'solve_text': newDescription.value,
-//         },
-//     })    
-//     console.log()
-//     .then((response) => {
-//         console.log(response.data);
-//         resolve(response);
-//     })
-//     .catch((error) => {
-//         reject(error,'ncjhasvgjl');
-//     });
+saveButton.style.display = 'block';
+addButton.style.display = 'none';
+
+getRowData(pageId);
+saveButton.addEventListener('click', async () => {
+    await editToProblem(pageId);
+    // modal.hide();
+    window.location.reload();
+});
+
+}
+
+
+function getRowData(pageId) {
+    const apiUrl = `http://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
+    const token = localStorage.getItem('token');
+
+    axios({
+        method: 'get',
+        url: apiUrl,
+        headers: {
+            "Authorization": `Token ${token}`
+        },
+    }).then(async (response) => {
+        const problemData = response.data;
+        const problemNameData = problemData.problem || '-';
+        const descriptionData = problemData.solve_text || '-';
+        const uploadData = problemData.upload || '-';
+
+        const uploadList = document.getElementById('upload-data');
+        uploadList.innerHTML = `
+        <div>
+            <li>
+                <a href="${uploadData}" class="uploaded-link font-weight-bold fs-5">${uploadData}</a>
+                <input class="form-control" id="solution-file" type="file">
+            </li>
+        </div>
     
-// })
-// try {
-//     const response = await editData;
-//     return response;
-// }
-// catch (e) {
-//     return e
-// }
-// }
+        `;
+        problemTitle.value = problemNameData;
+        solutionDescription.value = descriptionData;
 
-
-// function getAddedByUser(){
-//     const apiUrl= "http://backend.norbit.com.tr/ems/list/"
-//     const token  = localStorage.getItem('token');
-
-//     axios({
-//         method:'get',
-//         url:apiUrl,
-//         headers:{ 
-//             "Authorization": `Token ${token}`
-//         },
-//     }).then((response)=>{
-//         const user = response.data.results;
-
-//         console.log(user)
-//         // const fullName = document.getElementById('inputCompany')
-
-
-//         user.forEach(async (ownerUser) => {
-//             const firstName = getAddedByUserId(ownerUser.owner);
-//             const userName = document.getElementById("owner");
-//             userName.textContent = firstName;
-
-//         });
-
-//     }).catch((error) => {
-//           console.log(error);
-//         });
-// }
-
-// const getAddedByUserId = async (id) =>{
-//     const apiUrl= `http://backend.norbit.com.tr/ems/employee/${id}/`
-//     const token  = localStorage.getItem('token');
-
-//     const api = new Promise((resolve, reject) => {
-//         axios({
-//             method:'get',
-//             url:apiUrl,
-//             headers:{ 
-//                 "Authorization": `Token ${token}`
-//             },
-//         }).then((response)=>{
-//             const firstName = response.data.first_name;
-//             // const lastName = response.data.last_name;
-//             // const fullName = `${firstName} ${lastName}`;
-//             console.log(firstName)
-//             resolve(firstName)
-//         }).catch((error) => {
-//             reject("null")
-//         });
-//     });
-
-//     try {
-//         const response = await api;
-//         return response;
-//     }
-//     catch (e) {
-//         return e
-//     }
-// }
-
+        // saveButton.addEventListener('click', () =>{
+        //     editToProblem(pageId);
+        //     window.location.reload();
+        // })
+    }).catch((error) => {
+        console.error(error);
+    });
+}
 window.addEventListener("load", (event)  =>  {
     writeContent();
-    getOwner();
+    // getOwner();
   
 
-});
+})
