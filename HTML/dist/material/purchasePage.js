@@ -233,7 +233,7 @@ const showPurchase = async (responseData)  => {
         newRow.innerHTML = `
         <td><input class="form-check" type ="checkbox"  id="checkbox" value=""</td>
         <td>${owner}</td>
-        <td>${purchase.status}</td>
+        <td><span class="badge badge bg-success fw-semibold fs-12">${purchase.status}</span></td>
         <td>${productName}</td>
         <td>${price}</td>
         <td>${count}</td>
