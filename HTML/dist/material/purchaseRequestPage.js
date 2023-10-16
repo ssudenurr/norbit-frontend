@@ -217,11 +217,12 @@ const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
 const showPurchaseRequest = async (requestData) => {
     // tableBody.innerHTML ='';
     requestData.forEach(async  item => {
-        const newRow = document.createElement('tr') ;
+        let newRow = document.createElement('tr') ;
         const owner = await getOwnerNameId(item.owner) || '-';
         const responsiblePerson = await getResponsibleId(item.responsible_person) || '-';
 
-        // const status = item.status || '-';
+        const statusData = item.status === 'İptal Edildi' ? 'badge bg-danger fw-semibold' : 'badge bg-success fw-semibold';        
+        
         const productName = item.product_name || '-';
         const price = item.price || '-';
         const count = item.count || '-';
@@ -232,15 +233,16 @@ const showPurchaseRequest = async (requestData) => {
         <td><input class ="form-check-input" type ="checkbox" id="checkbox" value=""</td>
         <td>${owner}</td>
         <td>${responsiblePerson}</td>
-        <td>${item.status}</td>
+        <td><span class="badge ${statusData} fs-12">${item.status}</span></td>        
         <td>${productName}</td>
         <td>${price}</td>
         <td>${count}</td>
         <td><a href="${e_commerce_site}" target="_blank" style="text-decoration:underline!important">${e_commerce_site}</a></td>  
         <td>${purchasing_date}</td>  
         <td>${description}</td>
-        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn"  data-bs-toggle ="modal" data-bs-target="#exampleModal" data-user-id='${item.id}' >Edit</button></td>
-        <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
+        <td><button id="editBtn" class="btn btn-success mdi mdi-pencil btn-sm fs-5 edit-btn" data-bs-toggle ="modal" data-bs-target="#exampleModal" data-user-id='${item.id}'></button>
+        <button class="btn btn-danger mdi mdi-close btn-sm fs-5 delete-btn" data-user-id='${item.id}'></button></td>
+        
         `;
 
         tableBody.appendChild(newRow);
@@ -436,7 +438,7 @@ function editPurchaseRequest(purchaseId){
         console.error(error)
     });
 }
-async function createEditButton(purchaseId,loginnedUserId,ownerID) { 
+async function createEditButton(purchaseId) { 
     // const loginnedUserId = await getUserInfoId();    
     // const ownerID = await getOwnerNameId();
     // console.log(ownerID,loginnedUserId)
