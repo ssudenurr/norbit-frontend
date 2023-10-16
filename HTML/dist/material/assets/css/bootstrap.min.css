@@ -57,10 +57,10 @@
     rgba(255, 255, 255, 0)
   );
   --vz-body-font-family: var(--vz-font-sans-serif);
-  --vz-body-font-size: 0.8125rem;
+  --vz-body-font-size: 0.8680rem;
   --vz-body-font-weight: 400;
   --vz-body-line-height: 1.5;
-  --vz-body-color: #212529;
+  --vz-body-color: #0c141d;
   --vz-body-bg: #f2f2f7;
   --vz-border-width: 1px;
   --vz-border-style: solid;
@@ -312,8 +312,8 @@ tfoot,
 th,
 thead,
 tr {
-  border-color: inherit;
-  border-style: solid;
+  border-color:#d8dbdd;
+  /* border-style: solid; */
   border-width: 0;
 }
 label {
@@ -1904,7 +1904,7 @@ progress {
   --vz-table-border-color: var(--vz-border-color);
   --vz-table-accent-bg: transparent;
   --vz-table-striped-color: var(--vz-body-color);
-  --vz-table-striped-bg: rgba(var(--vz-dark-rgb), 0.02);
+  --vz-table-striped-bg: rgb(246, 246, 246);
   --vz-table-active-color: var(--vz-body-color);
   --vz-table-active-bg: rgba(var(--vz-light-rgb), 1);
   --vz-table-hover-color: var(--vz-body-color);
@@ -2033,7 +2033,7 @@ progress {
 }
 .table-danger {
   --vz-table-color: #000;
-  --vz-table-bg: #fce0da;
+  --vz-table-bg: #dcdcda;
   --vz-table-border-color: #e3cac4;
   --vz-table-striped-bg: #f7dcd6;
   --vz-table-striped-color: #000;
@@ -2046,8 +2046,8 @@ progress {
 }
 .table-light {
   --vz-table-color: #000;
-  --vz-table-bg: #f3f6f9;
-  --vz-table-border-color: #dbdde0;
+  --vz-table-bg: #06092f;
+  --vz-table-border-color: #fafafa;
   --vz-table-striped-bg: #eef1f4;
   --vz-table-striped-color: #000;
   --vz-table-active-bg: black;
@@ -2056,8 +2056,9 @@ progress {
   --vz-table-hover-color: #fff;
   --vz-card-title-color: var(--vz-heading-color);
   border-color: var(--vz-table-border-color);
-  font-size: 14px;
+  font-size: 15px;
   font-family: Inter, sans-serif;
+  color:rgb(237, 237, 237);
 }
 .table-dark {
   --vz-table-color: #fff;
@@ -5766,7 +5767,7 @@ fieldset:disabled .btn {
   width: 100%;
   color: var(--vz-modal-color);
   pointer-events: auto;
-  background-color:#02a8b5;
+  background-color:var(--vz-gray-100);
   background-clip: padding-box;
   border: var(--vz-modal-border-width) solid var(--vz-modal-border-color);
   border-radius: var(--vz-modal-border-radius);
@@ -5796,7 +5797,7 @@ fieldset:disabled .btn {
 }
 .modal-header {
 
-    background-color:#add8e6 ;
+    background-color:var(--vz-gray-100) ;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -5833,10 +5834,10 @@ fieldset:disabled .btn {
   flex: 1 1 auto;
   padding: var(--vz-modal-padding);
 
-  background-color:#add8e6 ;
+  background-color:var(--vz-gray-100) ;
 }
 .modal-footer {
-    background-color:#add8e6;
+  background-color:var(--vz-gray-100);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -8713,7 +8714,8 @@ fieldset:disabled .btn {
 }
 .text-muted {
   --vz-text-opacity: 1;
-  color: #878a99 !important;
+  color: gray !important;
+  font-weight: 500 ;
 }
 .text-black-50 {
   --vz-text-opacity: 1;
