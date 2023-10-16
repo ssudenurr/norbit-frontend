@@ -124,8 +124,8 @@
                                 <button type="button" class="btn shadow-none" id="page-header-user-dropdown"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="d-flex align-items-center">
-                                        <!-- <img class="rounded-circle header-profile-user"
-                                            src="assets/images/users/avatar-1.jpg" alt="Header Avatar"> -->
+                                        <img class="rounded-circle header-profile-user"
+                                            src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
                                         <span class="text-start ms-xl-2">
                                             <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="userName"></span>
                                             <span
@@ -283,6 +283,11 @@
                             <div class="tab-content text-muted">
                                 <div class="tab-pane fade show active" id="project-overview" role="tabpanel">
                                     <div class="row">
+                                        <!-- <div class="mb-3">
+                                            <button class="btn btn-primary" id="createButton" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                Yeni Proje Oluştur
+                                            </button>
+                                        </div> -->
                                         <div class="col-xl-12 col-lg-8" id="project-list">
                                             <!-- <div class="card">
                                                 <div class="card-body">
@@ -344,6 +349,58 @@
                                                     </div>
                                                 </div>
                                             </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content" id="modalContent">
+                                                <div class="modal-header ">
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Satın Alma İsteği Oluşturma Formu</h1>
+                                                    <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form class="row g-3" id="purchaseForm">
+                                    
+                                                        <br>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label for="problemName" class="form-label">Problem Adı</label>
+                                                                <input type="text" class="form-control" id="problemName"></input>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="problemDescription" class="form-label" >Problem Açıklaması</label>
+                                                                <input type="text" class="form-control" id="problemDescription">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label for="startDate" class="form-label" >Proje Başlangıç Tarihi</label>
+                                                                <input type="date" class="form-control" id="startDate">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="endDate" class="form-label" >Proje Bitiş Tarihi</label>
+                                                                <input type="date" class="form-control" id="endDate">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label for="customer" class="form-label">Müşteri</label>
+                                                                <input type="text" class="form-control"  id="customer">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="company" class="form-label">Şirketi</label>
+                                                                <select type="text" class="form-select" id="company">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                </div>
+                                                <div class="modal-footer" id="button-box">
+                                                    <button type="button" class="btn btn-secondary" id="addBtn">Ekle</button>
+                                                    <button type="button" class="btn btn-secondary" style="display: none;" id="save-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Kaydet</button>
+                                                    <!-- <button type="button" class="btn btn-primary" id="row-edit-btn" onclick='editPurchaseRequest(${purchaseId})'>Düzenle</button> -->
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- end row -->
