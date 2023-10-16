@@ -302,8 +302,9 @@ const showPersonal = async (personalData) => {
         <td>${job_end_date}</td>
         <td>${company}</td>
         <td>${username}</td>
-        <td><button id="editBtn" class="btn btn-success btn-sm edit-btn" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button></td>
-        <td><button class="btn btn-danger btn-sm delete-btn" data-user-id='${item.id}'>Delete</button></td>
+        <td><button id="editBtn" class="btn btn-success btn-sm mdi mdi-pencil fs-5 edit-btn" style="letter-spacing: 0.2px;" onclick='createEditButton(${item.id})' data-user-id='${item.id}' data-bs-toggle="modal" data-bs-target="#exampleModal"></button>
+        <button class="btn btn-danger mdi mdi-close btn-sm fs-5 delete-btn" data-user-id='${item.id}'></button></td>
+
         `;
         tableBody.appendChild(newRow);
         const checkBox = newRow.querySelector('.form-check-input');
