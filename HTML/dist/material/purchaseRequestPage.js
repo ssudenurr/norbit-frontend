@@ -195,25 +195,62 @@ function getModalValues(){
     }
     return data;
 }
-const purchaseList = () => {    // GETTING CONTACT INFORMATION FROM API
-    const apiUrl = "http://backend.norbit.com.tr/purchase-request/list/";
-    const token  = localStorage.getItem('token');
-       
-    axios({                                          
-        method: 'get',
-        url: apiUrl,
-        headers: {
-            "Authorization": `Token ${token}`
-        }
+let dataList = [];
+
+const id = 1;
+
+const purchaseList = async (url = null) => {
+  let urlApi;
+  if (url === null) {
+    urlApi = `http://backend.norbit.com.tr/purchase-request/list/?page=${id}`;
+  } else {
+    urlApi = url;
+  }
+
+  const token = localStorage.getItem('token');
+  const api = new Promise((resolve, reject) => {
+    axios({
+      method: 'get',
+      url: urlApi,
+      headers: {
+        "Authorization": `Token ${token}`
+      },
     })
-    .then(response =>{
+      .then((response) => {
         const requestData = response.data.results;
-        showPurchaseRequest(requestData)
-    })
-    .catch(error => {
-        console.error('hata oluştu',error);
-    })
+        showPurchaseRequest(requestData);
+        resolve(requestData);
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+
+  try {
+    const requestData = await api;
+    console.log(requestData);
+    const results = requestData;
+    const nextPage = requestData.next;
+
+    results.forEach((item) => {
+      dataList.push(item);
+    });
+
+    if (nextPage) {
+      purchaseList(nextPage);
+    } else {
+      console.log(dataList);
+    }
+  } catch (e) {
+    console.log(e);
+  }
 };
+
+purchaseList();
+
+
+
+
 const showPurchaseRequest = async (requestData) => {
     // tableBody.innerHTML ='';
     requestData.forEach(async  item => {
