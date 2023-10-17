@@ -1,9 +1,5 @@
 
-const addButton = document.getElementById('addBtn')
-addButton.addEventListener('click', () => {
-    
-  addToProblemSolve();                                                                                                                                                                                 
-})
+
 const problemTitle = document.getElementById('problem-title-input');
 const solutionDescription = document.getElementById('solution-description'); 
 const solutionFileInput1 = document.getElementById('solution-file-1');
@@ -12,12 +8,27 @@ const solutionFileInput3 = document.getElementById('solution-file-3');
 
 const saveButton  = document.getElementById('save-btn');
 
+const addButton = document.getElementById('addBtn')
+addButton.addEventListener('click', () => {
+    
+  addToProblemSolve();                                                                                                                                                                                 
+})
+
+const closeBtn = document.getElementById('btn-close');
+closeBtn.addEventListener('click', () =>{
+    problemTitle.value = '';
+    solutionDescription.value = '';
+    solutionFileInput1.value = '';
+    solutionFileInput2.value = '';
+    solutionFileInput3.value = '';  
+})
 let dataList = [];
+const id = 1;
 
 const getData = async (url=null) => {   
     let urlApi;
     if (url === null) {
-        urlApi = `http://backend.norbit.com.tr/knowhow/list/`; 
+        urlApi = `http://backend.norbit.com.tr/knowhow/list/?page=${id}`; 
     }
     else {
         urlApi = url; 
@@ -44,21 +55,19 @@ const getData = async (url=null) => {
     });
 
     try{
-        const response = await api;
-        const results = response.data;
-        const nextPage = response.next;
+        const knowHowData = await api;
+        const results = knowHowData;
+        const nextPage = knowHowData.next;
 
         results.forEach((item) => {
             dataList.push(item);
         });
-
-        // eger next page varsa diğer sayfanın verilerini de al
         
         if (nextPage){
             getData(nextPage);
         }
         else {
-            return dataList;
+            console.log(dataList);
         }
 
     }
@@ -67,6 +76,8 @@ const getData = async (url=null) => {
     }
    
 }
+getData();
+
 const AddContent = async (knowHowData) => {
     
     const knowHowList = document.getElementById('knowHow-list');
@@ -87,7 +98,7 @@ const AddContent = async (knowHowData) => {
 
             if (documentLink) {
                 const fileName = documentLink.split('/').pop();
-                documentLinks += `<li><span class="font-weight-bold fs-7">${fileName}</span></li>`;
+                documentLinks += `<li><a class="font-weight-bold fs-7" href="${documentLink}" style="text-decoration-underline !important" target="_blank" download>${fileName}</a></li>`;
             } else {
                 documentLinks += '<li>-</li>';
             }
@@ -412,40 +423,60 @@ function getRowData(pageId) {
         const uploadData2 = problemData.file_2 || '';
         const uploadData3 = problemData.file_3 || '';
 
-        const fileName1 = uploadData1 ? uploadData1.split('/').pop() : '';
-        const fileName2 = uploadData2 ? uploadData2.split('/').pop() : '';
-        const fileName3 = uploadData3 ? uploadData3.split('/').pop() : '';
-
-        function showFileName(inputId, linkId) {
+        const fileName1 = uploadData1 ? uploadData1.split('/').pop() : '-';
+        const fileName2 = uploadData2 ? uploadData2.split('/').pop() : '-';
+        const fileName3 = uploadData3 ? uploadData3.split('/').pop() : '-';
+        
+        function showFileName(inputId, listId, uploadedLinkId) {
             const solutionFileInput = document.getElementById(inputId);
-            const link = document.getElementById(linkId);
-
+            const list = document.getElementById(listId);
+            const uploadedLink = document.getElementById(uploadedLinkId); // Yüklenen dosyanın linki
+        
             solutionFileInput.addEventListener('change', (event) => {
                 const selectedFile = event.target.files[0];
                 const fileName = selectedFile ? selectedFile.name : '';
-                link.textContent = fileName;
+        
+                if (fileName) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = fileName;
+                    list.appendChild(listItem);
+                    
+                    // Yüklenen dosyanın linkini güncelle
+                    uploadedLink.textContent = fileName;
+                }
             });
         }
-
+        
         uploadList.innerHTML = `
         <div>
-        <label class="form-label" for="solution-file-1">Doküman 1 </label><br>
-        <input type="file" id="solution-file-1" hidden/>
-        <label for="solution-file-1" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
-        <li><a id="uploaded-link-1" href="${uploadData1}" class="uploaded-link-1 font-weight-bold fs-7">${fileName1}</a> <br>
+            <label class="form-label" for="solution-file-1">Doküman 1 </label><br>
+            <input type="file" id="solution-file-1" hidden/>
+            <label for="solution-file-1" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
+            <li>
+                <a id="uploaded-link-1" href="${uploadData1}" class="uploaded-link-1 font-weight-bold fs-7">${fileName1}</a>
+                <a class="mdi mdi-close" id="delete-button" style="float: right;" onclick="deleteFile(${pageId}, 'file_1',this)"></a><br>       
+            </li>
+        </div>
 
-    
-        <label class="form-label" for="solution-file-2">Doküman 2 </label><br>
-        <input type="file" id="solution-file-2" hidden/>
-        <label for="solution-file-2" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
-        <li><a id="uploaded-link-2" href="${uploadData2}" class="uploaded-link-2 font-weight-bold fs-7">${fileName2}</a> <br>
-    
+        <div>
+            <label class="form-label" for="solution-file-2">Doküman 2 </label><br>
+            <input type="file" id="solution-file-2" hidden/>
+            <label for="solution-file-2" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
+            <li>
+                <a id="uploaded-link-2" href="${uploadData2}" class="uploaded-link-2 font-weight-bold fs-7">${fileName2}</a>
+                <a class="mdi mdi-close" id="delete-button" style="float: right;" onclick="deleteFile(${pageId}, 'file_2',this)"></a><br>       
+            </li>
+        </div>
 
-        <label class="form-label" for "solution-file-3">Doküman 3 </label><br>
-        <input type="file" id="solution-file-3" hidden/>
-        <label for="solution-file-3" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
-        <li><a id="uploaded-link-3" href="${uploadData3}" class="uploaded-link-3 font-weight-bold fs-7">${fileName3}</a>          
-    </div>
+        <div>
+            <label class="form-label" for "solution-file-3">Doküman 3 </label><br>
+            <input type="file" id="solution-file-3" hidden/>
+            <label for="solution-file-3" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
+            <li>
+                <a id="uploaded-link-3" href="${uploadData3}" class="uploaded-link-3 font-weight-bold fs-7">${fileName3}</a>
+                <a class="mdi mdi-close" id="delete-button" style="float: right;" onclick="deleteFile(${pageId}, 'file_3',this)"></a>
+            <br>    
+        </div>
     
         `;
 
@@ -461,39 +492,38 @@ function getRowData(pageId) {
     });
 }
 
-// const deleteFile = async (pageId) =>{
-//     const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
-//     const token  = localStorage.getItem('token');  
+const deleteFile = async (pageId, fileId, deleteBtn) => {
+    const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
+    const token = localStorage.getItem('token');
 
-//     const removeData = new Promise ((resolve,reject) =>{
+    const formData = new FormData();
+    formData.append(fileId, "");
 
-//         axios ({
-//             method:'delete',
-//             url:apiPageUrl,
-//             headers:{ 
-//                 "Authorization": `Token ${token}`
-//             },
-//         }).then((response) =>{
-//             if (response.status === 204) {
+    axios({
+        method: 'patch',
+        url: apiPageUrl,
+        headers: {
+            "Authorization": `Token ${token}`,
+            'Content-Type': 'multipart/form-data',
+        },
+        data: formData
+    }).then((response) => {
+        if (response.status === 200) {
+            const listItem = deleteBtn.parentElement;
+            const uploadedLink = listItem.querySelector(`#uploaded-link-${fileId.charAt(fileId.length - 1)}`);
+            uploadedLink.textContent = '-';
 
-//                 window.location.reload();
-               
-//             } else {
-//                 console.error('Satır silinemedi.');
-//             }
-//             resolve();
-//         }).catch((error) =>{
-//             reject(error,'error');
-//         })
-//     });
-//     try {
-//         const response = await removeData;
-//         return response;
-//     }
-//     catch (e) {
-//         return e
-//     }
-// }
+            // Başarıyla silindi, "-" işaretini göster
+            // window.location.reload();
+        } else {
+            console.error('Dosya silinemedi.');
+        }
+        console.log(response);
+    }).catch((error) => {
+        console.error(error);
+    });
+}
+
 window.addEventListener("load", (event)  =>  {
     writeContent();
     // getOwner();
