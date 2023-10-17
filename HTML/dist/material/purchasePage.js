@@ -237,7 +237,12 @@ const showPurchase = async (responseData)  => {
         <td>${productName}</td>
         <td>${price}</td>
         <td>${count}</td>
-        <td><a href="${e_commerce_site}" target="_blank" style="text-decoration:underline!important">${e_commerce_site}</a></td>  
+        <td>
+        <a href="${e_commerce_site}" target="_blank" style="text-decoration: underline!important; max-width: 100px; display: block;">
+            ${e_commerce_site.length > 25 ? e_commerce_site.substr(0, 25) + '...' : e_commerce_site}
+        </a>
+        </td>
+    
         <td>${purchasing_date}</td>
 
 
