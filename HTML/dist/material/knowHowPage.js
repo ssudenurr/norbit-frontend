@@ -203,18 +203,18 @@ const addToProblemSolve = () => {
    
 }
 
-const writeContent = async ()=>{
-    const accordionBox = document.getElementById('accordionExample');
-    const datas = await getData();
+// const writeContent = async ()=>{
+//     const accordionBox = document.getElementById('accordionExample');
+//  await getData();
 
-    setTimeout(() => {
+//     setTimeout(() => {
 
-        for (let i=0; i < dataList.length; i++){
-        AddContent(dataList[i]);
-    }
-    }, 100)
+//         for (let i=0; i < dataList.length; i++){
+//         AddContent(dataList[i]);
+//     }
+//     }, 100)
 
-}
+// }
 
 const deleteClickFunction = async () => {
     const deleteButtons = document.querySelectorAll('.delete-btn');
@@ -525,8 +525,8 @@ const deleteFile = async (pageId, fileId, deleteBtn) => {
 }
 
 window.addEventListener("load", (event)  =>  {
-    writeContent();
+    // writeContent();
     // getOwner();
-  
+  getData();
 
 })
