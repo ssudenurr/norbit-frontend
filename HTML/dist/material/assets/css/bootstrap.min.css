@@ -5823,7 +5823,7 @@ fieldset:disabled .btn {
     calc(-0.5 * var(--vz-modal-header-padding-y)) auto;
 }
 .modal-title {  
-    border-bottom: 2px solid #195e83;
+  /* border-bottom: 2px solid #195e83; */
   margin-bottom: 0;
   line-height: var(--vz-modal-title-line-height);
 }
