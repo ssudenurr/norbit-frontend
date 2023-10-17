@@ -203,8 +203,11 @@ const showInventory =  async (item) => {
         <td>${where_in_the_office}</td>
         <td>${price}</td>
         <td>${count}</td>
-        <td><a href="${e_commerce_site}" target="_blank" style="text-decoration:underline!important">${e_commerce_site}</a></td>  
-        <td>${purchasing_date}</td>
+        <td>
+        <a href="${e_commerce_site}" target="_blank" style="text-decoration: underline!important; max-width: 100px; display: block;">
+            ${e_commerce_site.length > 20 ? e_commerce_site.substr(0, 20) + '...' : e_commerce_site}
+        </a>
+        </td>        <td>${purchasing_date}</td>
         <td>${description}</td>
         `
         tableBody.appendChild(newRow);
