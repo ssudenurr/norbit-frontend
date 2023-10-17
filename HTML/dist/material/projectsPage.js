@@ -9,9 +9,9 @@ const projectCustomer = document.getElementById('customer');
 const projectCompany = document.getElementById('company');
 
 const saveButton = document.getElementById('save-btn');
-addBtn.addEventListener('click', ()=>{
-    addNewProject();
-})
+// addBtn.addEventListener('click', ()=>{
+//     editToProject();
+// })
 
 function formatTarih(tarih) {
     const tarihParcalari = tarih.split('T');
@@ -48,7 +48,7 @@ function getProjectsInfo(){
         console.log(error);
     })
 }
- function getProjectsDetails(pageId){
+ function getProjectsDetails(pageId,id){
     const apiUrl = `http://backend.norbit.com.tr/projects/${pageId}/`;
     const token  = localStorage.getItem('token');
 
@@ -75,9 +75,7 @@ function getProjectsInfo(){
         projectstartDate.value = formatTarih(startDateData);
         projectEndDate.value = formatTarih(endData);
         projectCustomer.value = customerData;
-        projectCompany.value = await getCompanyNameId(companyData);
-        // const selected = projectCompany.children[pageId - 1]
-        // selected.setAttribute('selected', 'selected')
+        projectCompany.value = projectData.company;
 
 
     }).catch((error) =>{
@@ -102,7 +100,7 @@ async function projectDetails(projectData) {
         <div class="card-body">
             <div class="text-muted">
                     <p class="mb-2 fw-bold fs-14 text-dark">PROJE ADI:</p>
-                    <p class="mb-3 text-uppercase">${project.project_name || '-'}</p>
+                    <p class="mb-3 ">${project.project_name || '-'}</p>
                 
 
                 <p class="mb-2 fw-bold fs-14 text-dark">AÇIKLAMA :</p>
@@ -147,7 +145,7 @@ async function projectDetails(projectData) {
                         </div>
                         <div class="mt-auto d-flex justify-content-end align-items-end">
                         <div>
-                            <button id="editBtn" class="btn btn-success btn-m fw-semibold edit-btn" style="letter-spacing: 0.3px; "onclick='createSaveButton(${project.id})' data-bs-toggle="modal" data-bs-target="#exampleModal">Düzenle</button>
+                            <button id="editBtn" class="btn btn-outline-success fs-14 btn-m fw-semibold edit-btn" style="letter-spacing: 0.3px; "onclick='createSaveButton(${project.id})' data-bs-toggle="modal" data-bs-target="#exampleModal">Düzenle</button>
                         </div>
                     </div>
                     </div>
