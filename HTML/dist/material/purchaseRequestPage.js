@@ -237,11 +237,15 @@ const showPurchaseRequest = async (requestData) => {
         <td>${productName}</td>
         <td>${price}</td>
         <td>${count}</td>
-        <td><a href="${e_commerce_site}" target="_blank" style="text-decoration:underline!important">${e_commerce_site}</a></td>  
+        <td>
+        <a href="${e_commerce_site}" target="_blank" style="text-decoration: underline!important; max-width: 100px; display: block;">
+            ${e_commerce_site.length > 25 ? e_commerce_site.substr(0, 25) + ' ...' : e_commerce_site}
+        </a>
+        </td>
         <td>${purchasing_date}</td>  
         <td>${description}</td>
-        <td><button id="editBtn" class="btn btn-success mdi mdi-pencil btn-sm fs-5 edit-btn" data-bs-toggle ="modal" data-bs-target="#exampleModal" data-user-id='${item.id}'></button>
-        <button class="btn btn-danger mdi mdi-close btn-sm fs-5 delete-btn" data-user-id='${item.id}'></button></td>
+        <td><button id="editBtn" class="btn btn-outline-success mdi mdi-pencil btn-sm fs-5 edit-btn" data-bs-toggle ="modal" data-bs-target="#exampleModal" data-user-id='${item.id}'></button>
+        <button class="btn btn-outline-danger mdi mdi-close btn-sm fs-5 delete-btn" data-user-id='${item.id}'></button></td>
         
         `;
 
