@@ -238,14 +238,12 @@
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarPages">
-                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesaplar</span>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="accountInfo.html"  target="_self">
+                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesap Bilgileri</span>
                             </a>
 
                         </li>
-                        -->
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
@@ -276,7 +274,7 @@
                     <div class="container-fluid"> 
                         <div class="row">
                             <div class="mb-3">
-                                    <button class="btn btn-outline-info fw-semibold fs-14" style="width: 170px; height: 48px;" id="createButton" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <button class="btn btn-outline-info fw-semibold fs-14" style="width: 170px; height: 48px;"  data-bs-toggle="modal" data-bs-target="#exampleModal" id="createButton" >
                                         Yeni Çözüm Oluştur
                                     </button>
                             </div>
@@ -293,60 +291,104 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="pagination">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" id="prev-page">
+                                    <a class="page-link fs-19" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <!-- Sayfa numaralarını burada göstereceğiz -->
+                                <li class="page-item" id="next-page">
+                                    <a class="page-link fs-19" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                          
                     </div>
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Çözüm Oluştur</h5>
-                                    <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog moda-md">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Çözüm Oluştur</h5>
+                                <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label" for="problem-title-input">Problem Adı</label>
+                                    <input type="text" class="form-control" id="problem-title-input">
                                 </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="problem-title-input">Problem Adı</label>
-                                        <input type="text" class="form-control" id="problem-title-input">
-                                    </div>
-                                    <div class="mb-3" id="upload-data">
-                                        <label class="form-label" for="solution-file-1">Doküman 1</label>
-
-                                        <div class="input-group">
+                                <div class="mb-3" id="upload-data">
+                                    
+                                        <div class="input-group mb-3">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="solution-file-1">
+                                                <label class="custom-file-label btn btn-warning btn-sm fs-14" for="solution-file-1">Dosya Seç</label>
+                                                <input type="file" class="custom-file-input" id="solution-file-1" hidden>
                                             </div>
-                                        </div>
-                                                                            
-                                        <div class="mb-3">
-                                            <label class="form-label" for="solution-file-2">Doküman 2</label>
-                                            <div class="input-group">
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="solution-file-2">
-                                                </div>
-                                            </div>
+                                            <p id="file-selected-1" class="mt-2"></p>
                                         </div>
                                         
-                                        <div class="mb-3">
-                                            <label class="form-label" for="solution-file-3">Doküman 3</label>
-                                            <div class="input-group">
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input" id="solution-file-3">
-                                                </div>
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                                <label class="custom-file-label btn btn-warning btn-sm fs-14" for="solution-file-2">Dosya Seç</label>
+                                                <input type="file" class="custom-file-input" id="solution-file-2" hidden>
                                             </div>
+                                            <p id="file-selected-2" class="mt-2"></p>
                                         </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label" for="solution-description">Açıklama</label>
-                                        <textarea type="text" class="form-control" style="height: 80px;" id="solution-description"></textarea>
-                                            
-                                    </div>
-                                </div>  
+
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                                <label class="custom-file-label btn btn-warning btn-sm fs-14" for="solution-file-3">Dosya Seç</label>
+                                                <input type="file" class="custom-file-input" id="solution-file-3" hidden>
+                                            </div>
+                                            <p id="file-selected-3" class="mt-2"></p>
+                                        </div>
+                                        <script>
+                                            document.getElementById('solution-file-1').addEventListener('change', (e) => {
+                                                if (e.target.files.length > 0) {
+                                                    const fileurl = e.target.files[0].name;
+                                                    document.getElementById('file-selected-1').textContent = fileurl;
+                                                }
+                                            });
+
+                                            document.getElementById('solution-file-2').addEventListener('change', (e) => {
+                                                if (e.target.files.length > 0) {
+                                                    const fileurl = e.target.files[0].name;
+                                                    document.getElementById('file-selected-2').textContent = fileurl;
+                                                }
+                                            });
+
+                                            document.getElementById('solution-file-3').addEventListener('change', (e) => {
+                                                if (e.target.files.length > 0) {
+                                                    const fileurl = e.target.files[0].name;
+                                                    document.getElementById('file-selected-3').textContent = fileurl;
+                                                }
+                                            });
+                                        </script>
+                                </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="solution-description">Açıklama</label>
+                                            <textarea type="text" class="form-control" style="height: 80px;" id="solution-description"></textarea>
+                                        </div>
+                                
+                
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
-                                    <button type="button" class="btn btn-primary" style="display: none;" id="save-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Kaydet</button>
+                                    <button type="button" class="btn btn-primary" style="display: none;" id="save-btn">Kaydet</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                        <div class="alert">
+                            <div class="alert alert-danger fs-16 fw-bold" id="alertWarning" style="display: none; position: fixed; bottom: 10px; right: 10px; padding: 1rem;
+                                width: 22rem; text-align: center; font-size: 17px; font-weight: bold; border-radius: 30px;">
+                                Lütfen Gerekli Alanları Doldurun
+                            </div>
+                        </div>
                 </div>
+
             </div>
         </div>
     </div>
