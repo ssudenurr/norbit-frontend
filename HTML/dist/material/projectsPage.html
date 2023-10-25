@@ -237,14 +237,12 @@
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarPages">
-                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesaplar</span>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="accountInfo.html"  target="_self">
+                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesap Bilgileri</span>
                             </a>
 
                         </li>
--->
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
@@ -283,11 +281,11 @@
                             <div class="tab-content text-muted">
                                 <div class="tab-pane fade show active" id="project-overview" role="tabpanel">
                                     <div class="row">
-                                        <!-- <div class="mb-3">
+                                        <div class="mb-3">
                                             <button class="btn btn-primary" id="createButton" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                 Yeni Proje Oluştur
                                             </button>
-                                        </div> -->
+                                        </div>
                                         <div class="col-xl-12 col-lg-8" id="project-list">
                                             <!-- <div class="card">
                                                 <div class="card-body">
@@ -350,12 +348,27 @@
                                                 </div>
                                             </div> -->
                                         </div>
+                                        <div id="pagination">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item" id="prev-page">
+                                                    <a class="page-link fs-19" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <!-- Sayfa numaralarını burada göstereceğiz -->
+                                                <li class="page-item" id="next-page">
+                                                    <a class="page-link fs-19" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
                                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="false">
                                         <div class="modal-dialog">
                                             <div class="modal-content" id="modalContent">
                                                 <div class="modal-header ">
-                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Satın Alma İsteği Oluşturma Formu</h1>
+                                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Proje Oluştur</h1>
                                                     <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
@@ -365,12 +378,12 @@
                                                         <br>
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <label for="problemName" class="form-label">Problem Adı</label>
-                                                                <input type="text" class="form-control" id="problemName"></input>
+                                                                <label for="problemName" class="form-label">Proje Adı</label>
+                                                                <input type="text" class="form-control" id="projectName"></input>
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <label for="problemDescription" class="form-label" >Problem Açıklaması</label>
-                                                                <input type="text" class="form-control" id="problemDescription">
+                                                                <label for="problemDescription" class="form-label" >Proje Açıklaması</label>
+                                                                <input type="text" class="form-control" id="projectDescription">
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -394,6 +407,14 @@
                                                                 </select>
                                                             </div>
                                                         </div>
+                                                        <div class="row">
+                                                            <div class="col-md-6" id="employeesData" >
+                                                                <label for="employees" class="form-label">Projede Yer Alanlar</label>
+                                                                <select type="text" class="form-select" id="employees" multiple style="height: 120px;">
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        
                                                 </div>
                                                 <div class="modal-footer" id="button-box">
                                                     <button type="button" class="btn btn-secondary" id="addBtn">Ekle</button>
@@ -402,7 +423,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="alert">
+                                            <div class="alert alert-danger fs-16 fw-bold" id="alertWarning" style="display: none; position: fixed; bottom: 10px; right: 10px; padding: 1rem; 
+                                             width: 25rem; text-align: center; font-size: 17px; font-weight: bold; border-radius: 30px;">
+                                                Lütfen Gerekli Alanları Doldurun
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <!-- end row -->
                                 </div>
                                 
