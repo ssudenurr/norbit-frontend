@@ -124,7 +124,7 @@
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="d-flex align-items-center">
                                         <img class="rounded-circle header-profile-user"
-                                            src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                                            src="" alt="Header Avatar">
                                         <span class="text-start ms-xl-2">
                                             <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
                                                 id="userName"></span>
@@ -243,14 +243,13 @@
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarPages">
-                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesaplar</span>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="accountInfo.html"  target="_self">
+                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesap Bilgileri</span>
                             </a>
 
                         </li>
-                        -->
+                       
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
@@ -285,7 +284,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">
-                                <h4>Satın Alım İstekleri </h4>
+                                <h4>Satın Alım Bilgileri </h4>
                         </div>
                         <div class="card-body">
                             <div class="purchase-request-list">
@@ -295,7 +294,7 @@
                                             
                                             <a class="btn btn-outline-success btn-sm fw-semibold fs-13" id="edit-btn" style="width: 70px; height: 32px;" > Düzenle</a>
                                             <a class="btn btn-outline-primary btn-sm fw-semibold fs-13" id="reply" style="width: 68px; height: 32px;" > Geri Al</a> 
-                                            <a class="btn btn-outline-info btn-sm fw-semibold fs-13 " id="situation" style="width: 68px; height: 32px;"  data-bs-toggle="modal" data-bs-target="#exampleModal"> Onayla</a>
+                                            <a class="btn btn-outline-info btn-sm fw-semibold fs-13 " id="situation" style="width: 68px; height: 32px;" > Onayla</a>
                                             <a class="btn btn-outline-danger btn-sm fw-semibold fs-13" style="width: 68px; height: 32px;" id="cancel" > İptal Et</a> 
                                                 
         
@@ -315,13 +314,14 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th scope="sort">ID</th> 
-                                                <th scope="sort">Sorumlu Kişi</th> 
+                                                <th scope="sort">İsteyen Kişi</th> 
                                                 <th scope="sort" >Durum</th>                                   
                                                 <th scope="sort">Ürün Adı</th>                                    
                                                 <th scope="sort">Fiyat</th>    
                                                 <th scope="sort">Sayısı</th>                        
                                                 <th scope="sort">Link</th>
                                                 <th scope="sort">İstek Tarihi</th>
+                                                <th scope="sort">Sipariş Tarihi</th>
                                                 <!-- <th scope="sort">Açıklama</th> -->
                                                 <!-- <th scope="sort">Düzenleme</th>
                                                 <th scope="col"></th>   -->
@@ -331,7 +331,21 @@
                                             <!-- Add Personal Data-->
                                         </tbody>
                                     </table>
-
+                                    <div id="pagination">
+                                        <ul class="pagination justify-content-center">
+                                            <li class="page-item" id="prev-page">
+                                                <a class="page-link fs-19" href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <!-- Sayfa numaralarını burada göstereceğiz -->
+                                            <li class="page-item" id="next-page">
+                                                <a class="page-link fs-19" href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -339,7 +353,7 @@
                 </div>
         </div>
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-        aria-hidden="true" data-bs-backdrop="false">
+            aria-hidden="true" data-bs-backdrop="false">
         <div class="modal-dialog">
             <div class="modal-content" id="modalContent">
                 <div class="modal-header ">
@@ -381,13 +395,13 @@
                                 <input type="text" class="form-control" id="input-Where-In-The-Office" >
                             </div>
                         </div>
-                        <!-- <div class="row">
+                        <div class="row">
                             <div class="col-md-6">
-                                <label for="inputDescription" class="form-label">Açıklama</label>
-                                <input type="text" name="text" class="form-control"  id="inputDescription">
+                                <label for="inputOrderDate" class="form-label">Sipariş Tarihi</label>
+                                <input type="date" name="text" class="form-control"  id="inputOrderDate">
                             </div>
 
-                        </div> -->
+                        </div>
 
                     </form>
                 </div>
@@ -400,6 +414,12 @@
             </div>
         </div>
         
+    </div>
+    <div class="alert">
+        <div class="alert alert-danger fs-16 fw-bold" id="alertWarning" style="display: none; position: fixed; bottom: 10px; right: 10px; padding: 1rem; 
+         width: 25rem; text-align: center; font-size: 17px; font-weight: bold; border-radius: 30px;">
+            Lütfen Gerekli Alanları Doldurun
+        </div>
     </div>
         </div>
         </div>
