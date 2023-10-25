@@ -16,6 +16,7 @@ const countInput = document.getElementById('inputCount');
 const linkInput = document.getElementById('inputLink');
 const purchasingDateInput = document.getElementById('inputPurchasingDate');
 const descriptionInput = document.getElementById('inputDescription');
+const orderDateInput = document.getElementById('inputOrderDate');
 
 const rowEdit = document.getElementById('editBtn');
 
@@ -55,17 +56,22 @@ function getRowData(rowId){
         const priceData = rowData.price;
         const countData = rowData.count;
         const linkData = rowData.e_commerce_site;
-        const purchasingDateData = rowData.purchasing_date;
+        const purchasingDateData = rowData.created_at;
+        const orderDateData = rowData.siparis_verilen_tarih;
         // const descriptionData = rowData.description;
 
         // const transDate = new Date(purchasingDateData);
-
-        whereInTheOfficeInput.value = whereInTheOfficeInputData;
+        if (rowData.where_in_the_office) {
+            whereInTheOfficeInput.value = rowData.where_in_the_office;
+        } else {
+            whereInTheOfficeInput.value = ''; // Set an empty value
+        }
         productNameInput.value = productNameData;
         priceInput.value = priceData;
         countInput.value = countData;
         linkInput.value = linkData;
         purchasingDateInput.value = formatTarih(purchasingDateData);
+        orderDateInput.value = formatTarih(orderDateData);
         // console.log(purchasingDateInput.value);
         ;
         // descriptionInput.value = descriptionData;
@@ -83,6 +89,9 @@ function editPurchase(purchaseId){
     const newCount = document.getElementById('inputCount');
     const newLink = document.getElementById('inputLink');
     const newPurhasingDate = document.getElementById('inputPurchasingDate');
+    console.log(newPurhasingDate)
+    const newOrderDate = document.getElementById('inputOrderDate')
+
     const newDescription = document.getElementById('inputDescription')
 
     axios({
@@ -97,7 +106,8 @@ function editPurchase(purchaseId){
             price:newPrice.value,
             count:newCount.value,
             e_commerce_site:newLink.value,
-            purchasing_date:formatDateToCustomFormat(newPurhasingDate.value),
+            created_at:formatDateToCustomFormat(newPurhasingDate.value),
+            siparis_verilen_tarih:formatDateToCustomFormat(newOrderDate.value),
             // description:newDescription.value,
         }
     }).then((response)=>{
@@ -139,7 +149,7 @@ async function cancelRequest(requestId){
     })
 }
 async function updatePurchaseStatus(requestId){
-    const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
+    const apiUrl = `http://backend.norbit.com.tr/purchase/${requestId}/`;
     const token = localStorage.getItem('token');
 
     axios({
@@ -153,10 +163,10 @@ async function updatePurchaseStatus(requestId){
         }
 
     }).then((response)=>{
-        console.log(response.data)
+        // console.log(response.data)
         if (response.status === 200) {
             console.log('Status updated successfully:', response.data);
-            window.location.reload();
+            // window.location.reload();
 
         } else {
             console.error('Status update failed:', response);
@@ -199,8 +209,35 @@ async function replyRequest(requestId){
     })
 }
 
-function getPurchase(){
-    const apiUrl = `http://backend.norbit.com.tr/purchase/list/`;
+let dataList = [];
+let currentPage = 1;
+let itemsPerPage = 5;
+
+const nextPageBtn = document.getElementById("next-page");
+const prevPageBtn = document.getElementById("prev-page");
+
+function displayDataOnPage(){
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = dataList.slice(startIndex,endIndex);
+
+    tableBody.innerHTML = "";
+    showPurchase(pageData); 
+
+}
+nextPageBtn.addEventListener('click', () => {
+    currentPage++;
+    getPurchase(currentPage);
+});
+
+prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        getPurchase(currentPage);
+    }
+});
+async function getPurchase(page = 1){
+    const apiUrl = `http://backend.norbit.com.tr/purchase/list/?page=${page}`;
     const token  = localStorage.getItem('token');
 
     axios ({
@@ -211,8 +248,16 @@ function getPurchase(){
         },
     }).then((response) =>{
         const responseData = response.data.results;
+        const nextPage = response.next;
+        showPurchase(responseData);
+        responseData.map((item) => {
+            dataList.push(item);
+        });
+        if (nextPage) {
+            getPurchase(nextPage);
+        }
         // console.log(responseData)
-        showPurchase(responseData)
+
     }).catch((error) =>{
         console.log(error)
     })
@@ -220,30 +265,31 @@ function getPurchase(){
 const showPurchase = async (responseData)  => {
     tableBody.innerHTML = '';
     responseData.forEach( async purchase => {
-    console.log(responseData);
+    // console.log(responseData);
         const newRow = document.createElement('tr') ;
-        const owner = await getOwnerName(purchase.owner)  || '-';
+        const responsiblePerson = await getResponsibleId(purchase.responsible_person)  || '-';
         const productName = purchase.product_name || '-';
         const price = purchase.price || '-';
         const count = purchase.count || '-';
         const e_commerce_site = purchase.e_commerce_site || '-';
-        const purchasing_date = formatTarih(purchase.purchasing_date) || '-';
+        const purchasing_date = formatTarih(purchase.created_at);
+        const orderDate = purchase.siparis_verilen_tarih ? formatTarih(purchase.siparis_verilen_tarih) : '-';
         const description = purchase.description || '-';
 
         newRow.innerHTML = `
         <td><input class="form-check" type ="checkbox"  id="checkbox" value=""</td>
-        <td>${owner}</td>
+        <td>${responsiblePerson}</td>
         <td><span class="badge badge bg-success fw-semibold fs-12">${purchase.status}</span></td>
         <td>${productName}</td>
         <td>${price}</td>
         <td>${count}</td>
         <td>
-        <a href="${e_commerce_site}" target="_blank" style="text-decoration: underline!important; max-width: 100px; display: block;">
-            ${e_commerce_site.length > 25 ? e_commerce_site.substr(0, 25) + '...' : e_commerce_site}
-        </a>
+            <a href="${e_commerce_site}" target="_blank" style="text-decoration: underline!important; max-width: 100px; display: block;">
+                ${e_commerce_site.length > 25 ? e_commerce_site.substr(0, 25) + '...' : e_commerce_site}
+            </a>
         </td>
-    
         <td>${purchasing_date}</td>
+        <td>${orderDate}</td>
 
 
 
@@ -283,11 +329,46 @@ const showPurchase = async (responseData)  => {
 }
 
 
-const getOwnerName = async (id) => {
-
+const getResponsibleId = async (id) => {
     const apiUrl= `http://backend.norbit.com.tr/ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
+
     const api = new Promise((resolve, reject) => {
+        axios({
+            method:'get',
+            url:apiUrl,
+            headers:{ 
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const responseData = response.data.results
+
+            const ownerData = responseData.map((item) => {
+                const firstname = item.first_name;
+                const lastname = item.last_name;
+                return firstname + ' ' + lastname;
+            });
+
+            resolve(ownerData);
+        }).catch((error) => {
+            reject(error)
+        
+        });
+    });
+
+    try {
+        const response = await api;
+        return response;
+    }
+    catch (e) {
+        return e
+    }
+} 
+
+function getResponsiblePerson(purchaseId){
+    const apiUrl= "http://backend.norbit.com.tr/ems/list/"
+    const token  = localStorage.getItem('token');
+
     axios({
         method:'get',
         url:apiUrl,
@@ -295,31 +376,25 @@ const getOwnerName = async (id) => {
             "Authorization": `Token ${token}`
         },
     }).then((response)=>{
-        const responseData = response.data.results
+        const personNameData = response.data.results;
 
+        const personList = document.getElementById('responsible-person');
+        personList.innerHTML = '';
 
-        const ownerData = responseData.map((item) => {
-            const ownerID = item.id;
-            const firstname = item.first_name;
-            const lastname = item.last_name;
-            return firstname + ' ' + lastname
-            console.log(firstname)
+        personNameData.forEach((person) => {
+            const option = document.createElement('option');
+            option.value= person.id;
+            option.text = person.first_name + ' ' + person.last_name;
+            if (person.id === purchaseId) {
+                option.selected = true; // Seçilen kişiyi seçili olarak işaretle
+              }
+            personList.appendChild(option)
         });
 
-        resolve(ownerData);
     }).catch((error) => {
-        reject("null")
-    });
-});
-
-try {
-    const response = await api;
-    return response;
-}
-catch (e) {
-    return e
-}
-}
+          console.log(error);
+        });
+};
 searchButton.addEventListener('click', () => {
     const searchTerm = searchInput.value;
     if (searchTerm) {
@@ -363,9 +438,7 @@ searchInput.addEventListener('input', () => {
     }
 });
 
-// const eskiTarih = '2023-10-03T14:30';
-// const yeniTarih = formatTarih(eskiTarih);
-// console.log(yeniTarih); // "2023-10-03"
+
 window.addEventListener('load', (event) => {
     getPurchase();
     });
