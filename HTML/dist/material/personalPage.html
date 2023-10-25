@@ -243,14 +243,12 @@
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarPages">
-                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesaplar</span>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="accountInfo.html"  target="_self">
+                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesap Bilgileri</span>
                             </a>
 
                         </li>
-                        -->
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
@@ -312,162 +310,134 @@
                                     </div>  
                                 </div>
                                 <div class="table-responsive table-card mt-3 mb-1">
-                                    <table class="table table-striped align-middle" id="personalTable">
+                                    <table class="table table-striped align-middle " id="personalTable">
                                         <thead class="table-light">
                                             <tr>
                                                 <!-- <th scope="col"></th> -->
-                                                <th scope="col">Ad</th>
-                                                <th scope="col">Soyad</th>
-                                                <th scope="col">Görev</th>
-                                                <th scope="col">Kullanıcı Tipi</th>
-                                                <th scope="col">İşe Giriş Tarihi</th>
-                                                <th scope="col">İşten Çıkış Tarihi</th>
-                                                <th scope="col">Şirket</th>
-                                                <th scope="col">Kullanıcı Adı</th>
-                                                <th scope="col" id="editCol">Düzenleme</th>
-                                                <th scope="col"></th>
+                                                <th scope="sort">Ad</th>
+                                                <th scope="sort">Soyad</th>
+                                                <th scope="sort">Görev</th>
+                                                <th scope="sort">Kullanıcı Tipi</th>
+                                                <th scope="sort">İşe Giriş Tarihi</th>
+                                                <th scope="sort">İşten Çıkış Tarihi</th>
+                                                <th scope="sort">Şirket</th>
+                                                <th scope="sort">Kullanıcı Adı</th>
+                                                <th scope="sort" id="editCol">Düzenleme</th>
+                                                <th scope="sort"></th>
 
                                             </tr>
                                         </thead>
                                         <tbody class="list form-check-all">
                                             <!-- Add Personal Data -->
                                         </tbody>
+
                                     </table>
                                 </div>
                                 
                             </div>
+                        </div>
+                        <div id="pagination">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" id="prev-page">
+                                    <a class="page-link fs-19" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <!-- Sayfa numaralarını burada göstereceğiz -->
+                                <li class="page-item" id="next-page">
+                                    <a class="page-link fs-19" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
                 </div>
             </div>
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true" data-bs-backdrop="false">
-            <div class="modal-dialog">
-                <div class="modal-content" id="modalContent">
-                    <div class="modal-header ">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Personel Oluşturma Formu</h1>
-                        <button type="button" class="btn-close" id='btn-close' data-bs-dismiss="modal"
-                            aria-label="Close"></button>
+                aria-hidden="true" data-bs-backdrop="false">
+                <div class="modal-dialog">
+                    <div class="modal-content" id="modalContent">
+                        <div class="modal-header ">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Personel Oluşturma Formu</h1>
+                            <button type="button" class="btn-close" id='btn-close' data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body " id="modalBody">
+                            <form class="row g-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="inputEmail4" class="form-label">Ad</label>
+                                        <input type="text" class="form-control" id="inputFirstame">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="inputEmail4" class="form-label">Soyad</label>
+                                        <input type="text" class="form-control" id="inputLastname">
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6" id="job-date" >
+                                        <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
+                                        <input type="date" name="datetime" class="form-control" id="inputDate">
+                                    </div>
+                                    <div class="col-md-6" id="duty">
+                                        <label for="inputJob" class="form-label">Görevi</label>
+                                        <select type="text" class="form-select" id="inputJob">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" id="input-exit-date">
+                                        <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
+                                        <input type="date" class="form-control" id="inputExitDate" >
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="inputCompany" class="form-label">Şirketi</label>
+                                        <select type="text" class="form-select" id="inputCompany">
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="inputUserType" class="form-label">Kullanıcı Tipi</label>
+                                        <select class="form-select" id="inputUserType">
+                                            <option value="AU">AU</option>
+                                            <option value="NU">NU</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="inputUsername" class="form-label">Username</label>
+                                        <input type="text" class="form-control" id="inputUsername">
+                                    </div>
+                                    <div class="col-md-6" id="password-content">
+                                        <label for="inputPassword" class="form-label">Şifre</label>
+                                        <input type="text" class="form-control" id="inputPassword">
+                                    </div>
+                                </div>
+
+
+                            </form>
+                        </div>
+
+                        <div class="modal-footer" id="button-box">
+                            <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
+                    <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button> -->
+                            <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button> -->
+                        </div>
                     </div>
-                    <div class="modal-body " id="modalBody">
-                        <form class="row g-3">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="inputEmail4" class="form-label">Ad</label>
-                                    <input type="text" class="form-control" id="inputFirstame">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="inputEmail4" class="form-label">Soyad</label>
-                                    <input type="text" class="form-control" id="inputLastname">
-                                </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6" id="job-date" >
-                                    <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
-                                    <input type="date" name="datetime" class="form-control" id="inputDate">
-                                </div>
-                                <div class="col-md-6" id="duty">
-                                    <label for="inputJob" class="form-label">Görevi</label>
-                                    <select type="text" class="form-select" id="inputJob">
-                                    </select>
-                                </div>
-                                <div class="col-md-6" id="input-exit-date">
-                                    <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
-                                    <input type="date" class="form-control" id="inputExitDate" >
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="inputCompany" class="form-label">Şirketi</label>
-                                    <select type="text" class="form-select" id="inputCompany">
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label for="inputUserType" class="form-label">Kullanıcı Tipi</label>
-                                    <select class="form-select" id="inputUserType">
-                                        <option value="AU">AU</option>
-                                        <option value="NU">NU</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <label for="inputUsername" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="inputUsername">
-                                </div>
-                                <div class="col-md-6" id="password-content">
-                                    <label for="inputPassword" class="form-label">Şifre</label>
-                                    <input type="text" class="form-control" id="inputPassword">
-                                </div>
-                            </div>
-
-
-                        </form>
-                    </div>
-
-                    <div class="modal-footer" id="button-box">
-                        <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
-                <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button> -->
-                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button> -->
+                </div>
+                
+                <div class="alert">
+                    <div class="alert alert-danger fs-16 fw-bold" id="alertWarning" style="display: none; position: fixed; bottom: 10px; right: 10px; padding: 1rem; 
+                     width: 25rem; text-align: center; font-size: 17px; font-weight: bold; border-radius: 30px;">
+                        Lütfen Gerekli Alanları Doldurun
                     </div>
                 </div>
             </div>
-            
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+
         </div>
         </div>
     </div>
