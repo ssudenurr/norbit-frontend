@@ -1,22 +1,80 @@
 const projectList = document.getElementById('project-list');
 const addBtn = document.getElementById('addBtn');
 
-const projectName = document.getElementById('problemName');
-const projectDescription = document.getElementById('problemDescription');
+const projectName = document.getElementById('projectName');
+const projectDescription = document.getElementById('projectDescription');
 const projectstartDate = document.getElementById('startDate');
 const projectEndDate = document.getElementById('endDate');
 const projectCustomer = document.getElementById('customer');
 const projectCompany = document.getElementById('company');
+const employees = document.getElementById('employees')
+
+const createButton = document.getElementById('createButton');
 
 const saveButton = document.getElementById('save-btn');
-// addBtn.addEventListener('click', ()=>{
-//     editToProject();
-// })
+addBtn.addEventListener('click', ()=>{
+        addNewProject();
+        window.location.reload();
 
-function formatTarih(tarih) {
-    const tarihParcalari = tarih.split('T');
-    return tarihParcalari[0];
+})
+
+function valueControl() {
+    const alert = document.getElementById("alertWarning"); // Define 'alert' here
+    if (
+      !projectName.value ||
+      !projectDescription.value ||
+      !projectstartDate.value ||
+      !projectCustomer.value ||
+      !projectCompany.value ||
+      !employees.value 
+    ) {
+      alert.style.display = "block";
+  
+      setTimeout(() => {
+        alert.style.display = "none";
+      }, 1600);
+  
+      return;
+    }
+    alert.style.display = "none";
+  }
+  
+  function formatTarih(tarih) {
+    if (tarih) {
+        const tarihParcalari = tarih.split('T');
+        return tarihParcalari[0];
+    } else {
+        return '-';
+    }
 }
+
+let currentPage = 1;
+const itemsPerPage = 10 ;
+
+function displayDataOnPage() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const dataToDisplay = dataList.slice(startIndex, endIndex);
+
+    tableBody.innerHTML = '';
+    getProjectsDetails(dataToDisplay);
+}
+
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+
+prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        getProjectsInfo(currentPage);
+    }
+});
+
+nextPageBtn.addEventListener('click', () => {
+    currentPage++;
+    getProjectsInfo(currentPage);
+});
+
 function formatDateToCustomFormat(date) {
     let date2 = new Date(date)
     var yyyy = date2.getFullYear();
@@ -30,8 +88,8 @@ function formatDateToCustomFormat(date) {
   
     return formattedDate;
 }
-function getProjectsInfo(){
-    const apiUrl = `http://backend.norbit.com.tr/projects/list/`;
+function getProjectsInfo(page){
+    const apiUrl = `http://backend.norbit.com.tr/projects/list/?page=${page}`;
     const token  = localStorage.getItem('token');
 
     axios ({
@@ -48,7 +106,7 @@ function getProjectsInfo(){
         console.log(error);
     })
 }
- function getProjectsDetails(pageId,id){
+async function getProjectsDetails(pageId){
     const apiUrl = `http://backend.norbit.com.tr/projects/${pageId}/`;
     const token  = localStorage.getItem('token');
 
@@ -61,21 +119,25 @@ function getProjectsInfo(){
         
     }).then( async (response) =>{
         const projectData = response.data;
-        // getCompanyName();
         // console.log(projectData)
+        const employeesDataId = await getEmployeesId(
+            projectData.employees
+        )
         const nameData = projectData.project_name || '-';     
         const descriptionData = projectData.description || '-';
         const startDateData = projectData.project_start_date || '-';
         const endData = projectData.project_end_date || '-';
         const customerData = projectData.customer || '-';
         const companyData = projectData.company || '-';
-  
+
+        employees.value = employeesDataId;
         projectName.value = nameData;
         projectDescription.value = descriptionData;
         projectstartDate.value = formatTarih(startDateData);
         projectEndDate.value = formatTarih(endData);
         projectCustomer.value = customerData;
-        projectCompany.value = projectData.company;
+        projectCompany.value = companyData;
+        employeesData(projectData.employees);
 
 
     }).catch((error) =>{
@@ -90,6 +152,10 @@ async function projectDetails(projectData) {
         const projectDiv = document.createElement('div');
         projectDiv.classList.add('card', 'mb-3');
         const company = await getCompanyNameId(project.company) || '-';
+        const employeesIds = project.employees;
+        const employeesValue = await getEmployeesData(employeesIds);
+
+        const usernames = employeesValue.map(innerArray => innerArray.map(user => user.username));
 
         if(project.status === "FNS"){
             project.status = "TAMAMLANDI"
@@ -99,9 +165,19 @@ async function projectDetails(projectData) {
         projectDiv.innerHTML = `
         <div class="card-body">
             <div class="text-muted">
-                    <p class="mb-2 fw-bold fs-14 text-dark">PROJE ADI:</p>
-                    <p class="mb-3 ">${project.project_name || '-'}</p>
-                
+                <div class ="row">
+
+                    <div class="col-lg-5 col-sm-4">
+                        <p class="mb-2 fw-bold fs-14 text-dark">PROJE ADI:</p>
+                        <p class="mb-3 ">${project.project_name || '-'}</p>
+                    </div>
+
+                    <div class="col-lg-7 col-sm-10">
+                        <p class="mb-2 fw-bold fs-14 text-dark">PROJEDE YER ALANLAR:</p>
+                        <p class="mb-3 ">${usernames.join(', ') || '-'}</p>
+                    </div>
+
+                </div>
 
                 <p class="mb-2 fw-bold fs-14 text-dark">AÇIKLAMA :</p>
                 <p>${project.description || '-'}</p>
@@ -161,28 +237,36 @@ async function projectDetails(projectData) {
 
 async function createSaveButton(pageId) {
     document.querySelector('.modal-title').innerHTML = '';
-    
+
     saveButton.style.display = 'block';
-    addBtn.style.display = 'none';  
+    addBtn.style.display = 'none';
+
+    await getProjectsDetails(pageId);
     
-    getProjectsDetails(pageId);
+    // Get the selected employees' IDs and pass them to employeesData
+    const selectedEmployeeIds = Array.from(employees.selectedOptions).map(option => option.value);
+    employeesData(selectedEmployeeIds);
+
     saveButton.addEventListener('click', async () => {
         await editToProject(pageId);
         // modal.hide();
-        window.location.reload();
+        // window.location.reload();
     });
-    
 }
+
+
 const editToProject = async (itemId) =>{
     const pageApi = `https://backend.norbit.com.tr/projects/${itemId}/`;
     const token = localStorage.getItem('token');
 
-    const newProjectName = document.getElementById(`problemName`).value;
-    const newProjectDescription =document.getElementById('problemDescription').value;
+    const newProjectName = document.getElementById(`projectName`).value;
+    const newProjectDescription =document.getElementById('projectDescription').value;
     const newProjectstartDate = document.getElementById('startDate').value ;
     const newProjectEndDate = document.getElementById('endDate').value;
     const newProjectCustomer = document.getElementById('customer').value;
     const newProjectCompany= document.getElementById('company').value;
+    const newEmployees = Array.from(document.getElementById('employees').selectedOptions).map(option => option.value);
+    console.log(newEmployees)
 
     const data = {
         project_name:newProjectName,
@@ -191,6 +275,7 @@ const editToProject = async (itemId) =>{
         project_end_date: formatDateToCustomFormat(newProjectEndDate),
         customer: newProjectCustomer,
         company:newProjectCompany,
+        employees:newEmployees,
     };
     
     axios({
@@ -238,7 +323,7 @@ const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
         return e
     }
 };
-// getCompanyNameId fonksiyonunu ayrıca çağırmayın
+
 function getCompanyName() {
     const apiUrl = "http://backend.norbit.com.tr/company/list/";
     const token = localStorage.getItem('token');
@@ -266,42 +351,129 @@ function getCompanyName() {
         console.log(error);
     });
 }
+function employeesData(selectedEmployeeIds) {
+    const apiUrl = "http://backend.norbit.com.tr/ems/list/";
+    const token = localStorage.getItem("token");
+  
+    axios({
+      method: "get",
+      url: apiUrl,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => {
+        const personNameData = response.data.results;
+  
+        const employees = document.getElementById('employees')
+        employees.innerHTML = "";
+  
+        personNameData.forEach((person) => {
+          const option = document.createElement("option");
+          option.value = person.id;
+          option.text = person.username;
+          if (selectedEmployeeIds && selectedEmployeeIds.includes(person.id)) {
+            option.selected = true;
+        }
+          employees.appendChild(option);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+const getEmployeesId = async (id) => {
+const apiUrl = `http://backend.norbit.com.tr/ems/list/?id=${id}`;
+const token = localStorage.getItem("token");
 
-window.onload = function () {
-    getProjectsInfo();
-    getCompanyName();
+const api = new Promise((resolve, reject) => {
+    axios({
+    method: "get",
+    url: apiUrl,
+    headers: {
+        Authorization: `Token ${token}`,
+    },
+    })
+    .then((response) => {
+        const responseData = response.data.results;
+        // console.log(responseData[0].username)
+        resolve(responseData);
+
+        if (responseData.length > 0) {
+            return responseData[0].username;
+        } else {
+            return "ID bulunamadı";
+        }
+
+    })
+    .catch((error) => {
+        reject(error);
+    });
+});
+
+try {
+    const response = await api;
+    return response;
+} catch (e) {
+    return e;
+}
+};
+async function getEmployeesData(employeeIds) {
+    const employeeData = [];
+
+    for (const id of employeeIds) {
+        const employeeName = await getEmployeesId(id);
+        employeeData.push(employeeName);
+    }
+
+    return employeeData;
 }
 
-// const addNewProject = async (projectDetails) =>{
-//     const apiUrl = `http://backend.norbit.com.tr/projects/list/`; 
-//     const token  = localStorage.getItem('token');
+const addNewProject = async () =>{
+    const apiUrl = `https://backend.norbit.com.tr/projects/create/`; 
+    const token  = localStorage.getItem('token');
+    valueControl()
 
-//     const projectName = document.getElementById('problemName').value;
-//     const projectDescription = document.getElementById('problemDescription').value;
-//     const projectstartDate = document.getElementById('startDate').value;
-//     const projectEndDate = document.getElementById('endDate').value;
-//     const projectCustomer = document.getElementById('customer').value;
-//     const projectCompany = document.getElementById('company').value;
+    const projectName = document.getElementById('projectName').value;
+    const projectDescription = document.getElementById('projectDescription').value;
+    const projectstartDate = document.getElementById('startDate').value;
+    const projectEndDate = document.getElementById('endDate');
+    const formattedEndDate = projectEndDate.value ? formatDateToCustomFormat(projectEndDate.value) : null;
+    const projectCustomer = document.getElementById('customer').value;
+    const projectCompany = document.getElementById('company').value;
 
-//     axios({        
-//         method:'post',
-//         url:apiUrl,
-//         headers:{ 
-//             "Authorization": `Token ${token}`
-//         },
-//         data:{
-//             project_name:projectName,
-//             description:projectDescription,
-//             project_start_date: formatDateToCustomFormat(projectstartDate),
-//             project_end_date:formatDateToCustomFormat(projectEndDate),
-//             customer: projectCustomer,
-//             company:projectCompany,
-//         }
-//     }).then(async (response)=>{
+    const selectedEmployees = Array.from(document.getElementById('employees').selectedOptions).map(option => option.value);
 
-//         clearInput();
-//         window.location.reload();
-//     }).catch((error) => {
-//           console.log(error);
-//         });
-// }
+    axios({        
+        method:'post',
+        url:apiUrl,
+        headers:{ 
+            "Authorization": `Token ${token}`
+        },
+        data:{
+            project_name:projectName,
+            description:projectDescription,
+            project_start_date: formatDateToCustomFormat(projectstartDate),
+            project_end_date:formatDateToCustomFormat(formattedEndDate),
+            customer: projectCustomer,
+            company:projectCompany,
+            employees:selectedEmployees,
+        }
+    }).then(async (response)=>{
+        employeesData();
+
+        window.location.reload();
+    }).catch((error) => {
+          console.log(error);
+        });
+}
+
+
+
+window.onload = function () {
+    getProjectsInfo(1);
+    getCompanyName();
+    employeesData();
+}
+
+
