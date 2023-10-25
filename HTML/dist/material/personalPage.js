@@ -56,12 +56,16 @@ async function createEditButton(userId){
     document.getElementById('job-date').style.display = 'none'
     inputExitDate.style.display = 'block'
     modalButtonBox.innerHTML += `
-        <button type="button" class="btn btn-primary" id="row-edit-btn" onclick='editPersonel(${userId})'>Düzenle</button>
+        <button type="button" class="btn btn-primary" id="row-edit-btn" >Düzenle</button>
     `;   
     const rowEditBtn = document.getElementById('row-edit-btn');
     rowEditBtn.addEventListener('click', () => {
-        modal.hide();
-        clearInput();   
+        if(modalValueControl()){
+            editPersonel(userId)
+            modal.hide();
+            clearInput();   
+        };
+
 
     })
 
@@ -69,11 +73,36 @@ async function createEditButton(userId){
     
     getRowData(userId)
 }
+function valueControl(){
+    if (
+        !firstName.value ||
+        !lastName.value ||
+        !job.value ||
+        !userTypes.value ||
+        !entryDate.value ||
+        !exitDate.value ||
+        !company.value ||
+        !username.value ||
+        !password.value 
 
+    ) {
+        const alert = document.getElementById('alertWarning');
+        alert.style.display = 'block';
+
+        setTimeout(() => {
+            alert.style.display = 'none';
+        }, 1400);
+
+        return;
+    }
+    alert.style.display = 'none';
+
+}
 function createPersonel(){ // CREATE NEW PERSONAL
+    valueControl();
 
     const apiUrl= "http://backend.norbit.com.tr/accounts/registration/"
-        const token  = localStorage.getItem('token');
+    const token  = localStorage.getItem('token');
         
        
         const transDate = new Date (entryDate.value);
@@ -207,19 +236,43 @@ function getRowData(userId){ // GET CURRENT ROW USER'S DATA
         });
 
 }
+function modalValueControl() {
+    const alert = document.getElementById("alertWarning");
+  
+    if (
+      !newFirstName.value ||
+      !newLastName.value ||
+      !newjob.value ||
+      !newCompany.value ||
+      !newUserType.value ||
+      !newUserName.value
+
+    ) {
+      alert.style.display = "block";
+      setTimeout(() => {
+        alert.style.display = "none";
+      }, 1600);
+      return false; // Return false to indicate that validation failed.
+    }
+    
+    alert.style.display = "none";
+    return true; // Return true to indicate that validation passed.
+  }
+  
+  
+const newFirstName = document.getElementById('inputFirstame');
+const newLastName = document.getElementById('inputLastname');
+const newjob = document.getElementById('inputJob');
+const newCompany = document.getElementById('inputCompany');
+const newUserType = document.getElementById('inputUserType');
+const newUserName = document.getElementById('inputUsername')
+
+const newExitDate = document.getElementById('inputExitDate');
+const exitDateValue = newExitDate.value.trim();
 
 function editPersonel(userID) {
     const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userID}/`;
     const token = localStorage.getItem('token');
-
-    const newFirstName = document.getElementById('inputFirstame');
-    const newLastName = document.getElementById('inputLastname');
-    const newjob = document.getElementById('inputJob');
-    const newCompany = document.getElementById('inputCompany');
-    const newUserType = document.getElementById('inputUserType');
-
-    const newExitDate = document.getElementById('inputExitDate');
-    const exitDateValue = newExitDate.value.trim();
 
     const data = {
         first_name: newFirstName.value,
@@ -227,6 +280,7 @@ function editPersonel(userID) {
         job_title: newjob.value,
         user: newUserType.value,
         company_name: newCompany.value,
+        username:newUserName.value,
     };
 
 
@@ -250,10 +304,36 @@ function editPersonel(userID) {
         console.error(error);
     });
 }
+let currentPage = 1;
+const itemsPerPage = 5 ;
 
+function displayDataOnPage() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const dataToDisplay = dataList.slice(startIndex, endIndex);
+
+    tableBody.innerHTML = '';
+    showPersonal(dataToDisplay);
+}
+
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+
+prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        personalList(currentPage);
+    }
+});
+
+nextPageBtn.addEventListener('click', () => {
+    currentPage++;
+    personalList(currentPage);
+});
             
-const personalList = () => {    // GETTING CONTACT INFORMATION FROM API
-    const apiUrl = "http://backend.norbit.com.tr/ems/list/";
+const personalList = (page = 1) => {    // GETTING CONTACT INFORMATION FROM API
+    const apiUrl = `https://backend.norbit.com.tr/ems/list/?page=${page}`;
+
     const token  = localStorage.getItem('token');
        
     axios({                                          
@@ -274,6 +354,7 @@ const personalList = () => {    // GETTING CONTACT INFORMATION FROM API
     })
 };
 
+
 const showPersonal = async (personalData) => {
     
     tableBody.innerHTML = '';
@@ -283,7 +364,6 @@ const showPersonal = async (personalData) => {
     personalData.forEach(async  item => {
         const newRow = document.createElement('tr');
         const job = await getJobTitleId(item.job_title) || '-'; 
-        console.log(job)
         const company = await getCompanyNameId(item.company_name) || '-';
         const first_name = item.first_name || '-';
         const last_name = item.last_name || '-';
@@ -401,7 +481,7 @@ const getJobTitleId  = async (job_id) => {    // GET JOB TİTLE ID
             },
         }).then((response)=>{
             const jobList = response.data;
-            console.log(jobList)
+            // console.log(jobList)
             const jobId =jobList.id;
             const jobName = jobList.job_title;
             resolve(jobName)
@@ -562,11 +642,11 @@ searchInput.addEventListener('input', () => {
 
 window.addEventListener("load", async (event) => {
 
-    personalList();
+    // personalList();
     getJobTitle();
     getJobTitleId();
     getCompanyName();
     getCompanyNameId();
-
+    personalList(1);
 
 });
