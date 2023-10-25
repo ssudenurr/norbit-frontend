@@ -243,14 +243,12 @@
                             </a>
                         </li>
 
-                        <!-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="#sidebarPages" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarPages">
-                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesaplar</span>
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="accountInfo.html"  target="_self">
+                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesap Bilgileri</span>
                             </a>
 
                         </li>
-                    -->
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false" aria-controls="sidebarLanding">
                                 <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
@@ -261,7 +259,7 @@
                         
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="purchasePage.html" aria-expanded="false" aria-controls="sidebarUI">
-                                <i class="mdi mdi-cube-outline"></i> <span data-key="t-base-ui">Satın Alım
+                                <i class="mdi mdi-cube-outline"></i> <span data-key="t-base-ui">Satın Alım  
                                     Bilgileri</span>
                             </a>
                         </li> 
@@ -293,10 +291,9 @@
                                     <div class="col-sm-auto col">
                                         <div class="table-buttons">
                                             
-                                            <a class="btn btn-outline-success btn-sm fw-semibold fs-13" style="width: 70px; height: 32px;" id="edit-btn"> Düzenle</a>
+                                            <a class="btn btn-outline-success btn-sm fw-semibold fs-14" style="width: 75px; height: 32px;" id="edit-btn"> Düzenle</a>
                                             <a class="btn btn-outline-danger btn-sm fw-semibold fs-14"  style="width: 50px; height: 32px; " id="delete-btn" > Sil</a> 
-                                            <!-- <a class="mdi mdi-plus btn btn-info btn-m " id="add-btn" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal"></a> -->
+                                            <a class="btn btn-outline-primary btn-sm fw-semibold fs-14" style="width: 60px; height: 32px;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Ekle</a>
         
                                         </div>
                                     </div>
@@ -314,14 +311,14 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th scope="sort">ID </th> 
-                                                <!-- <th scope="sort">İsteği Yapan Kişi</th>  -->
+                                                <!-- <th scope="sort">İsteyen Kişi</th>  -->
                                                 <th scope="sort">Ürün Adı</th>  
-                                                <!-- <th scope="sort">Sorumlu Kişi</th>  -->
+                                                <th scope="sort">Alınma Tarihi</th> 
                                                 <th scope="sort">Ofiste Nerede</th>                                   
                                                 <th scope="sort">Fiyat</th>    
                                                 <th scope="sort">Sayısı</th>                        
                                                 <th scope="sort">Link</th>
-                                                <th scope="sort">İstek Tarihi</th>
+                                                <!-- <th scope="sort">İstek Tarihi</th> -->
                                                 <th scope="sort">Açıklama</th>
                                                 <!-- <th scope="sort">Düzenleme</th> -->
 
@@ -336,6 +333,22 @@
                                 </div>
                             </div>
                         </div>
+                        <div id="pagination">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" id="prev-page">
+                                    <a class="page-link fs-19" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <!-- Sayfa numaralarını burada göstereceğiz -->
+                                <li class="page-item" id="next-page">
+                                    <a class="page-link fs-19" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        
                     </div>
 
                 </div>
@@ -351,45 +364,67 @@
                     </div>
                     <div class="modal-body " id="modalBody">
                         <form class="row g-3">
+                            <!-- <div class="row" id="extraData">
+
+                                <div class="col-md-6" id="ownerInput">
+                                    <label for="inputProductName" class="form-label">İsteği Yapan Kişi</label>
+                                    <input type="text" class="form-control" id="inputOwner">
+                                </div>
+                                
+                                <div class="col-md-6" id=" responsible-person">
+                                    <label for="inputPrice" class="form-label">İsteyen Kişi</label>
+                                    <input type="text" name="number" class="form-control" id="inputResponsiblePerson">
+                                </div>  
+                            </div> -->
                             <div class="row">
+
                                 <div class="col-md-6">
                                     <label for="inputProductName" class="form-label">Ürün Adı</label>
                                     <input type="text" class="form-control" id="inputProductName">
                                 </div>
-                                <div class="col-md-6">
-                                    <label for="inputLink" class="form-label">Ofiste Nerede</label>
-                                    <input type="text" class="form-control" id="input-Where-In-The-Office" >
-                                </div>
-                            </div>
-                            <div class="row">
+                                
                                 <div class="col-md-6">
                                     <label for="inputPrice" class="form-label">Fiyat</label>
                                     <input type="number" name="number" class="form-control" id="inputPrice">
-                                </div>
+                                </div>  
+                            </div>
+
+                            <div class="row">
+
                                 <div class="col-md-6" id="duty">
                                     <label for="inputCount" class="form-label">Sayısı</label>
                                     <input type="number" name="number" class="form-control" id="inputCount">
                                     
                                 </div>
-
-                            </div>
-                            <div class="row">
                                 <div class="col-md-6" >
                                     <label for="inputLink" class="form-label">Link</label>
                                     <input type="url" class="form-control" id="inputLink" >
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="inputPurchasingDate" class="form-label">İstek Tarihi</label>
-                                    <input type="date" name="datetime" class="form-control"  id="inputPurchasingDate">
-                                </div>
+                                </div>                           
+
 
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
+                                    <label for="inputPurchaseDate" class="form-label">Alınma Tarihi</label>
+                                    <input type="date" name="text" class="form-control"  id="inputPurchaseDate">
+                                </div>
+                                <div class="col-md-8">
+                                    <label for="inputLink" class="form-label">Ofiste Nerede</label>
+                                    <input type="text" class="form-control" id="input-Where-In-The-Office" >
+                                </div>
+                            </div>
+
+                            <div class="row">
+
+
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
                                     <label for="inputDescription" class="form-label">Açıklama</label>
                                     <input type="text" name="text" class="form-control"  id="inputDescription">
                                 </div>
-    
+
                             </div>
     
                         </form>
@@ -403,6 +438,12 @@
                 </div>
             </div>
             
+        </div>
+        <div class="alert">
+            <div class="alert alert-danger fs-16 fw-bold" id="alertWarning" style="display: none; position: fixed; bottom: 10px; right: 10px; padding: 1rem; 
+             width: 25rem; text-align: center; font-size: 17px; font-weight: bold; border-radius: 30px;">
+                Lütfen Gerekli Alanları Doldurun
+            </div>
         </div>
         </div>
         </div>
