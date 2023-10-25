@@ -6,55 +6,74 @@ const solutionFileInput1 = document.getElementById('solution-file-1');
 const solutionFileInput2 = document.getElementById('solution-file-2');
 const solutionFileInput3 = document.getElementById('solution-file-3');
 
+const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
+
+const createButton = document.getElementById('createButton');
+createButton.addEventListener('click',() =>{
+    modal.show();
+})
+
 const saveButton  = document.getElementById('save-btn');
 
 const addButton = document.getElementById('addBtn')
 addButton.addEventListener('click', () => {
-    
+    valueControl();
   addToProblemSolve();                                                                                                                                                                                 
 })
 
 const closeBtn = document.getElementById('btn-close');
 closeBtn.addEventListener('click', () =>{
-    problemTitle.value = '';
-    solutionDescription.value = '';
-    solutionFileInput1.value = '';
-    solutionFileInput2.value = '';
-    solutionFileInput3.value = '';  
+clearInput();
 })
 let dataList = [];
-const id = 1;
+let currentPage = 1;
+const itemsPerPage = 5 ;
 
-const getData = async (url=null) => {   
-    let urlApi;
-    if (url === null) {
-        urlApi = `http://backend.norbit.com.tr/knowhow/list/?page=${id}`; 
-    }
-    else {
-        urlApi = url; 
-    }
+function displayDataOnPage() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const dataToDisplay = dataList.slice(startIndex, endIndex);
 
+    tableBody.innerHTML = '';
+    AddContent(dataToDisplay);
+}
+
+const prevPageBtn = document.getElementById('prev-page');
+const nextPageBtn = document.getElementById('next-page');
+
+prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        getData(currentPage);
+    }
+});
+
+nextPageBtn.addEventListener('click', () => {
+    currentPage++;
+    getData(currentPage);
+});
+const getData = async (page = 1) => {   
+    const urlApi = `http://backend.norbit.com.tr/knowhow/list/?page=${page}`;
     const token  = localStorage.getItem('token');
     const api = new Promise((resolve, reject) => {
         axios({
-            method:'get',
+            method: 'get',
             url: urlApi,
-            headers:{ 
+            headers: { 
                 "Authorization": `Token ${token}`
             },
         })
-        .then((response)=>{
-            const knowHowData =response.data.results;
-            AddContent(knowHowData)
-            resolve(knowHowData)
-            
-    
-        }).catch((error) => {
-            reject(error)
+        .then((response) => {
+            const knowHowData = response.data.results;
+            AddContent(knowHowData);
+            resolve(knowHowData);
+        })
+        .catch((error) => {
+            reject(error);
         });
     });
 
-    try{
+    try {
         const knowHowData = await api;
         const results = knowHowData;
         const nextPage = knowHowData.next;
@@ -63,20 +82,37 @@ const getData = async (url=null) => {
             dataList.push(item);
         });
         
-        if (nextPage){
-            getData(nextPage);
-        }
-        else {
+        if (nextPage) {
+            const nextPageNum = parsePageNumber(nextPage);
+            getData(nextPageNum);
+        } else {
             console.log(dataList);
         }
 
+    } catch (e) {
+        console.log(e);
     }
-    catch (e){
-        console.log(e)
-    }
-   
 }
-getData();
+function valueControl() {
+    const alert = document.getElementById('alertWarning'); // Define alert here
+    if (
+        !problemTitle.value ||
+        !solutionDescription.value
+    ) {
+        alert.style.display = 'block';
+
+        setTimeout(() => {
+            alert.style.display = 'none';
+        }, 1400);
+
+        return false;
+    }
+
+    alert.style.display = 'none';
+    return true; 
+
+}
+
 
 const AddContent = async (knowHowData) => {
     
@@ -341,7 +377,7 @@ const deleteProblem = async(pageId) =>{
 }
 
 const editToProblem = async (itemId) => {
-    console.log(itemId);
+    // console.log(itemId);
     const pageApi = `https://backend.norbit.com.tr/knowhow/detail/${itemId}/`;
     const token = localStorage.getItem('token');
 
@@ -352,7 +388,7 @@ const editToProblem = async (itemId) => {
     const newDocumention2 = document.getElementById('solution-file-2');
     const newDocumention3 = document.getElementById('solution-file-3');
 
-    console.log(newDocumention1.files);
+    // console.log(newDocumention1.files);
 
     const formData = new FormData();
     formData.append('problem', newProblemContent);
@@ -376,31 +412,44 @@ const editToProblem = async (itemId) => {
                 'Authorization': `Token ${token}`,
                 'Content-Type': 'multipart/form-data',
             },
-        });
+        }).then((response) =>{
+
+        })
 
         // console.log(response.data);
-
+        window.location.reload();
         return response;
     } catch (error) {
         console.error('EditToProblem Error:', error);
         return error;
     }
 }
+function createEditButton(pageId) {
+    document.querySelector('.modal-title').innerHTML = '';
+    saveButton.style.display = 'block';
+    addButton.style.display = 'none';
 
-async function createEditButton(pageId) {
-document.querySelector('.modal-title').innerHTML = '';
+    // Get the row data
+    getRowData(pageId);
 
-saveButton.style.display = 'block';
-addButton.style.display = 'none';
+    saveButton.addEventListener('click', async () => {
 
-getRowData(pageId);
-saveButton.addEventListener('click', async () => {
-    await editToProblem(pageId);
-    // modal.hide();
-    window.location.reload();
-});
+        const fileIds = ['file_1', 'file_2', 'file_3'];
+        fileIds.forEach(fileId => {
+            const uploadedLink = document.getElementById(`uploaded-link-${fileId.charAt(fileId.length - 1)}`);
+            if (uploadedLink.textContent === '-') {
+                deleteFile(pageId, fileId);
+            }
+        });
+        if(valueControl()){
+        // window.location.reload();
+        await editToProblem(pageId);
+        clearInput();
+        }
 
+    });
 }
+
 
 function getRowData(pageId) {
     const apiUrl = `http://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
@@ -418,6 +467,9 @@ function getRowData(pageId) {
         const problemNameData = problemData.problem || '-';
         const descriptionData = problemData.solve_text || '';
 
+        problemTitle.value = problemNameData;
+        solutionDescription.value = descriptionData;
+        
         const uploadList = document.getElementById('upload-data');
         const uploadData1 = problemData.file_1 || '';
         const uploadData2 = problemData.file_2 || '';
@@ -427,7 +479,7 @@ function getRowData(pageId) {
         const fileName2 = uploadData2 ? uploadData2.split('/').pop() : '-';
         const fileName3 = uploadData3 ? uploadData3.split('/').pop() : '-';
         
-        function showFileName(inputId, listId, uploadedLinkId) {
+        function showFileName(inputId, listId, uploadedLinkId, fileId) {
             const solutionFileInput = document.getElementById(inputId);
             const list = document.getElementById(listId);
             const uploadedLink = document.getElementById(uploadedLinkId); // Yüklenen dosyanın linki
@@ -440,13 +492,13 @@ function getRowData(pageId) {
                     const listItem = document.createElement('li');
                     listItem.textContent = fileName;
                     list.appendChild(listItem);
-                    
+        
                     // Yüklenen dosyanın linkini güncelle
                     uploadedLink.textContent = fileName;
                 }
             });
+
         }
-        
         uploadList.innerHTML = `
         <div>
             <label class="form-label" for="solution-file-1">Doküman 1 </label><br>
@@ -454,7 +506,7 @@ function getRowData(pageId) {
             <label for="solution-file-1" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
             <li>
                 <a id="uploaded-link-1" href="${uploadData1}" class="uploaded-link-1 font-weight-bold fs-7">${fileName1}</a>
-                <a class="mdi mdi-close" id="delete-button" style="float: right;" onclick="deleteFile(${pageId}, 'file_1',this)"></a><br>       
+                <a class="mdi mdi-close delete-button" data-file-id="file_1" style="float: right;" ></a><br>       
             </li>
         </div>
 
@@ -464,7 +516,7 @@ function getRowData(pageId) {
             <label for="solution-file-2" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
             <li>
                 <a id="uploaded-link-2" href="${uploadData2}" class="uploaded-link-2 font-weight-bold fs-7">${fileName2}</a>
-                <a class="mdi mdi-close" id="delete-button" style="float: right;" onclick="deleteFile(${pageId}, 'file_2',this)"></a><br>       
+                <a class="mdi mdi-close delete-button" data-file-id="file_2" style="float: right;" ></a><br>       
             </li>
         </div>
 
@@ -474,7 +526,7 @@ function getRowData(pageId) {
             <label for="solution-file-3" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
             <li>
                 <a id="uploaded-link-3" href="${uploadData3}" class="uploaded-link-3 font-weight-bold fs-7">${fileName3}</a>
-                <a class="mdi mdi-close" id="delete-button" style="float: right;" onclick="deleteFile(${pageId}, 'file_3',this)"></a>
+                <a class="mdi mdi-close delete-button" data-file-id="file_3" style="float: right;" ></a>
             <br>    
         </div>
     
@@ -485,6 +537,18 @@ function getRowData(pageId) {
         showFileName('solution-file-2', 'solution-file-2', 'uploaded-link-2');
         showFileName('solution-file-3', 'solution-file-3', 'uploaded-link-3');
 
+        const deleteButtons = document.querySelectorAll('.delete-button');
+
+        deleteButtons.forEach(deleteButton => {
+            deleteButton.addEventListener('click', () => {
+                const fileId = deleteButton.getAttribute('data-file-id');
+                const listItem = deleteButton.closest('li');
+                const uploadedLink = listItem.querySelector(`#uploaded-link-${fileId.charAt(fileId.length - 1)}`);
+        
+                uploadedLink.textContent = '-';
+            });
+        });
+        
         problemTitle.value = problemNameData;
         solutionDescription.value = descriptionData;
     }).catch((error) => {
@@ -492,7 +556,7 @@ function getRowData(pageId) {
     });
 }
 
-const deleteFile = async (pageId, fileId, deleteBtn) => {
+const deleteFile = async (pageId, fileId) => {
     const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
     const token = localStorage.getItem('token');
 
@@ -509,24 +573,25 @@ const deleteFile = async (pageId, fileId, deleteBtn) => {
         data: formData
     }).then((response) => {
         if (response.status === 200) {
-            const listItem = deleteBtn.parentElement;
-            const uploadedLink = listItem.querySelector(`#uploaded-link-${fileId.charAt(fileId.length - 1)}`);
-            uploadedLink.textContent = '-';
-
-            // Başarıyla silindi, "-" işaretini göster
-            // window.location.reload();
+            // File deleted successfully
         } else {
-            console.error('Dosya silinemedi.');
+            console.error('File could not be deleted.');
         }
-        console.log(response);
     }).catch((error) => {
         console.error(error);
     });
 }
 
+function clearInput(){
+    problemTitle.value = '';
+    solutionDescription.value = '';
+    solutionFileInput1.file = '';
+    solutionFileInput2.file = '';
+    solutionFileInput3.file = '';
+}
 window.addEventListener("load", (event)  =>  {
     // writeContent();
     // getOwner();
-  getData();
+  getData(1);
 
 })
