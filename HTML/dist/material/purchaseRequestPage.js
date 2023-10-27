@@ -9,6 +9,7 @@ const link = document.getElementById("link");
 const purchasingDate = document.getElementById("purchasingDate");
 const description = document.getElementById("description");
 const responsiblePerson = document.getElementById("responsible-person");
+const statusData = document.getElementById('statusData')
 
 const tableBody = document.querySelector("#purchaseTable tbody");
 const modalButtonBox = document.getElementById("button-box");
@@ -19,6 +20,8 @@ const cancelBtn = document.getElementById("cancel");
 
 const statusBtn = document.getElementById("situation");
 statusBtn.style.display = "none";
+
+
 
 let dataList = [];
 let currentPage = 1;
@@ -73,7 +76,7 @@ const purchaseList = async (page = 1) => {
   try {
     const requestData = await api;
     const results = requestData;
-    console.log(results);
+    // console.log(results);
 
     const nextPage = requestData.next;
 
@@ -106,7 +109,7 @@ async function cancelRequest(requestId) {
       Authorization: `Token ${token}`,
     },
     data: {
-      status: "İptal Edildi",
+      status: "IP",
     },
   })
     .then((response) => {
@@ -133,7 +136,7 @@ async function updatePurchaseStatus(requestId) {
       Authorization: `Token ${token}`,
     },
     data: {
-      status: "Onaylandı",
+      status: "ON",
     },
   })
     .then((response) => {
@@ -156,6 +159,7 @@ closeBtn.addEventListener("click", () => {
   clearInput();
 });
 addBtn.addEventListener("click", () => {
+
   clearInput();
   modalButtonBox.innerHTML += `
     <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPurchase()'>Ekle</button>
@@ -201,6 +205,7 @@ async function createPurchase() {
       created_at: formatDateToCustomFormat(purchasingDate.value),
       e_commerce_site: link.value,
       description: description.value,
+      status:statusData.value,
     },
   })
     .then(async (response) => {
@@ -287,14 +292,14 @@ function getModalValues() {
 
 const showPurchaseRequest = async (requestData) => {
   // tableBody.innerHTML ='';
-  requestData.forEach(async (item) => {
+  for ( const item of requestData){
     let newRow = document.createElement("tr");
     const owner = (await getOwnerNameId(item.owner)) || "-";
     const responsiblePerson =
       (await getResponsibleId(item.responsible_person)) || "-";
 
     const statusData =
-      item.status === "İptal Edildi"
+      item.status === "IP"
         ? "badge bg-danger fw-semibold"
         : "badge bg-success fw-semibold";
 
@@ -304,13 +309,13 @@ const showPurchaseRequest = async (requestData) => {
     const e_commerce_site = item.e_commerce_site || "-";
     const purchasing_date = formatTarih(item.created_at) || "-";
     const description = item.description || "-";
+
+    let statusText = item.status === "BE" ? "Bekleniyor" : "İptal Edildi";
     newRow.innerHTML = `
         <td><input class ="form-check-input" type ="checkbox" id="checkbox" value=""</td>
         <td>${owner}</td>
         <td>${responsiblePerson}</td>
-        <td><span class="badge ${statusData} fs-12">${
-      item.status
-    }</span></td>        
+        <td><span class="badge ${statusData} fs-12">${statusText || '-'}</span></td>        
         <td>${productName}</td>
         <td>${price}</td>
         <td>${count}</td>
@@ -376,7 +381,7 @@ const showPurchaseRequest = async (requestData) => {
     });
 
     clearInput();
-  });
+  };
 };
 
 const getOwnerNameId = async (id) => {
@@ -482,6 +487,26 @@ function getResponsiblePerson(purchaseId) {
       console.log(error);
     });
 }
+const getStatusData = async () => {
+  const statusSelect = document.getElementById('statusData');
+
+  const statusOptions = [
+    {value:'BE',text:'Bekleniyor'},
+    {value:'ON', text:'Onaylandı'},
+    {value:'TA', text:'Tamamlandı'},
+    {value:'IP', text: 'İptal Edildi' }
+  ];
+
+  statusOptions.forEach((option) => {
+    const optionData = document.createElement('option');
+    optionData.value = option.value;
+    optionData.textContent = option.text;
+    statusSelect.appendChild(optionData);
+  });
+};
+
+
+
 function modalValueControl() {
   const newResponsible = document.getElementById("responsible-person");
   const newProductName = document.getElementById("productName");
@@ -617,10 +642,14 @@ const getUserInfoId = async () => {
     })
       .then((response) => {
         const userInfo = response.data;
-
+        const statusMenu = document.getElementById('statusMenu')
         if (userInfo.user_type === "AdminUser") {
           statusBtn.style.display = "inline-block ";
+          statusMenu.style.display=('block');
+          getStatusData();
         }
+
+
         resolve(userInfo);
       })
       .catch((error) => {
@@ -696,26 +725,6 @@ searchInput.addEventListener("input", () => {
     searchData(searchTerm);
   }
 });
-// async function searchData(search){
-
-//     const apiUrl = `http://backend.norbit.com.tr/purchase-request/?search=${search}`;
-//     const token  = localStorage.getItem('token');
-
-//     axios({
-//         method:'get',
-//         url:apiUrl,
-//         headers:{
-//             "Authorization": `Token ${token}`
-//         },
-//     }).then(response => {
-//         const searchData = response.data;
-//         searchResults(searchData, searchTerm);
-
-//     })
-//     .catch(error => {
-//         console.error('Arama sırasında hata oluştu: ', error);
-//     });
-// }
 
 window.addEventListener("load", (event) => {
   getUserInfoId();
