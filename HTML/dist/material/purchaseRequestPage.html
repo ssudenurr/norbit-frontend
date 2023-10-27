@@ -365,17 +365,17 @@
                                     <select type="text" class="form-select" id="responsible-person"></select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="inputEmail4" class="form-label" >Ürün İsmi</label>
+                                    <label for="productName" class="form-label" >Ürün İsmi</label>
                                     <input type="text" class="form-control" id="productName">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="inputPassword4" class="form-label" >Fiyat</label>
+                                    <label for="price" class="form-label" >Fiyat</label>
                                     <input type="number" class="form-control" id="price">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="inputAddress" class="form-label" >Sayısı</label>
+                                    <label for="count" class="form-label" >Sayısı</label>
                                     <input type="number" class="form-control" id="count">
                                 </div>
                             </div>
@@ -385,15 +385,20 @@
                                     <input type="date" name="datetime" class="form-control"  id="purchasingDate">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="inputAddress" class="form-label" >Link</label>
+                                    <label for="link" class="form-label" >Link</label>
                                     <input type="url" class="form-control" id="link">
                                 </div>
                             </div>
-        
-                            <div class="col-md-12">
-                                <label for="inputAddress2" class="form-label">Açıklama</label>
-                                <input type="text" class="form-control"  id="description">
-                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="description" class="form-label">Açıklama</label>
+                                    <input type="text" class="form-control"  id="description">
+                                </div>
+                                <div class="col-md-6" style="display: none;" id="statusMenu">
+                                    <label for="statusData" class="form-label" >Statü</label>
+                                    <select type="text" class="form-select" id="statusData"></select>
+                                </div>
+                        </div>
                     </div>
                     <div class="modal-footer" id="button-box">
                         <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button> -->
