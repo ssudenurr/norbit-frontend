@@ -124,7 +124,7 @@
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="d-flex align-items-center">
                                         <img class="rounded-circle header-profile-user"
-                                            src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                                            src="" alt="Header Avatar">
                                         <span class="text-start ms-xl-2">
                                             <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
                                                 id="userName"></span>
@@ -291,14 +291,12 @@
                             <div class="personal-list">
                                 <div class="g-4 mb-3 row">
                                     <div class="col-sm-auto col">
-                                        <div class="table-buttons col-sm-2">
-                                            
-                                            <!-- <a class="mdi mdi-eye btn btn-success btn-mm"></a>
-                                            <a class="mdi mdi-chevron-down btn btn-light btn-m" id="situation"></a> -->
-                                            <a class="btn btn-outline-info btn-sm fw-semibold fs-15" style="width: 140px; height: 32px; display: none; letter-spacing: 0.2px;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Personel Ekle</a>
-
-        
+                                        <div class="table-buttons col-sm-2 d-flex">
+                                            <a class="btn btn-outline-primary btn-sm fw-semibold fs-15" style="height: 32px; letter-spacing: 0.2px; white-space: nowrap;" id="permission-btn">Yetki Ver</a>
+                                            <a class="btn btn-outline-info btn-sm fw-semibold fs-15" style="height: 32px; display: none; letter-spacing: 0.2px; white-space: nowrap;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Personel Ekle</a>
                                         </div>
+                                        
+                                        
                                     </div>
                                     <div class="col-sm col">
                                         <div class="d-flex justify-content-sm-end">
@@ -313,7 +311,7 @@
                                     <table class="table table-striped align-middle " id="personalTable">
                                         <thead class="table-light">
                                             <tr>
-                                                <!-- <th scope="col"></th> -->
+                                                <th scope="col"></th>
                                                 <th scope="sort">Ad</th>
                                                 <th scope="sort">Soyad</th>
                                                 <th scope="sort">Görev</th>
@@ -323,7 +321,8 @@
                                                 <th scope="sort">Şirket</th>
                                                 <th scope="sort">Kullanıcı Adı</th>
                                                 <th scope="sort" id="editCol">Düzenleme</th>
-                                                <th scope="sort"></th>
+                                                <!-- <th scope="sort"></th> -->
+
 
                                             </tr>
                                         </thead>
@@ -437,6 +436,28 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="permissionModal" tabindex="-1" aria-labelledby="permissionModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="permissionModalLabel"></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="permission_list">
+                                <div class="column" id="column1"></div>
+                                <div class="column" id="column2"></div>
+                                <div class="column" id="column3"></div>
+                              </form>
+                              
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="save-btn" >Kaydet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
 
         </div>
         </div>
@@ -468,7 +489,7 @@
     <script src="homePage.js"></script>
     <script src="personalPage.js"></script>
     <script src="logout.js"></script>
-    <script src="profilePage.js"></script>
+    <!-- <script src="profilePage.js"></script> -->
 
 
 
