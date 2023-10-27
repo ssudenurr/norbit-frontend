@@ -129,7 +129,7 @@ async function cancelRequest(requestId){
             "Authorization": `Token ${token}`
         },
             data:{
-            status: 'İptal Edildi',
+            status: 'IP',
         }
 
     }).then((response)=>{
@@ -159,7 +159,7 @@ async function updatePurchaseStatus(requestId){
             "Authorization": `Token ${token}`
         },
          data:{
-            status: 'Tamamlandı',
+            status: 'TA',
         }
 
     }).then((response)=>{
@@ -189,7 +189,7 @@ async function replyRequest(requestId){
             "Authorization": `Token ${token}`
         },
          data:{
-            status: 'Bekleniyor',
+            status: 'BE',
         }
 
     }).then((response)=>{
@@ -264,7 +264,7 @@ async function getPurchase(page = 1){
 }
 const showPurchase = async (responseData)  => {
     tableBody.innerHTML = '';
-    responseData.forEach( async purchase => {
+    for( const purchase of responseData){
     // console.log(responseData);
         const newRow = document.createElement('tr') ;
         const responsiblePerson = await getResponsibleId(purchase.responsible_person)  || '-';
@@ -275,11 +275,11 @@ const showPurchase = async (responseData)  => {
         const purchasing_date = formatTarih(purchase.created_at);
         const orderDate = purchase.siparis_verilen_tarih ? formatTarih(purchase.siparis_verilen_tarih) : '-';
         const description = purchase.description || '-';
-
+        let statusData = purchase.siparis_verilen_tarih ? "Tamamlandı" : (purchase.status === "ON" ? "Onaylandı" : "-");
         newRow.innerHTML = `
         <td><input class="form-check" type ="checkbox"  id="checkbox" value=""</td>
         <td>${responsiblePerson}</td>
-        <td><span class="badge badge bg-success fw-semibold fs-12">${purchase.status}</span></td>
+        <td><span class="badge badge bg-success fw-semibold fs-12">${statusData}</span></td>
         <td>${productName}</td>
         <td>${price}</td>
         <td>${count}</td>
@@ -325,7 +325,7 @@ const showPurchase = async (responseData)  => {
                 editPurchase(purchaseId);
             })
         })
-    });
+    };
 }
 
 
