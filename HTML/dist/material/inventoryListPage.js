@@ -263,7 +263,7 @@ function deleteInventory(inventoryId){
 
 const showInventory =  async (responseData) => {
     tableBody.innerHTML = '';
-    responseData.forEach(item=>{
+    for (const item of responseData) {
         const newRow = document.createElement('tr');
         const purchasing_date = item.satin_alinan_tarih ? formatTarih(item.satin_alinan_tarih) : '-';
         const product_name = item.product_name || '-';
@@ -282,11 +282,16 @@ const showInventory =  async (responseData) => {
         <td>${where_in_the_office}</td>
         <td>${price}</td>
         <td>${count}</td>
-        <td>
-        <a href="${e_commerce_site}" target="_blank" style="text-decoration: underline!important; max-width: 100px; display: block;">
-            ${e_commerce_site.length > 20 ? e_commerce_site.substr(0, 20) + '...' : e_commerce_site}
-        </a>
         <td>${description}</td>
+        <td>
+        <div style="max-width: 160px;">
+            <a href="${e_commerce_site}" target="_blank" style="text-decoration: underline!important; display: block;">
+                ${e_commerce_site.length > 23 ? e_commerce_site.substr(0, 23) + '...' : e_commerce_site}
+            </a>
+        </div>
+    </td>
+    
+
         `
         tableBody.appendChild(newRow);
 
@@ -315,7 +320,7 @@ const showInventory =  async (responseData) => {
                 checkBox.checked = false;
             })
         });
-    })
+    };
 }
 // function getResponsiblePerson(purchaseId){
 //     const apiUrl= "http://backend.norbit.com.tr/ems/list/"

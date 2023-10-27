@@ -10,6 +10,8 @@ const modal = new bootstrap.Modal(document.getElementById('exampleModal'));
 
 const createButton = document.getElementById('createButton');
 createButton.addEventListener('click',() =>{
+    saveButton.style.display='none';
+    addButton.style.display = 'block'
     modal.show();
 })
 
@@ -120,7 +122,7 @@ const AddContent = async (knowHowData) => {
     knowHowList.innerHTML = '';
     const userId = await getUserInfoId();
 
-    knowHowData.forEach(async item => {
+    for (const item of knowHowData ) {
         const itemId = item.id;
         const knowHowDiv = document.createElement('div');
         knowHowDiv.classList.add('card', 'mb-3');
@@ -185,7 +187,7 @@ const AddContent = async (knowHowData) => {
 
         deleteClickFunction(owner);
         knowHowList.appendChild(knowHowDiv);
-    });
+    };
 };
 
 const addToProblemSolve = () => {
@@ -501,7 +503,6 @@ function getRowData(pageId) {
         }
         uploadList.innerHTML = `
         <div>
-            <label class="form-label" for="solution-file-1">Doküman 1 </label><br>
             <input type="file" id="solution-file-1" hidden/>
             <label for="solution-file-1" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
             <li>
@@ -511,7 +512,6 @@ function getRowData(pageId) {
         </div>
 
         <div>
-            <label class="form-label" for="solution-file-2">Doküman 2 </label><br>
             <input type="file" id="solution-file-2" hidden/>
             <label for="solution-file-2" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
             <li>
@@ -520,14 +520,13 @@ function getRowData(pageId) {
             </li>
         </div>
 
-        <div>
-            <label class="form-label" for "solution-file-3">Doküman 3 </label><br>
+        <div> 
             <input type="file" id="solution-file-3" hidden/>
             <label for="solution-file-3" class="btn btn-warning btn-sm fs-14">Dosya Seç</label>
             <li>
                 <a id="uploaded-link-3" href="${uploadData3}" class="uploaded-link-3 font-weight-bold fs-7">${fileName3}</a>
-                <a class="mdi mdi-close delete-button" data-file-id="file_3" style="float: right;" ></a>
-            <br>    
+                <a class="mdi mdi-close delete-button" data-file-id="file_3" style="float: right;" ></a><br>
+            </li>    
         </div>
     
         `;
@@ -581,17 +580,21 @@ const deleteFile = async (pageId, fileId) => {
         console.error(error);
     });
 }
-
-function clearInput(){
+function clearInput() {
     problemTitle.value = '';
     solutionDescription.value = '';
-    solutionFileInput1.file = '';
-    solutionFileInput2.file = '';
-    solutionFileInput3.file = '';
+    document.querySelectorAll('.uploaded-link-1').forEach(link => {
+        link.textContent = '-';
+    });
+    document.querySelectorAll('.uploaded-link-2').forEach(link => {
+        link.textContent = '-';
+    });
+    document.querySelectorAll('.uploaded-link-3').forEach(link => {
+        link.textContent = '-';
+    });
 }
+
 window.addEventListener("load", (event)  =>  {
-    // writeContent();
-    // getOwner();
   getData(1);
 
 })

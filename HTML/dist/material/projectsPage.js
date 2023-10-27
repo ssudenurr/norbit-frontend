@@ -148,7 +148,7 @@ async function getProjectsDetails(pageId){
 async function projectDetails(projectData) {
     projectList.innerHTML = ''; // Projeleri temizle
 
-    projectData.forEach(async project  => {
+    for ( const project of projectData) {
         const projectDiv = document.createElement('div');
         projectDiv.classList.add('card', 'mb-3');
         const company = await getCompanyNameId(project.company) || '-';
@@ -232,7 +232,7 @@ async function projectDetails(projectData) {
     
 
         projectList.appendChild(projectDiv);
-    });
+    };
 }
 
 async function createSaveButton(pageId) {
