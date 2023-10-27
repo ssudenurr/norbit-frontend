@@ -312,7 +312,7 @@
                     <div class="modal-dialog moda-md">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Çözüm Oluştur</h5>
+                                <h5 class="modal-title" id="exampleModalLabel"></h5>
                                 <button type="button" class="btn-close" id="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -322,62 +322,72 @@
                                 </div>
                                 <div class="mb-3" id="upload-data">
                                     
-                                        <div class="input-group mb-3">
-                                            <div class="custom-file">
+                                            <div>
                                                 <label class="custom-file-label btn btn-warning btn-sm fs-14" for="solution-file-1">Dosya Seç</label>
                                                 <input type="file" class="custom-file-input" id="solution-file-1" hidden>
+                                                <li>
+                                                    <a id="file-selected-1"  href="" class="mt-2 font-weight-bold fs-7"></a>
+                                                    <a class="mdi mdi-close delete-button" data-file-id="file_2" style="float: right;" ></a><br>       
+                                                </li>
                                             </div>
-                                            <p id="file-selected-1" class="mt-2"></p>
-                                        </div>
+
                                         
-                                        <div class="input-group mb-3">
-                                            <div class="custom-file">
+                                            <div>
                                                 <label class="custom-file-label btn btn-warning btn-sm fs-14" for="solution-file-2">Dosya Seç</label>
                                                 <input type="file" class="custom-file-input" id="solution-file-2" hidden>
+                                                <li>
+                                                    <a id="file-selected-2"  href="" class="mt-2 font-weight-bold fs-7"></a>
+                                                    <a class="mdi mdi-close delete-button" data-file-id="file_2" style="float: right;" ></a><br>       
+                                                </li>
                                             </div>
-                                            <p id="file-selected-2" class="mt-2"></p>
-                                        </div>
 
-                                        <div class="input-group mb-3">
-                                            <div class="custom-file">
+                                            <div>
                                                 <label class="custom-file-label btn btn-warning btn-sm fs-14" for="solution-file-3">Dosya Seç</label>
                                                 <input type="file" class="custom-file-input" id="solution-file-3" hidden>
+                                                <li>
+                                                    <a id="file-selected-3" href="" class="mt-2 font-weight-bold fs-7"></a>
+                                                    <a class="mdi mdi-close delete-button" data-file-id="file_2" style="float: right;" ></a><br>       
+                                                </li>
                                             </div>
-                                            <p id="file-selected-3" class="mt-2"></p>
-                                        </div>
+                                        
                                         <script>
-                                            document.getElementById('solution-file-1').addEventListener('change', (e) => {
-                                                if (e.target.files.length > 0) {
-                                                    const fileurl = e.target.files[0].name;
-                                                    document.getElementById('file-selected-1').textContent = fileurl;
-                                                }
-                                            });
+document.getElementById('solution-file-1').addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        const fileurl = e.target.files[0].name;
+        document.getElementById('file-selected-1').textContent = fileurl;
+    } else {
+        document.getElementById('file-selected-1').textContent = '-';
+    }
+});
 
-                                            document.getElementById('solution-file-2').addEventListener('change', (e) => {
-                                                if (e.target.files.length > 0) {
-                                                    const fileurl = e.target.files[0].name;
-                                                    document.getElementById('file-selected-2').textContent = fileurl;
-                                                }
-                                            });
+document.getElementById('solution-file-2').addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        const fileurl = e.target.files[0].name;
+        document.getElementById('file-selected-2').textContent = fileurl;
+    } else {
+        document.getElementById('file-selected-2').textContent = '-';
+    }
+});
 
-                                            document.getElementById('solution-file-3').addEventListener('change', (e) => {
-                                                if (e.target.files.length > 0) {
-                                                    const fileurl = e.target.files[0].name;
-                                                    document.getElementById('file-selected-3').textContent = fileurl;
-                                                }
-                                            });
+document.getElementById('solution-file-3').addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        const fileurl = e.target.files[0].name;
+        document.getElementById('file-selected-3').textContent = fileurl;
+    } else {
+        document.getElementById('file-selected-3').textContent = '-';
+    }
+});
+
                                         </script>
                                 </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="solution-description">Açıklama</label>
                                             <textarea type="text" class="form-control" style="height: 80px;" id="solution-description"></textarea>
                                         </div>
-                                
-                
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
-                                    <button type="button" class="btn btn-primary" style="display: none;" id="save-btn">Kaydet</button>
-                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" id="addBtn">Ekle</button>
+                                <button type="button" class="btn btn-primary" style="display: none;" id="save-btn">Kaydet</button>
                             </div>
                         </div>
                     </div>
