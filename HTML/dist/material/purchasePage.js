@@ -166,7 +166,7 @@ async function updatePurchaseStatus(requestId){
         // console.log(response.data)
         if (response.status === 200) {
             console.log('Status updated successfully:', response.data);
-            // window.location.reload();
+            window.location.reload();
 
         } else {
             console.error('Status update failed:', response);
@@ -305,6 +305,7 @@ const showPurchase = async (responseData)  => {
             }   
             statusBtn.addEventListener('click', () => {
                 updatePurchaseStatus(purchaseId);
+                
                 });
             
             cancelBtn.addEventListener('click', () =>{
@@ -404,24 +405,37 @@ searchButton.addEventListener('click', () => {
     }
 });
 
-async function searchData(search) {
-    const apiUrl = `http://backend.norbit.com.tr/purchase/list/?search=${search}`;
-    const token = localStorage.getItem('token');
+async function searchData(searchTerm){
+    const apiUrl = `http://backend.norbit.com.tr/inventory/list/?search=${searchTerm}`;
+    const token  = localStorage.getItem('token');
 
     axios({
-        method: 'get',
-        url: apiUrl,
-        headers: {
+        method:'get',
+        url:apiUrl,
+        headers:{ 
             "Authorization": `Token ${token}`
         },
     }).then(response => {
         const searchData = response.data.results;
-        if (searchData.length === 0) {
-            alert('Arama sonucunda hiçbir veri bulunamadı.');
-        } else {
-            showPurchase(searchData);
-        }
-    }).catch(error => {
+        const tableRows = document.querySelectorAll('#purchase-table tbody tr');
+        
+        tableRows.forEach(row => {
+            const rowData = row.textContent.toLowerCase(); 
+    
+            if (rowData.includes(searchTerm.toLowerCase()) || searchTerm === '') {
+                row.style.display = 'table-row'; 
+            } else {
+                row.style.display = 'none'; 
+            }
+            if (searchInput.value === '') {
+                    row.style.display = 'table-row';
+            }
+    
+    })
+        showInventory(searchData); 
+
+    })
+    .catch(error => {
         console.error('Arama sırasında hata oluştu: ', error);
     });
 }
