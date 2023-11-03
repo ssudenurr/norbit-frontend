@@ -15,22 +15,33 @@ const password = document.getElementById("inputPassword");
 const tableBody = document.querySelector("#personalTable tbody");
 const modalButtonBox = document.getElementById("button-box");
 
+const modalHeader = document.getElementById('permissionModalLabel')
+
 const inputExitDate = document.getElementById("input-exit-date");
+
+const saveBtn = document.getElementById('save-btn');
+const updateBtn  =document.getElementById('update-btn');
+updateBtn.style.display='none';
 
 const modal = new bootstrap.Modal(document.getElementById("permissionModal"));
 const permissionBtn = document.getElementById("permission-btn");
-permissionBtn.addEventListener("click", () => {
-  modal.show();
-});
+
 addRowButton.addEventListener("click", () => {
+  const rowEditBtn = document.getElementById("row-edit-btn");
+  if (rowEditBtn) {
+    rowEditBtn.remove(); 
+  }
   document.getElementById("job-date").style.display = "block";
   document.getElementById("password-content").style.display = "block";
   clearInput();
   inputExitDate.style.display = "none";
-  modalButtonBox.innerHTML += `
-    <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPersonel()'>Ekle</button>
+  if (!document.getElementById("row-add-btn")) {
+    modalButtonBox.innerHTML += `
+      <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPersonel()'>Ekle</button>
     `;
+  }
 });
+
 
 function formatTarih(tarih) {
   const tarihParcalari = tarih.split("T");
@@ -49,26 +60,35 @@ function formatDateToCustomFormat(date) {
 
   return formattedDate;
 }
+let userId = null; 
 const closeBtn = document.getElementById("btn-close");
 closeBtn.addEventListener("click", () => {
-  modalButtonBox.innerHTML = "";
-  clearInput();
+  userId = null; 
+  modal.hide();
 });
 
 async function createEditButton(userId) {
+  const rowAddBtn = document.getElementById("row-add-btn");
+  if (rowAddBtn) {
+    rowAddBtn.remove(); 
+  }
   editClickFunction();
-  document.getElementById("job-date").style.display = "none";
+  document.getElementById("job-date").style.display = "block";
   inputExitDate.style.display = "block";
+  if(!document.getElementById("row-edit-btn")){
   modalButtonBox.innerHTML += `
         <button type="button" class="btn btn-primary" id="row-edit-btn" >Düzenle</button>
     `;
+  }
   const rowEditBtn = document.getElementById("row-edit-btn");
   rowEditBtn.addEventListener("click", () => {
+
     if (modalValueControl()) {
       editPersonel(userId);
       modal.hide();
       clearInput();
     }
+    // window.location.reload();
   });
 
   modaltitle.innerHTML = "Personel Düzenleme Formu";
@@ -77,28 +97,32 @@ async function createEditButton(userId) {
 }
 
 function valueControl() {
+  const alert = document.getElementById("alertWarning");
+  // if (!alert) {
+  //   console.error("alertWarning öğesi bulunamadı.");
+  //   return;
+  // }
+
   if (
     !firstName.value ||
     !lastName.value ||
     !job.value ||
     !userTypes.value ||
     !entryDate.value ||
-    !exitDate.value ||
     !company.value ||
     !username.value ||
     !password.value
   ) {
-    const alert = document.getElementById("alertWarning");
     alert.style.display = "block";
 
     setTimeout(() => {
       alert.style.display = "none";
     }, 1400);
-
-    return;
+  } else {
+    alert.style.display = "none";
   }
-  alert.style.display = "none";
 }
+
 function createPersonel() {
   // CREATE NEW PERSONAL
   valueControl();
@@ -217,6 +241,7 @@ function getRowData(userId) {
 
       const nameData = userData.first_name || "";
       const surnameData = userData.last_name || "";
+      const startDate = userData.job_start_date || "";
       const exitData = userData.job_end_date || "";
       const jobData = userData.job_title || "";
       const companyData = userData.company_name || "";
@@ -225,6 +250,7 @@ function getRowData(userId) {
 
       firstName.value = nameData;
       lastName.value = surnameData;
+      entryDate.value = formatTarih(startDate);
       exitDate.value = formatTarih(exitData);
       job.value = jobData;
       company.value = companyData;
@@ -263,9 +289,12 @@ const newjob = document.getElementById("inputJob");
 const newCompany = document.getElementById("inputCompany");
 const newUserType = document.getElementById("inputUserType");
 const newUserName = document.getElementById("inputUsername");
+const newEntryDate = document.getElementById("inputDate");
+const formattedEndDate = exitDate.value ? formatDateToCustomFormat(exitDate.value) : null;
+// const newExitDate = document.getElementById("inputExitDate");
+// console.log(exitDate.value);
+// const exitDateValue = newExitDate.value.trim();
 
-const newExitDate = document.getElementById("inputExitDate");
-const exitDateValue = newExitDate.value.trim();
 
 function editPersonel(userID) {
   const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userID}/`;
@@ -277,12 +306,15 @@ function editPersonel(userID) {
     job_title: newjob.value,
     user: newUserType.value,
     company_name: newCompany.value,
+    job_end_date:formattedEndDate,
+    job_start_date:formatDateToCustomFormat(newEntryDate.value),
     username: newUserName.value,
   };
 
-  if (exitDateValue) {
-    data.job_end_date = formatDateToCustomFormat(exitDateValue);
-  }
+  // if (exitDateValue) {
+  //   data.job_end_date = formatDateToCustomFormat(exitDateValue);
+  //   console.log(job_end_date);
+  // }
 
   axios({
     method: "patch",
@@ -293,7 +325,8 @@ function editPersonel(userID) {
     data: data,
   })
     .then((response) => {
-      // const userData = response.data
+      const userData = response.data;
+      console.log(userData);
       window.location.reload();
     })
     .catch((error) => {
@@ -344,7 +377,6 @@ const personalList = (page = 1) => {
       const personalData = response.data.results;
       // console.log(personalData);
       // console.log(response.data.next);
-      // personalData.sort((a, b) => b.id - a.id);
       showPersonal(personalData);
     })
     .catch((error) => {
@@ -390,26 +422,49 @@ const showPersonal = async (personalData) => {
     tableBody.appendChild(newRow);
     // const checkboxes = document.querySelectorAll('input[name="checkbox-group"]');
     const checkBox = newRow.querySelector(".form-check");
-    const userId = item.id;
-    checkBox.addEventListener("change", () => {
-      if (checkBox.checked) {
-        getPermissionId(userId);
-        console.log(userId);
+    // const userId = item.id;
+    const firstname = item.first_name
+    checkBox.addEventListener("change", async ()  => {
+      if (checkBox.checked)  {
+        userId = item.id;
+        //console.log(userId);
+        getPermissionId(userId);          
+
+        clearInputPermission();
+        permissionBtn.addEventListener("click",  () => {
+          modalHeader.innerHTML = `
+          <h4 class="text-capitalize">${firstname} Personelinin Yetkilerini Düzenle</h4>
+          ` ;
+          modal.show();
+          checkBox.checked = false;
+        });
+
+        updateBtn.style.display = 'block';
       }
+      
+      updateBtn.addEventListener("click", () => {
+        if (userId !== null) {
+          addUserPermissions(userId);
+        }
+      });
     });
     const editBtn = newRow.querySelector(".edit-btn");
     const deleteBtn = newRow.querySelector(".delete-btn");
     const editCol = document.getElementById("editCol");
     const colId = document.getElementById("colId");
     if (loginnedUserType === "AdminUser") {
-      addRowButton.style.display = "";
+      addRowButton.style.display = "block";
+      permissionBtn.style.display = "block"
+
     }
     if (loginnedUserType === "NormalUser") {
       editBtn.style.display = "none";
       deleteBtn.style.display = "none";
       editCol.style.display = "none";
       checkBox.style.display = "none";
-      colId.innerHTML = "";
+
+      // colId.innerHTML = ""; 
+
     }
 
     deleteBtn.addEventListener("click", function () {
@@ -422,6 +477,198 @@ const showPersonal = async (personalData) => {
     }
   };
 };
+
+let pageSize = 20;
+let allPermissions = [];
+const excludedValues = [121, 122, 123, 124, 113, 114, 115, 116, 141, 144, 143, 142, 105, 106, 107, 108, 101, 102, 103, 104, 109, 110, 111, 112, 1, 2, 3, 4, 9, 10, 11, 12,
+61,62,63,64,49,50,51,52,101,102,103,41,42,43,44,45,46,47,48,85,86,87,88,89,90,91,92,93,94,95,96,13,14,15,16,17,18,19,20,29,30,31,32,33,34,35,36,37,38,39,40];
+
+function getPermission(page = 1) {
+  const apiUrl = `https://backend.norbit.com.tr/permission/?page=${page}`;
+  const token = localStorage.getItem("token");
+
+  return axios({
+    method: "get",
+    url: apiUrl,
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  }).then((response) => {
+    const responseData = response.data.results;
+    // console.log(responseData);
+
+    allPermissions = allPermissions.concat(responseData);
+    if (response.data.next !== null) {
+      const nextPage = page + 1;
+      return getPermission(nextPage, allPermissions);
+    } else {
+      return allPermissions;
+    }
+  });
+}
+
+
+let itemName = []; // itemName dizisini global olarak tanımlayın.
+
+function createPermissionData(responseData) {
+  const permissionList = document.getElementById("permission_list");
+  itemName = []; // Her çağrıda boşaltın.
+  responseData.forEach((item) => {
+    if (!excludedValues.includes(item.id)) {
+      const nospaceName = item.name.trim();
+      //   console.log(nospaceName)
+      if (!itemName.includes(nospaceName)) {
+        const permissionItem = document.createElement("div");
+        permissionItem.className = "form-check";
+        //   console.log(item)
+        permissionItem.innerHTML = `
+          <input class="form-check-input modal-checkbox" type="checkbox" id="permission${item.id}" value="${item.id}">
+          <label class="form-check-label" for="permission${item.id}">
+              ${item.name}
+          </label>
+        `;
+
+        permissionList.appendChild(permissionItem);
+        itemName.push(nospaceName);
+        console.log(itemName);
+      }
+    }
+  });
+
+  console.log(itemName);
+}
+
+
+
+getPermission()
+  .then((allPermissions) => {
+    createPermissionData(allPermissions);
+    const groupedPermissions = groupByName(allPermissions);
+    console.log(groupedPermissions);
+
+  })
+  .catch((error) => {
+    console.log("error", error);
+  });
+
+async function getPermissionId(id) {
+  // console.log(id);
+  const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
+  const token = localStorage.getItem("token");
+
+  axios({
+    method: "get",
+    url: apiUrl,
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+  })
+    .then((response) => {
+      //const responseData = [];
+      const responseData = response.data.user_permissions;
+      // console.log(responseData);
+      localStorage.setItem("responseData", JSON.stringify(responseData));
+
+      for (let i = 0; i < responseData.length; i++) {
+        responseData[i].id = parseInt(responseData[i].id, 10);
+      }
+      const integerData = responseData;
+      // console.log(integerData);
+      
+      integerData.forEach((data) => {
+        const permissionId = data;
+      });
+      
+      allPermissions.forEach((permission) => {
+        const id = permission.id;
+      }); 
+
+      allPermissions.forEach((permission) => {
+        integerData.forEach((permissionId) => {
+          const id = permission.id;
+          if (permissionId === id) {
+            // console.log(`ID ${id} usersPermission dizisinde bulunuyor.`);
+            const checkbox = document.getElementById(`permission${id}`);
+            if (checkbox) {
+              checkbox.checked = integerData.some((permissionId) => permissionId === id);
+            }
+          } else {
+            // console.log(`ID ${id} usersPermission dizisinde bulunmuyor.`);
+          }
+        });
+      });
+      // getPermissionFilter(perId, "", "");
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+}
+function addUserPermissions(id) {
+  // console.log(id);
+  const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
+  const token = localStorage.getItem("token");
+
+  const selectedPermissions = document.querySelectorAll('input[type="checkbox"]:checked');
+  
+  const values = [];
+  
+  selectedPermissions.forEach(checkbox => {
+    const value = parseInt(checkbox.value, 10);
+
+    if (!isNaN(value)) {
+      values.push(value);
+      console.log(values);
+
+    }
+    return false;
+  });
+
+
+
+  axios({
+    method: 'patch',
+    url: apiUrl,
+    headers: {
+      Authorization: `Token ${token}`,
+    },
+    data: {
+      user_permissions: values,
+    }
+  }).then((response) => {
+
+    localStorage.setItem("userPermissions", values);
+    // window.location.reload();
+    console.log("İzinler başarıyla güncellendi.");
+  }).catch((error) => {
+    console.log("Hata:", error);
+  });
+}
+let groupedPermissions = [];
+
+function groupByName(responseData) {
+
+
+  responseData.forEach((item) => {
+    let permissionName = item.name;
+    permissionName = permissionName.trim(); 
+
+    if (!groupedPermissions[permissionName]) {
+      groupedPermissions[permissionName] = {
+        id: [],
+        name: permissionName
+      };
+    }
+    groupedPermissions[permissionName].id.push(item.id);
+  });
+  const groupedPermissionsArray = Object.values(groupedPermissions);
+  const names = groupedPermissionsArray.map(group => group.name);
+  console.log(names);
+  
+
+  // console.log(groupedPermissionsArray);
+  return groupedPermissionsArray;
+}
+
 const editClickFunction = async () => {
   const editButtons = document.querySelectorAll("edit-btn");
   const passwordContent = document.getElementById("password-content");
@@ -594,99 +841,6 @@ const getUserInfoId = async () => {
   }
 };
 
-let pageSize = 20;
-let allPermissions = [];
-function getPermission(page = 1) {
-  const apiUrl = `https://backend.norbit.com.tr/permission/?page=${page}`;
-  const token = localStorage.getItem("token");
-
-  return axios({
-    method: "get",
-    url: apiUrl,
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-  }).then((response) => {
-    const responseData = response.data.results;
-
-    allPermissions = allPermissions.concat(responseData);
-
-    // console.log(allPermissions);
-
-    if (response.data.next !== null) {
-      const nextPage = page + 1;
-      // console.log(nextPage)
-      return getPermission(nextPage, allPermissions);
-    } else {
-      return allPermissions;
-    }
-  });
-}
-function createPermissionData(responseData) {
-  const permissionList = document.getElementById("permission_list");
-  responseData.forEach((item) => {
-    const permissionItem = document.createElement("div");
-    permissionItem.className = "form-check";
-    //   console.log(item)
-    permissionItem.innerHTML = `
-          <input class="form-check-input" type="checkbox" id="permission${item.id}" value="${item.id}">
-          <label class="form-check-label" for="permission${item.id}">
-              ${item.name}
-          </label>
-          `;
-
-    permissionList.appendChild(permissionItem);
-  });
-}
-
-getPermission()
-  .then((allPermissions) => {
-    createPermissionData(allPermissions);
-  })
-  .catch((error) => {
-    console.log("error", error);
-  });
-
-  let usersPermission = [];
-
-  function getPermissionId(id) {
-    const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
-    const token = localStorage.getItem("token");
-  
-    axios({
-      method: "get",
-      url: apiUrl,
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    })
-      .then((response) => {
-        const responseData = response.data.user_permissions;
-
-        allPermissions.forEach((permission) => {
-          const integerData = responseData.map(item => parseInt(item.user_permissions));
-          console.log(typeof integerData);
-
-          const id = permission.id;
-          console.log(id)
-          const isIdInUsersPermission = integerData.some((integerData) => integerData.id === id);
-        
-          if (isIdInUsersPermission) {
-            console.log(`ID ${id} usersPermission dizisinde bulunuyor.`);
-          } else {
-            console.log(`ID ${id} usersPermission dizisinde bulunmuyor.`);
-          }
-        }); 
-
-  
-        console.log(usersPermission);
-        // getPermissionFilter(perId, "", "");
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  }
-  
 function getPermissionFilter(id, permissionName, codename) {
   const apiUrl = `https://backend.norbit.com.tr/permission/?id=${id}&name=${permissionName}&codename=${codename}`;
   const token = localStorage.getItem("token");
@@ -761,13 +915,21 @@ searchInput.addEventListener("input", () => {
     searchData(searchTerm);
   }
 });
+const modalElement = document.getElementById("permissionModal");
+function clearInputPermission() {
+  modalElement.addEventListener('hidden.bs.modal', function (event) {
+    const checkboxes = document.querySelectorAll('input.modal-checkbox[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
+  });
+  
+}
+
 
 window.addEventListener("load", async (event) => {
-  // personalList();
   getJobTitle();
-  // getJobTitleId();
   getCompanyName();
-  // getCompanyNameId();
   personalList(1);
-  // getPermission(1);
+
 });
