@@ -66,9 +66,14 @@ addButton.addEventListener('click', () => {
 })
 
 function formatTarih(tarih) {
-  const tarihParcalari = tarih.split('T');
-  return tarihParcalari[0];
+    if (tarih && tarih !== '-') {
+        const tarihParcalari = tarih.split('T');
+        return tarihParcalari[0];
+    } else {
+        return '-';
+    }
 }
+
 function formatDateToCustomFormat(date) {
   let date2 = new Date(date)
   var yyyy = date2.getFullYear();
@@ -106,7 +111,7 @@ function createInventory(){
       }
   }).then((response) => {
     //   getResponsiblePerson();
-    window.location.reload();
+    // window.location.reload();
 
   }).catch((error) => {
       console.log(error)
@@ -268,6 +273,7 @@ const showInventory =  async (responseData) => {
         const purchasing_date = item.satin_alinan_tarih ? formatTarih(item.satin_alinan_tarih) : '-';
         const product_name = item.product_name || '-';
         const where_in_the_office = item.where_in_the_office || '-';
+        console.log(responseData);
         const price = item.price || '-';
         const count = item.count || '-';
         const e_commerce_site = item.e_commerce_site || '-';
@@ -388,12 +394,12 @@ const showInventory =  async (responseData) => {
 //   }
 // } 
 
-searchButton.addEventListener('click', () => {
-    const searchTerm = searchInput.value.trim();   
+searchButton.addEventListener("click", () => {
+    const searchTerm = searchInput.value.trim();
     searchData(searchTerm);
   });
 async function searchData(searchTerm){
-    const apiUrl = `http://backend.norbit.com.tr/ems/list/?search=${searchTerm}`;
+    const apiUrl = `http://backend.norbit.com.tr/inventory/list/?search=${searchTerm}`;
     const token  = localStorage.getItem('token');
 
     axios({
