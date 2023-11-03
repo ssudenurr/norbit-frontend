@@ -291,9 +291,12 @@
                             <div class="personal-list">
                                 <div class="g-4 mb-3 row">
                                     <div class="col-sm-auto col">
-                                        <div class="table-buttons col-sm-2 d-flex">
-                                            <a class="btn btn-outline-primary btn-sm fw-semibold fs-15" style="height: 32px; letter-spacing: 0.2px; white-space: nowrap;" id="permission-btn">Yetki Ver</a>
-                                            <a class="btn btn-outline-info btn-sm fw-semibold fs-15" style="height: 32px; display: none; letter-spacing: 0.2px; white-space: nowrap;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Personel Ekle</a>
+                                        <div class="table-buttons">
+                                            <!-- <a class="btn btn-outline-primary btn-sm fw-semibold fs-15"style="width: 100px; height: 32px;" id="permission-btn">Yetki Ver</a>
+                                            <a class="btn btn-outline-info btn-sm fw-semibold fs-15" style="width: 100px; height: 32px;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">Personel Ekle</a> -->
+                                            <a class="btn btn-outline-primary btn-sm fw-semibold fs-15" style="width: 100px;display: none; height: 32px;" id="permission-btn"><span class="fs-8">Yetki Ver</span></a></a>
+                                            <a class="btn btn-outline-info btn-sm fw-semibold fs-15" style="width: 120px; display: none; height: 32px;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                <span class="fs-8">Personel Ekle</span></a>
                                         </div>
                                         
                                         
@@ -377,21 +380,6 @@
 
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6" id="job-date" >
-                                        <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
-                                        <input type="date" name="datetime" class="form-control" id="inputDate">
-                                    </div>
-                                    <div class="col-md-6" id="duty">
-                                        <label for="inputJob" class="form-label">Görevi</label>
-                                        <select type="text" class="form-select" id="inputJob">
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6" id="input-exit-date">
-                                        <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
-                                        <input type="date" class="form-control" id="inputExitDate" >
-                                    </div>
-                                </div>
-                                <div class="row">
                                     <div class="col-md-6">
                                         <label for="inputCompany" class="form-label">Şirketi</label>
                                         <select type="text" class="form-select" id="inputCompany">
@@ -415,6 +403,24 @@
                                         <label for="inputPassword" class="form-label">Şifre</label>
                                         <input type="text" class="form-control" id="inputPassword">
                                     </div>
+                                    <div class="col-md-6" id="duty">
+                                        <label for="inputJob" class="form-label">Görevi</label>
+                                        <select type="text" class="form-select" id="inputJob">
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6" id="job-date" >
+                                        <label for="inputDate" class="form-label">İşe Giriş Tarihi</label>
+                                        <input type="date" name="datetime" class="form-control" id="inputDate">
+                                    </div>
+                                    <div class="col-md-6" id="input-exit-date">
+                                        <label for="inputDate" class="form-label">İşten Çıkış Tarihi</label>
+                                        <input type="date" class="form-control" id="inputExitDate" >
+                                    </div>
+                                </div>
+                                <div class="row">
+
+
+
                                 </div>
 
 
@@ -436,23 +442,27 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="permissionModal" tabindex="-1" aria-labelledby="permissionModalLabel" aria-hidden="true">
+            <div class="modal fade" id="permissionModal" tabindex="-1" aria-labelledby="permissionModalLabel" >
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header" id="modal-header">
                             <h5 class="modal-title" id="permissionModalLabel"></h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form id="permission_list">
-                                <div class="column" id="column1"></div>
-                                <div class="column" id="column2"></div>
-                                <div class="column" id="column3"></div>
+                                <div class="row">
+
+                                    <div class="form-check">
+
+                                    </div>
+                                </div>
                               </form>
                               
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="save-btn" >Kaydet</button>
+                            <!-- <button type="button" class="btn btn-primary" id="save-btn" >Kaydet</button> -->
+                            <button type="button" class="btn btn-primary" id="update-btn" >Güncelle</button>
                         </div>
                     </div>
                 </div>
