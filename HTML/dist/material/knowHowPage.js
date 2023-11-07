@@ -191,7 +191,7 @@ const AddContent = async (knowHowData) => {
 };
 
 const addToProblemSolve = () => {
-    const apiUrl = `http://backend.norbit.com.tr/knowhow/list/`; 
+    const apiUrl = `http://backend.norbit.com.tr/knowhow/create/`; 
     const token  = localStorage.getItem('token');
     
     const problemTitle = document.getElementById('problem-title-input').value;
