@@ -161,7 +161,7 @@ const showAccountInfo = async (responseData) => {
 };
 
 const addNewInfo = async () => {
-  const apiUrl = `https://backend.norbit.com.tr/accountinfo/list/`;
+  const apiUrl = `https://backend.norbit.com.tr/accountinfo/create/`;
   const token = localStorage.getItem("token");
 
   valueControl();
