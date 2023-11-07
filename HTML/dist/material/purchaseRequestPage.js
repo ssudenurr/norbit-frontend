@@ -96,7 +96,7 @@ const purchaseList = async (page = 1) => {
 };
 
 // statusBtn.addEventListener('click', () => {
-//     updatePurchaseStatus();
+//   tePurchaseStatus();
 //     });
 async function cancelRequest(requestId) {
   const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
@@ -158,6 +158,7 @@ closeBtn.addEventListener("click", () => {
   modalButtonBox.innerHTML = "";
   clearInput();
 });
+
 addBtn.addEventListener("click", () => {
 
   clearInput();
@@ -165,6 +166,7 @@ addBtn.addEventListener("click", () => {
     <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPurchase()'>Ekle</button>
     `;
 });
+
 function valueControl() {
   const alert = document.getElementById("alertWarning"); // Define 'alert' here
   if (
@@ -212,7 +214,7 @@ async function createPurchase() {
       getResponsiblePerson();
       clearInput();
       tableBody.innerHTML = "";
-      window.location.reload();
+      // window.location.reload();
       purchaseList();
     })
     .catch((error) => {
@@ -221,9 +223,13 @@ async function createPurchase() {
 }
 
 function formatTarih(tarih) {
-  const tarihParcalari = tarih.split("T");
-  return tarihParcalari[0];
+  if (tarih) {
+    const tarihParcalari = tarih.split("T");
+    return tarihParcalari[0];
+  }
+  return "-";
 }
+
 function formatDateToCustomFormat(date) {
   let date2 = new Date(date);
   var yyyy = date2.getFullYear();
@@ -643,11 +649,11 @@ const getUserInfoId = async () => {
       .then((response) => {
         const userInfo = response.data;
         const statusMenu = document.getElementById('statusMenu')
-        if (userInfo.user_type === "AdminUser") {
-          statusBtn.style.display = "inline-block ";
-          statusMenu.style.display=('block');
-          getStatusData();
-        }
+        // if (userInfo.user_type === "AdminUser") {
+        //   statusBtn.style.display = "inline-block ";
+        //   statusMenu.style.display=('block');
+        //   // getStatusData();
+        // }
 
 
         resolve(userInfo);
@@ -726,9 +732,14 @@ searchInput.addEventListener("input", () => {
   }
 });
 
-window.addEventListener("load", (event) => {
-  getUserInfoId();
-  getOwnerNameId();
+window.addEventListener("load", async (event) => {
+  const loginnedUser = await getUserInfoId();
+  const loginnedUserType = loginnedUser.user_type;  getOwnerNameId();
+  if(loginnedUserType === "AdminUser"){
+    statusBtn.style.display = "inline-block ";
+    statusMenu.style.display=('block');
+    getStatusData();
+  }
   getResponsiblePerson();
   purchaseList(1);
 });
