@@ -1788,7 +1788,7 @@ axios ({
     const userData = response.data;
     const userID = response.data.id;
     console.log(userID);
-    getPermissionId(userID);
+    // getPermissionId(userID);
     personalInfo(userData);
 
 }).catch((error) => {
@@ -1799,23 +1799,23 @@ function personalInfo(userData){
     userName.textContent = userData.first_name + ' ' + userData.last_name;
     userType.textContent = userData.user_type;
 }
-function getPermissionId(id) {
-  const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
-  const token = localStorage.getItem("token");
+// function getPermissionId(id) {
+//   const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
+//   const token = localStorage.getItem("token");
 
-  axios({
-    method: "get",
-    url: apiUrl,
-    headers: {
-      Authorization: `Token ${token}`,
-    },
-  })
-    .then((response) => {
-      const responseData = response.data.user_permissions;
+//   axios({
+//     method: "get",
+//     url: apiUrl,
+//     headers: {
+//       Authorization: `Token ${token}`,
+//     },
+//   })
+//     .then((response) => {
+//       const responseData = response.data.user_permissions;
 
-      localStorage.setItem("responseData", JSON.stringify(responseData));
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
-}
+//       localStorage.setItem("responseData", JSON.stringify(responseData));
+//     })
+//     .catch((error) => {
+//       console.log("error", error);
+//     });
+// }
