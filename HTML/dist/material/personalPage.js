@@ -43,10 +43,18 @@ addRowButton.addEventListener("click", () => {
 });
 
 
+
 function formatTarih(tarih) {
-  const tarihParcalari = tarih.split("T");
-  return tarihParcalari[0];
+  if (tarih) {
+    const tarihParcalari = tarih.split("T");
+    if (tarihParcalari.length > 0) {
+      return tarihParcalari[0];
+    }
+  }
+  return null; // Eksik tarih için null değeri döndürün
 }
+
+
 function formatDateToCustomFormat(date) {
   let date2 = new Date(date);
   var yyyy = date2.getFullYear();
@@ -454,7 +462,7 @@ const showPersonal = async (personalData) => {
     const colId = document.getElementById("colId");
     if (loginnedUserType === "AdminUser") {
       addRowButton.style.display = "block";
-      permissionBtn.style.display = "block"
+      // permissionBtn.style.display = "block"
 
     }
     if (loginnedUserType === "NormalUser") {
@@ -462,7 +470,7 @@ const showPersonal = async (personalData) => {
       deleteBtn.style.display = "none";
       editCol.style.display = "none";
       checkBox.style.display = "none";
-
+      permissionBtn.style.display = "none"
       // colId.innerHTML = ""; 
 
     }
@@ -480,8 +488,8 @@ const showPersonal = async (personalData) => {
 
 let pageSize = 20;
 let allPermissions = [];
-const excludedValues = [121, 122, 123, 124, 113, 114, 115, 116, 141, 144, 143, 142, 105, 106, 107, 108, 101, 102, 103, 104, 109, 110, 111, 112, 1, 2, 3, 4, 9, 10, 11, 12,
-61,62,63,64,49,50,51,52,101,102,103,41,42,43,44,45,46,47,48,85,86,87,88,89,90,91,92,93,94,95,96,13,14,15,16,17,18,19,20,29,30,31,32,33,34,35,36,37,38,39,40];
+const excludedValues = [121, 122, 123, 124, 113, 114, 115, 116, 141, 144, 143, 142,  1, 2, 3, 4, 9, 10, 11, 12,69,70,71,72,
+61,62,63,64,49,50,51,52,101,102,103,41,42,43,44,45,46,47,48,85,86,87,88,13,14,15,16,17,18,19,20,29,30,31,32,33,34,35,36,37,38,39,40];
 
 function getPermission(page = 1) {
   const apiUrl = `https://backend.norbit.com.tr/permission/?page=${page}`;
@@ -508,7 +516,7 @@ function getPermission(page = 1) {
 }
 
 
-let itemName = []; // itemName dizisini global olarak tanımlayın.
+let itemName = []; 
 
 function createPermissionData(responseData) {
   const permissionList = document.getElementById("permission_list");
@@ -522,7 +530,7 @@ function createPermissionData(responseData) {
         permissionItem.className = "form-check";
         //   console.log(item)
         permissionItem.innerHTML = `
-          <input class="form-check-input modal-checkbox" type="checkbox" id="permission${item.id}" value="${item.id}">
+          <input class="form-check-input modal-checkbox" type="checkbox" id="permission${item.id}" value="${item.id}" name="${item.name}">
           <label class="form-check-label" for="permission${item.id}">
               ${item.name}
           </label>
@@ -530,12 +538,12 @@ function createPermissionData(responseData) {
 
         permissionList.appendChild(permissionItem);
         itemName.push(nospaceName);
-        console.log(itemName);
+        // console.log(itemName);
       }
     }
   });
 
-  console.log(itemName);
+  // console.log(itemName);
 }
 
 
@@ -544,12 +552,42 @@ getPermission()
   .then((allPermissions) => {
     createPermissionData(allPermissions);
     const groupedPermissions = groupByName(allPermissions);
-    console.log(groupedPermissions);
+    // console.log(groupedPermissions);
 
   })
   .catch((error) => {
     console.log("error", error);
   });
+
+
+
+let groupedPermissions = [];
+
+let groupedNames = [];
+
+function groupByName(responseData) {
+
+  responseData.forEach((item) => {
+    let permissionName = item.name;
+    permissionName = permissionName.trim(); 
+
+    if (!groupedPermissions[permissionName]) {
+      groupedPermissions[permissionName] = {
+        id: [],
+        name: permissionName
+      };
+    }
+    groupedPermissions[permissionName].id.push(item.id);
+  });
+  const groupedPermissionsArray = Object.values(groupedPermissions);
+  groupedPermissions = groupedPermissionsArray;
+
+  const names = groupedPermissionsArray.map(group => group.name);
+
+groupedNames = names;
+  console.log(groupedPermissions);
+  return groupedPermissionsArray;
+}
 
 async function getPermissionId(id) {
   // console.log(id);
@@ -591,6 +629,17 @@ async function getPermissionId(id) {
             const checkbox = document.getElementById(`permission${id}`);
             if (checkbox) {
               checkbox.checked = integerData.some((permissionId) => permissionId === id);
+
+              // const selectedPermissions = document.querySelectorAll('input[type="checkbox"]:checked');
+              // selectedPermissions.forEach((checkbox) => {
+              //   const nameValue = checkbox.getAttribute("name");
+
+              //   if (groupedNames.includes(nameValue)) {
+              //     console.log(`"${nameValue}" groupedNames içinde var.`);
+              //   } else {
+              //     console.log(`"${nameValue}" groupedNames içinde yok.`);
+              //   }
+              // });
             }
           } else {
             // console.log(`ID ${id} usersPermission dizisinde bulunmuyor.`);
@@ -604,27 +653,31 @@ async function getPermissionId(id) {
     });
 }
 function addUserPermissions(id) {
-  // console.log(id);
   const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
   const token = localStorage.getItem("token");
 
   const selectedPermissions = document.querySelectorAll('input[type="checkbox"]:checked');
-  
-  const values = [];
-  
+  let values = [];
+  let idValues = [];
+
   selectedPermissions.forEach(checkbox => {
     const value = parseInt(checkbox.value, 10);
+    const nameValue = checkbox.getAttribute("name");
+
+    groupedPermissions.forEach(group => {
+      if (group.name === nameValue) {
+        idValues = idValues.concat(group.id);
+      }
+    });
 
     if (!isNaN(value)) {
       values.push(value);
-      console.log(values);
-
     }
-    return false;
   });
 
-
-
+  // Şimdi idValues dizisini de values dizisine ekleyin
+  values = values.concat(idValues);
+console.log(values);
   axios({
     method: 'patch',
     url: apiUrl,
@@ -635,39 +688,13 @@ function addUserPermissions(id) {
       user_permissions: values,
     }
   }).then((response) => {
-
     localStorage.setItem("userPermissions", values);
-    // window.location.reload();
     console.log("İzinler başarıyla güncellendi.");
   }).catch((error) => {
     console.log("Hata:", error);
   });
 }
-let groupedPermissions = [];
 
-function groupByName(responseData) {
-
-
-  responseData.forEach((item) => {
-    let permissionName = item.name;
-    permissionName = permissionName.trim(); 
-
-    if (!groupedPermissions[permissionName]) {
-      groupedPermissions[permissionName] = {
-        id: [],
-        name: permissionName
-      };
-    }
-    groupedPermissions[permissionName].id.push(item.id);
-  });
-  const groupedPermissionsArray = Object.values(groupedPermissions);
-  const names = groupedPermissionsArray.map(group => group.name);
-  console.log(names);
-  
-
-  // console.log(groupedPermissionsArray);
-  return groupedPermissionsArray;
-}
 
 const editClickFunction = async () => {
   const editButtons = document.querySelectorAll("edit-btn");
