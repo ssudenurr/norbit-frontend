@@ -272,11 +272,14 @@
                             <div id="sidebarApps" class="menu-dropdown collapse" style>
                                 <ul class="nav nav-sm flex-column test">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="newCompany.html">Yeni İş Tanımı</a>
+                                        <a class="nav-link" href="newJobTitle.html">Yeni İş Tanımı</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link" href="newJobTitle.html">Yeni Şirket</a>
+                                        <a class="nav-link" href="newCompany.html">Yeni Şirket</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="newCategory.html">Yeni Kategori</a>
                                     </li>
                                 </ul>
                             </div>
@@ -312,8 +315,8 @@
                                     <div class="col-sm-auto col">
                                         <div class="table-buttons">
                                             <div class="d-flex">
-                                                <a class="btn btn-outline-primary btn-sm fw-semibold fs-15" style="width: 100px; height: 32px;" id="permission-btn"><span class="fs-8">Yetki Ver</span></a>
-                                                <a class="btn btn-outline-info btn-sm fw-semibold fs-15" style="width: 120px; height: 32px;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="fs-8">Personel Ekle</span></a>
+                                                <a class="btn btn-outline-primary btn-sm fw-semibold fs-15" style="width: 100px; height: 32px; display: none;" id="permission-btn"><span class="fs-8">Yetki Ver</span></a>
+                                                <a class="btn btn-outline-info btn-sm fw-semibold fs-15" style="width: 120px; height: 32px; display: none; margin-left: 5px;" id="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="fs-8">Personel Ekle</span></a>
                                             </div>
                                         </div>                             
                                     </div>
@@ -405,8 +408,8 @@
                                     <div class="col-md-6">
                                         <label for="inputUserType" class="form-label">Kullanıcı Tipi</label>
                                         <select class="form-select" id="inputUserType">
-                                            <option value="AU">AU</option>
-                                            <option value="NU">NU</option>
+                                            <option value="AU">Admin User</option>
+                                            <option value="NU">Normal User</option>
                                         </select>
                                     </div>
                                 </div>

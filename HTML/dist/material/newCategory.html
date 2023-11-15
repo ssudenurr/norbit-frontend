@@ -127,21 +127,26 @@
                                         <img class="rounded-circle header-profile-user"
                                             src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
                                         <span class="text-start ms-xl-2">
-                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="userName"></span>
-                                            <span
-                                                class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text" id="userType"></span>
+                                            <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text"
+                                                id="userName"></span>
+                                            <span class="d-none d-xl-block ms-1 fs-12 text-muted user-name-sub-text"
+                                                id="userType"></span>
                                         </span>
                                     </span>
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                <!-- item-->
-                                <a class="dropdown-item" href="profilePage.html"><i class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span class="align-middle">Profiles</span></a>
-                                <a class="dropdown-item" ><i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span class="align-middle" data-key="t-logout" id="logout">Logout</span></a>
-                                
+                                    <!-- item-->
+                                    <a class="dropdown-item" href="profilePage.html"><i
+                                            class="mdi mdi-account-circle text-muted fs-16 align-middle me-1"></i> <span
+                                            class="align-middle">Profiles</span></a>
+                                    <a class="dropdown-item"><i
+                                            class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i> <span
+                                            class="align-middle" data-key="t-logout" id="logout">Logout</span></a>
+
                                 </div>
                             </div>
+                        </div>
                     </div>
-                </div>
         </header>
 
         <!-- removeNotificationModal -->
@@ -212,7 +217,8 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link" id="buyScreen" href="purchaseRequestPage.html" target="_self">
-                                <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Satın Alım İstekleri </span>
+                                <i class="mdi mdi-speedometer"></i> <span data-key="t-dashboards">Satın Alım İstekleri
+                                </span>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -223,12 +229,13 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="projectsPage.html" aria-expanded="false" aria-controls="sidebarLayouts">
+                            <a class="nav-link menu-link" href="projectsPage.html" aria-expanded="false"
+                                aria-controls="sidebarLayouts">
                                 <i class="mdi mdi-view-carousel-outline"></i> <span data-key="t-layouts">Projeler
-                                    </span>
+                                </span>
                             </a>
 
-                        </li> 
+                        </li>
 
 
                         <li class="nav-item">
@@ -239,25 +246,28 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="accountInfo.html"  target="_self">
-                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesap Bilgileri</span>
+                            <a class="nav-link menu-link" href="accountInfo.html" target="_self">
+                                <i class="mdi mdi-sticker-text-outline"></i> <span data-key="t-pages">Hesap
+                                    Bilgileri</span>
                             </a>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false" aria-controls="sidebarLanding">
+                            <a class="nav-link menu-link" href="inventoryListPage.html" aria-expanded="false"
+                                aria-controls="sidebarLanding">
                                 <i class="mdi mdi-folder-multiple"></i> <span data-key="t-landing">Envanter</span>
                             </a>
 
                         </li>
 
-                        
+
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="purchasePage.html" aria-expanded="false" aria-controls="sidebarUI">
+                            <a class="nav-link menu-link" href="purchasePage.html" aria-expanded="false"
+                                aria-controls="sidebarUI">
                                 <i class="mdi mdi-cube-outline"></i> <span data-key="t-base-ui">Satın Alım
                                     Bilgileri</span>
                             </a>
-                        </li> 
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link menu-link active" href="#sidebarApps" aria-expanded="false"
                                 data-bs-toggle="collapse" id="dashboardToggle">
@@ -279,6 +289,8 @@
                                 </ul>
                             </div>
                         </li>
+
+
                     </ul>
                 </div>
             </div>
@@ -291,21 +303,94 @@
     </button>
     </div>
     </div>
-<div class="main-content" id="mainContent">
-    <div class="page-content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="container-fluid"> 
-                    <div class="calendar">
-                        <h2>TAKVİM</h2>
-                        <button class="btn btn-outline-info" onclick="getCalendar()">Takvime Yönlendir</button>
+    <div class="main-content" id="mainContent">
+        <div class="page-content">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="company-list">
+                                    <div class="g-4 mb-3 row">
+                                        <div class="col-sm-auto col">
+                                            <div class="table-buttons">
+                                                <!-- <input type="text" id="companyName" placeholder="Şirket Adı" style="border: 1px solid #ccc; height: 32px; width: 260px; border-radius: 5px;"> -->
+                                                <a class="btn btn-outline-info btn-m fw-semibold fs-15" id="add-btn"
+                                                    >Yeni Kategori</a>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive table-card mt-3 mb-1">
+                                        <table class="table align-middle table-striped mb-0" id="category-table">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="sort" style="text-align: center;">Kategori</th>
+                                                    <th scope="sort" style="text-align: center;">Oluşturulma Tarihi</th>
+                                                    <th scope="sort" style="text-align: center;">Düzenle</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="list form-check-all">
+                                                <!-- Add Personal Data-->
+                                            </tbody>
+                                        </table>
+                                        <div id="pagination">
+                                            <ul class="pagination justify-content-center">
+                                                <li class="page-item" id="prev-page">
+                                                    <a class="page-link fs-19" href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">&laquo;</span>
+                                                    </a>
+                                                </li>
+                                                <!-- Sayfa numaralarını burada göstereceğiz -->
+                                                <li class="page-item" id="next-page">
+                                                    <a class="page-link fs-19" href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true" data-bs-backdrop="false">
+                    <div class="modal-dialog">
+                        <div class="modal-content" id="modalContent">
+                            <div class="modal-header ">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                                <button type="button" class="btn-close" id='btn-close' data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body " id="modalBody">
+                                <form class="row g-3">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <label for="inputCategory" class="form-label">Kategori Adı</label>
+                                            <input type="text" class="form-control" id="inputCategory">
+                                        </div>
+
+                                    </div>
+
+
+                                </form>
+                            </div>
+
+                            <div class="modal-footer" id="button-box">
+                                <!-- <button type="button" class="btn btn-info" data-bs-dismiss="modal" id="add-data-btn" style="display: none;">Ekle</button> -->
+                                <!-- <button type="button" class="btn btn-info" data-bs-dismiss="modal" id="save-btn" style="display: none;">Kaydet</button> -->
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
             </div>
         </div>
     </div>
-</div>
 
     <!-- <div class="calendar-container" id="calendar-container">
         <a href="calendar.html">
@@ -339,10 +424,8 @@
 
     <!-- App js -->
     <script src="assets/js/app.js"></script>
-    <script src="homePage.js"></script>
     <script src="logout.js"></script>
-    <script src="profilePage.js"></script>
-
+    <script src="newCategory.js"></script>
 </body>
 
 </html>

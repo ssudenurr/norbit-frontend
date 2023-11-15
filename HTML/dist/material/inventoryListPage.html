@@ -272,11 +272,14 @@
                             <div id="sidebarApps" class="menu-dropdown collapse" style>
                                 <ul class="nav nav-sm flex-column test">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="newCompany.html">Yeni İş Tanımı</a>
+                                        <a class="nav-link" href="newJobTitle.html">Yeni İş Tanımı</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link" href="newJobTitle.html">Yeni Şirket</a>
+                                        <a class="nav-link" href="newCompany.html">Yeni Şirket</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="newCategory.html">Yeni Kategori</a>
                                     </li>
                                 </ul>
                             </div>
@@ -328,17 +331,14 @@
                                         <thead class="table-light">
                                             <tr>
                                                 <th scope="sort">ID </th> 
-                                                <!-- <th scope="sort">İsteyen Kişi</th>  -->
                                                 <th scope="sort">Ürün Adı</th>  
-                                                <th scope="sort">Alınma Tarihi</th> 
-                                                <th scope="sort">Ofiste Nerede</th>                                   
+                                                <th scope="sort">Alınma Tarihi</th>        
+                                                <th scope="sort">Kategori</th>               
                                                 <th scope="sort">Fiyat</th>    
-                                                <th scope="sort">Sayısı</th>                        
+                                                <th scope="sort">Sayısı</th>                                            
+                                                <th scope="sort">Ofiste Nerde</th>
+                                                <th scope="sort">Açıklama</th>                                              
                                                 <th scope="sort">Link</th>
-                                                <!-- <th scope="sort">İstek Tarihi</th> -->
-                                                <th scope="sort">Açıklama</th>
-                                                <!-- <th scope="sort">Düzenleme</th> -->
-
                                 
                                             </tr>
                                         </thead>
@@ -430,17 +430,16 @@
                                     <input type="text" class="form-control" id="input-Where-In-The-Office" >
                                 </div>
                             </div>
-
                             <div class="row">
-
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
+                                    <label for="inputCategory" class="form-label">Kategori</label>
+                                    <select type="text"class="form-select"  id="inputCategory"></select>
+                                </div>
+                                <div class="col-md-6">
                                     <label for="inputDescription" class="form-label">Açıklama</label>
                                     <input type="text" name="text" class="form-control"  id="inputDescription">
                                 </div>
+
 
                             </div>
     
@@ -449,7 +448,7 @@
     
                     <div class="modal-footer" id="button-box">
                        <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button>
-                <!--  <button type="button" class="btn btn-primary" id="editBtn">Düzenle</button> -->
+                 <button type="button" class="btn btn-primary"  style="display: none;" id="row-add-btn">Ekle</button>
                         <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button> -->
                     </div>
                 </div>
