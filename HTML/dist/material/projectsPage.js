@@ -1,3 +1,4 @@
+
 const projectList = document.getElementById('project-list');
 const addBtn = document.getElementById('addBtn');
 
@@ -14,7 +15,7 @@ const createButton = document.getElementById('createButton');
 const saveButton = document.getElementById('save-btn');
 addBtn.addEventListener('click', ()=>{
         addNewProject();
-        window.location.reload();
+        // window.location.reload();    
 
 })
 
@@ -26,7 +27,7 @@ function valueControl() {
       !projectstartDate.value ||
       !projectCustomer.value ||
       !projectCompany.value ||
-      !employees.value 
+      !employeesOption.value 
     ) {
       alert.style.display = "block";
   
@@ -40,13 +41,12 @@ function valueControl() {
   }
   
   function formatTarih(tarih) {
-    if (tarih && tarih !== '-') {
-        const tarihParcalari = tarih.split('T');
-        return tarihParcalari[0];
-    } else {
-        return '-';
+    if (tarih) {
+      const tarihParcalari = tarih.split("T");
+      return tarihParcalari[0];
     }
-}
+    return "-";
+  }
 
 
 let currentPage = 1;
@@ -77,20 +77,20 @@ nextPageBtn.addEventListener('click', () => {
 });
 
 function formatDateToCustomFormat(date) {
-    let date2 = new Date(date)
+    let date2 = new Date(date);
     var yyyy = date2.getFullYear();
-    var MM = String(date2.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
-    var dd = String(date2.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
-    var hh = String(date2.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
-    var mm = String(date2.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
+    var MM = String(date2.getMonth() + 1).padStart(2, "0"); // Ayı 2 basamaklı hale getiriyoruz
+    var dd = String(date2.getDate()).padStart(2, "0"); // Günü 2 basamaklı hale getiriyoruz
+    var hh = String(date2.getHours()).padStart(2, "0"); // Saati 2 basamaklı hale getiriyoruz
+    var mm = String(date2.getMinutes()).padStart(2, "0"); // Dakikayı 2 basamaklı hale getiriyoruz
   
     // Sonuç formatını birleştiriyoruz
-    var formattedDate = yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm;
+    var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
   
     return formattedDate;
-}
+  }
 function getProjectsInfo(page){
-    const apiUrl = `http://backend.norbit.com.tr/projects/list/?page=${page}`;
+    const apiUrl = `${baseUrl}projects/list/?page=${page}`;
     const token  = localStorage.getItem('token');
 
     axios ({
@@ -108,7 +108,7 @@ function getProjectsInfo(page){
     })
 }
 async function getProjectsDetails(pageId){
-    const apiUrl = `http://backend.norbit.com.tr/projects/${pageId}/`;
+    const apiUrl = `${baseUrl}projects/${pageId}/`;
     const token  = localStorage.getItem('token');
 
     axios ({
@@ -126,8 +126,8 @@ async function getProjectsDetails(pageId){
         )
         const nameData = projectData.project_name || '-';     
         const descriptionData = projectData.description || '-';
-        const startDateData = projectData.project_start_date || '-';
-        const endData = projectData.project_end_date || '-';
+        const startDateData = projectData.project_start_date;
+        const endData = projectData.project_end_date;
         const customerData = projectData.customer || '-';
         const companyData = projectData.company || '-';
 
@@ -153,11 +153,9 @@ async function projectDetails(projectData) {
         const projectDiv = document.createElement('div');
         projectDiv.classList.add('card', 'mb-3');
         const company = await getCompanyNameId(project.company) || '-';
-        const employeesIds = project.employees;
+        const employeesIds = project.employess;
         const employeesValue = await getEmployeesData(employeesIds);
-        console.log(employeesValue)
-        const usernames = employeesValue.map(innerArray => innerArray.map(user => user.username));
-
+        const users = employeesValue.map(user => `${user.first_name} ${user.last_name}`);
         if(project.status === "FNS"){
             project.status = "TAMAMLANDI"
         }else{
@@ -175,7 +173,7 @@ async function projectDetails(projectData) {
 
                     <div class="col-lg-7 col-sm-10">
                         <p class="mb-2 fw-bold fs-14 text-dark">PROJEDE YER ALANLAR:</p>
-                        <p class="mb-3 ">${usernames.join(', ') || '-'}</p>
+                        <p class="mb-3 ">${users.join(', ') || '-'}</p>
                     </div>
 
                 </div>
@@ -251,35 +249,29 @@ async function createSaveButton(pageId) {
     saveButton.addEventListener('click', async () => {
         await editToProject(pageId);
         // modal.hide();
-        window.location.reload();
+        // window.location.reload();
     });
 }
 
 
-const editToProject = async (itemId) =>{
-    const pageApi = `https://backend.norbit.com.tr/projects/${itemId}/`;
+const editToProject = async (itemId) => {
+    const pageApi = `${baseUrl}projects/${itemId}/`;
     const token = localStorage.getItem('token');
-
-    const newProjectName = document.getElementById(`projectName`).value;
-    const newProjectDescription =document.getElementById('projectDescription').value;
-    const newProjectstartDate = document.getElementById('startDate').value ;
-    const formattedEndDate = projectEndDate.value ? formatDateToCustomFormat(projectEndDate.value) : null; 
-    
-    const newProjectCustomer = document.getElementById('customer').value;
-    const newProjectCompany= document.getElementById('company').value;
     const newEmployees = Array.from(document.getElementById('employees').selectedOptions).map(option => option.value);
-    console.log(newEmployees)
 
     const data = {
-        project_name:newProjectName,
-        description:newProjectDescription,
-        project_start_date: formatDateToCustomFormat(newProjectstartDate),
-        project_end_date: formattedEndDate,
-        customer: newProjectCustomer,
-        company:newProjectCompany,
-        employees:newEmployees,
+        project_name: projectName.value,
+        description: projectDescription.value,
+        project_start_date: formatDateToCustomFormat(projectstartDate.value),
+        customer: projectCustomer.value,
+        company: projectCompany.value,
+        employees: newEmployees,
     };
-    
+
+    if (projectEndDate.value) {
+        data.project_end_date = formatDateToCustomFormat(projectEndDate.value);
+    }
+
     axios({
         method: 'patch',
         url: pageApi,
@@ -287,18 +279,18 @@ const editToProject = async (itemId) =>{
             "Authorization": `Token ${token}`
         },
         data: data,
-    }) .then((response) => {
+    }).then((response) => {
         const projectData = response.data;
-        console.log(projectData)
-        // window.location.reload();
-    })
-    .catch((error) => {
+        console.log(projectData);
+        window.location.reload();
+    }).catch((error) => {
         console.error(error);
     });
-}
+};
+
 
 const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
-    const apiUrl= `http://backend.norbit.com.tr/company/${id}/`
+    const apiUrl= `${baseUrl}company/${id}/`
     const token  = localStorage.getItem('token');
 
     const api = new Promise((resolve, reject) => {
@@ -327,7 +319,7 @@ const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
 };
 
 function getCompanyName() {
-    const apiUrl = "http://backend.norbit.com.tr/company/list/";
+    const apiUrl = `${baseUrl}company/list/`;
     const token = localStorage.getItem('token');
 
     axios({
@@ -396,7 +388,7 @@ function getCompanyName() {
   
 
 async function employeesData(selectedEmployeeIds, allPersonNameData = [], pageNumber = 1) {
-    const apiUrl = `http://backend.norbit.com.tr/ems/list/?page=${pageNumber}`;
+    const apiUrl = `${baseUrl}ems/list/?page=${pageNumber}`;
     const token = localStorage.getItem("token");
   
     try {
@@ -435,7 +427,8 @@ async function employeesData(selectedEmployeeIds, allPersonNameData = [], pageNu
   
   
 const getEmployeesId = async (id) => {
-const apiUrl = `http://backend.norbit.com.tr/ems/list/?id=${id}`;
+
+const apiUrl = `${baseUrl}ems/employee/${id}`;
 const token = localStorage.getItem("token");
 
 const api = new Promise((resolve, reject) => {
@@ -447,7 +440,7 @@ const api = new Promise((resolve, reject) => {
     },
     })
     .then((response) => {
-        const responseData = response.data.results;
+        const responseData = response.data;
         // console.log(responseData)
         resolve(responseData);
 
@@ -483,7 +476,7 @@ async function getEmployeesData(employeeIds) {
 }
 
 const addNewProject = async () =>{
-    const apiUrl = `https://backend.norbit.com.tr/projects/create/`; 
+    const apiUrl = `${baseUrl}projects/create/`; 
     const token  = localStorage.getItem('token');
     valueControl()
 
@@ -491,27 +484,30 @@ const addNewProject = async () =>{
     const projectDescription = document.getElementById('projectDescription').value;
     const projectstartDate = document.getElementById('startDate').value;
     const projectEndDate = document.getElementById('endDate').value;
-    const formattedEndDate = projectEndDate ? formatDateToCustomFormat(projectEndDate) : null;
+    // const formattedEndDate = projectEndDate ? formatDateToCustomFormat(projectEndDate) : '';
     const projectCustomer = document.getElementById('customer').value;
     const projectCompany = document.getElementById('company').value;
 
     const selectedEmployees = Array.from(document.getElementById('employees').selectedOptions).map(option => option.value);
+    const data = {
+        project_name: projectName,
+        description: projectDescription,
+        project_start_date: formatDateToCustomFormat(projectstartDate),
+        customer: projectCustomer,
+        company: projectCompany,
+        employess: selectedEmployees,
+    };
 
+    if (projectEndDate) {
+        data.project_end_date = formatDateToCustomFormat(projectEndDate);
+    }
     axios({        
         method:'post',
         url:apiUrl,
         headers:{ 
             "Authorization": `Token ${token}`
         },
-        data:{
-            project_name:projectName,
-            description:projectDescription,
-            project_start_date: formatDateToCustomFormat(projectstartDate),
-            project_end_date:formatDateToCustomFormat(formattedEndDate),
-            customer: projectCustomer,
-            company:projectCompany,
-            employees:selectedEmployees,
-        }
+        data:data,
     }).then(async (response)=>{
         employeesData();
 
