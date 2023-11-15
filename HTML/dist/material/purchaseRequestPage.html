@@ -268,11 +268,14 @@
                             <div id="sidebarApps" class="menu-dropdown collapse" style>
                                 <ul class="nav nav-sm flex-column test">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="newCompany.html">Yeni İş Tanımı</a>
+                                        <a class="nav-link" href="newJobTitle.html">Yeni İş Tanımı</a>
                                     </li>
 
                                     <li class="nav-item">
-                                        <a class="nav-link" href="newJobTitle.html">Yeni Şirket</a>
+                                        <a class="nav-link" href="newCompany.html">Yeni Şirket</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="newCategory.html">Yeni Kategori</a>
                                     </li>
                                 </ul>
                             </div>
@@ -302,9 +305,9 @@
                                         <div class="col-sm-auto col">
                                             <div class="table-buttons">
                                                 <a class="btn btn-outline-info btn-sm fw-semibold fs-13" id="add-btn" style="width: 100px; height: 32px;" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="fs-6">İstek Oluştur</span></a>
-                                                <a class="btn btn-outline-success btn-sm fw-semibold fs-13" id="situation" style="width: 70px; height: 32px;">
+                                                <a class="btn btn-outline-success btn-sm fw-semibold fs-13" id="situation" style="width: 70px; height: 32px; display: none;">
                                                     <span class="fs-6">Onayla</span></a>
-                                                <a class="btn btn-outline-danger btn-sm fw-semibold fs-13" id="cancel" style="width: 70px; height: 32px;"><span class="fs-6">İptal Et</span></a>
+                                                <a class="btn btn-outline-danger btn-sm fw-semibold fs-13" id="cancel" style="width: 70px; height: 32px; display: none;"><span class="fs-6">İptal Et</span></a>
                                             </div>
                                         </div>                                      
                                         <div class="col-sm col">
@@ -321,11 +324,12 @@
                                         <table class="table align-middle table-striped mb-0" id="purchaseTable">
                                             <thead class="table-light">
                                                 <tr>
-                                                    <th scope="sort">ID</th> 
+                                                    <th scope="sort"></th> 
                                                     <th scope="sort">İsteği Yapan Kişi</th> 
                                                     <th scope="sort">Sorumlu Kişi</th> 
                                                     <th scope="sort" >Durum</th>                                   
-                                                    <th scope="sort">Ürün Adı</th>                                    
+                                                    <th scope="sort">Ürün Adı</th>      
+                                                    <th scope="sort">Kategori</th>                              
                                                     <th scope="sort">Fiyat</th>    
                                                     <th scope="sort">Sayısı</th>                        
                                                     <th scope="sort">Link</th>
@@ -407,14 +411,20 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <label for="description" class="form-label">Açıklama</label>
-                                    <input type="text" class="form-control"  id="description">
-                                </div>
                                 <div class="col-md-6" style="display: none;" id="statusMenu">
                                     <label for="statusData" class="form-label" >Statü</label>
                                     <select type="text" class="form-select" id="statusData"></select>
                                 </div>
+                                <div class="col-md-6">
+                                    <label for="statusData" class="form-label" id="categoryMenu">Kategori</label>
+                                    <select type="text" class="form-select" id="categoryData"></select>
+                                </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="description" class="form-label">Açıklama</label>
+                                <input type="text" class="form-control"  id="description">
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer" id="button-box">
