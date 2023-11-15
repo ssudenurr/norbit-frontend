@@ -11,11 +11,12 @@ const priceInput = document.getElementById('inputPrice');
 const countInput = document.getElementById('inputCount');
 const linkInput = document.getElementById('inputLink');
 const descriptionInput = document.getElementById('inputDescription');
+const categoryInput = document.getElementById('inputCategory');
 
 const modaltitle = document.getElementById('exampleModalLabel');
 
 const addButton = document.getElementById('add-btn');
-
+const rowAdd = document.getElementById('row-add-btn')
 const editButton = document.getElementById('edit-btn');
 const rowEdit = document.getElementById('editBtn');
 const rowDelete = document.getElementById('delete-btn');
@@ -46,22 +47,24 @@ function valueControl(){
 }
 }
 addButton.addEventListener('click', () => {
-
+    rowAdd.style.display = "block"
+    getCategoryList();
     rowEdit.style.display = 'none';
     modaltitle.innerHTML = '';
-
-    const existingRowAddBtn = document.querySelector('.row-add-btn');
-    if (!existingRowAddBtn) {
-        const buttonBox = document.getElementById('button-box');
-        const addBtn = document.createElement('button');
-        addBtn.className = 'btn btn-primary row-add-btn';
-        addBtn.textContent = 'Ekle';
-        addBtn.addEventListener('click', () => {
+        rowAdd.addEventListener('click', () => {
             valueControl();
             createInventory();
         });
-        buttonBox.appendChild(addBtn);
-    }
+    // const existingRowAddBtn = document.querySelector('.row-add-btn');
+    // if (!existingRowAddBtn) {
+    //     const buttonBox = document.getElementById('button-box');
+    //     const addBtn = document.createElement('button');
+    //     addBtn.className = 'btn btn-primary row-add-btn';
+    //     addBtn.textContent = 'Ekle';
+    //     // addBtn.style.display = "none"
+
+    //     buttonBox.appendChild(addBtn);
+    // }
     clearInput();
 })
 
@@ -90,7 +93,7 @@ function formatDateToCustomFormat(date) {
 
 
 function createInventory(){
-  const apiUrl= "https://backend.norbit.com.tr/inventory/create/"
+  const apiUrl= `${baseUrl}inventory/create/`;
   const token  = localStorage.getItem('token');
 
   axios({
@@ -107,10 +110,12 @@ function createInventory(){
         count:countInput.value,
         e_commerce_site:linkInput.value,
         where_in_the_office:whereInTheOfficeInput.value,
-
+        category:[categoryInput.value],
+        project: [],
+        
       }
   }).then((response) => {
-    //   getResponsiblePerson();
+    // getCategoryList();
     window.location.reload();
 
   }).catch((error) => {
@@ -119,7 +124,7 @@ function createInventory(){
 }
 
 function getRowData(rowId){
-  const apiUrl = `http://backend.norbit.com.tr/inventory/${rowId}/`
+  const apiUrl = `${baseUrl}inventory/${rowId}/`
   const token  = localStorage.getItem('token');
 
   axios({
@@ -138,8 +143,9 @@ function getRowData(rowId){
       const countData = rowData.count;
       const linkData = rowData.e_commerce_site;
       const descriptionData = rowData.description;
+      const categoryData = await getCategoryId(rowData.category);
 
-
+      categoryInput.value = categoryData;
       purchaseDate.value = formatTarih(purchaseDateData);
       whereInTheOfficeInput.value = whereInTheOfficeInputData;
       productNameInput.value = productNameData;
@@ -147,8 +153,12 @@ function getRowData(rowId){
       countInput.value = countData;
       linkInput.value = linkData;
       descriptionInput.value = descriptionData; 
+      getCategoryList(rowData.category);
 
-  })
+
+  }).catch((error) => {
+    console.error(error);
+  });
 }
 let dataList = [];
 let currentPage = 1;
@@ -182,7 +192,7 @@ prevPageBtn.addEventListener('click', () => {
 
 async function getInventory(itemsPerPage = 1){
 
-    const urlApi = `http://backend.norbit.com.tr/inventory/list/?page=${itemsPerPage}`;
+    const urlApi = `${baseUrl}inventory/list/?page=${itemsPerPage}`;
     
 
   const token = localStorage.getItem('token');
@@ -210,7 +220,7 @@ async function getInventory(itemsPerPage = 1){
   })
 }
 function editInventory(inventoryId){
-  const apiUrl = `http://backend.norbit.com.tr/inventory/${inventoryId}/`
+  const apiUrl = `${baseUrl}inventory/${inventoryId}/`
   const token  = localStorage.getItem('token');
 
   const newProductName = document.getElementById('inputProductName');
@@ -220,7 +230,8 @@ function editInventory(inventoryId){
   const newCount = document.getElementById('inputCount');
   const newLink = document.getElementById('inputLink');
   // const newPurhasingDate = document.getElementById('inputPurchasingDate');
-  const newDescription = document.getElementById('inputDescription')
+  const newDescription = document.getElementById('inputDescription');
+  const newCategory = document.getElementById("inputCategory")
 
   axios({
       method:'patch',
@@ -236,6 +247,7 @@ function editInventory(inventoryId){
           count:newCount.value,
           e_commerce_site:newLink.value,
           description:newDescription.value,
+          category:[newCategory.value],
       }
   }).then((response)=>{
       // const userData = response.data
@@ -247,7 +259,7 @@ function editInventory(inventoryId){
 }   
 
 function deleteInventory(inventoryId){
-  const apiUrl = `http://backend.norbit.com.tr/inventory/${inventoryId}/`
+  const apiUrl = `${baseUrl}inventory/${inventoryId}/`
   const token  = localStorage.getItem('token');
   
   axios({
@@ -273,21 +285,21 @@ const showInventory =  async (responseData) => {
         const purchasing_date = item.satin_alinan_tarih ? formatTarih(item.satin_alinan_tarih) : '-';
         const product_name = item.product_name || '-';
         const where_in_the_office = item.where_in_the_office || '-';
-        console.log(responseData);
         const price = item.price || '-';
         const count = item.count || '-';
         const e_commerce_site = item.e_commerce_site || '-';
         const description = item.description || '-';
-    
-
-
+        // console.log(item.category[0]);
+        // const categoryName = await getCategoryId(item.category[0]) ;
+        const categoryName = await getCategoryId(item.category[0])
         newRow.innerHTML = `
         <td><input class="form-check" type ="checkbox"  id="checkbox" value=""</td>
         <td>${product_name}</td>
         <td>${purchasing_date}</td>
-        <td>${where_in_the_office}</td>
+        <td>${categoryName}</td>
         <td>${price}</td>
         <td>${count}</td>
+        <td>${where_in_the_office}</td>
         <td>${description}</td>
         <td>
         <div style="max-width: 160px;">
@@ -309,8 +321,8 @@ const showInventory =  async (responseData) => {
                 console.log("Seçilen satırın ID'si: " + inventoryId);
             }   
             editButton.addEventListener('click', () =>{
-                // document.querySelector('.row-add-btn').style.display = "none";
-                rowEdit.style.display = "block"
+                rowAdd.style.display = "none";
+                rowEdit.style.display = "block";
                 getRowData(inventoryId);
                 modal.show();
                 checkBox.checked = false;
@@ -328,6 +340,58 @@ const showInventory =  async (responseData) => {
         });
     };
 }
+function getCategoryList() {
+    // GET COMPANY NAME
+    const apiUrl = `${baseUrl}category/`;
+    const token = localStorage.getItem("token");
+  
+    axios({
+      method: "get",
+      url: apiUrl,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => {
+        const categoryeData = response.data.results;
+        categoryInput.innerHTML =  "";
+        
+        categoryeData.forEach((item) =>{
+        const option = document.createElement("option");
+            option.value = item.id;
+            option.text = item.name;
+            categoryInput.appendChild(option); 
+        })
+  
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+async function getCategoryId(id) {
+const apiUrl = `${baseUrl}category/${id}`;
+const token = localStorage.getItem("token");
+
+try {
+    const response = await axios({
+        method: "get",
+        url: apiUrl,
+        headers: {
+            Authorization: `Token ${token}`,
+        },
+    });
+
+    const responseData = response.data;
+    const categoryName = responseData.name;
+    return categoryName;
+} catch (error) {
+    console.log(error);
+    return null; // Return a default value or handle the error as needed
+}
+}
+
+
+//  
 // function getResponsiblePerson(purchaseId){
 //     const apiUrl= "http://backend.norbit.com.tr/ems/list/"
 //     const token  = localStorage.getItem('token');
@@ -399,7 +463,7 @@ searchButton.addEventListener("click", () => {
     searchData(searchTerm);
   });
 async function searchData(searchTerm){
-    const apiUrl = `http://backend.norbit.com.tr/inventory/list/?search=${searchTerm}`;
+    const apiUrl = `${baseUrl}inventory/list/?search=${searchTerm}`;
     const token  = localStorage.getItem('token');
 
     axios({
