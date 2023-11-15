@@ -17,7 +17,6 @@ const linkInput = document.getElementById('inputLink');
 const purchasingDateInput = document.getElementById('inputPurchasingDate');
 const descriptionInput = document.getElementById('inputDescription');
 const orderDateInput = document.getElementById('inputOrderDate');
-
 const rowEdit = document.getElementById('editBtn');
 
 function formatTarih(tarih) {
@@ -38,7 +37,7 @@ function formatDateToCustomFormat(date) {
     return formattedDate;
 }
 function getRowData(rowId){
-    const apiUrl = `http://backend.norbit.com.tr/purchase/${rowId}/`
+    const apiUrl = `${baseUrl}purchase/${rowId}/`
     const token  = localStorage.getItem('token');
 
     axios({
@@ -80,19 +79,8 @@ function getRowData(rowId){
 }
 
 function editPurchase(purchaseId){
-    const apiUrl = `http://backend.norbit.com.tr/purchase/${purchaseId}/`
+    const apiUrl = `${baseUrl}purchase/${purchaseId}/`
     const token  = localStorage.getItem('token');
-
-    const newWhereInTheOffice = document.getElementById('input-Where-In-The-Office');
-    const newProductName = document.getElementById('inputProductName');
-    const newPrice = document.getElementById('inputPrice');
-    const newCount = document.getElementById('inputCount');
-    const newLink = document.getElementById('inputLink');
-    const newPurhasingDate = document.getElementById('inputPurchasingDate');
-    console.log(newPurhasingDate)
-    const newOrderDate = document.getElementById('inputOrderDate')
-
-    const newDescription = document.getElementById('inputDescription')
 
     axios({
         method:'patch',
@@ -101,13 +89,13 @@ function editPurchase(purchaseId){
             "Authorization": `Token ${token}`
         },
         data:{
-            where_in_the_office:newWhereInTheOffice.value,
-            product_name:newProductName.value,
-            price:newPrice.value,
-            count:newCount.value,
-            e_commerce_site:newLink.value,
-            created_at:formatDateToCustomFormat(newPurhasingDate.value),
-            siparis_verilen_tarih:formatDateToCustomFormat(newOrderDate.value),
+            where_in_the_office: whereInTheOfficeInput.value,
+            product_name:productNameInput.value,
+            price:priceInput.value,
+            count:countInput.value,
+            e_commerce_site:linkInput.value,
+            created_at:formatDateToCustomFormat(purchasingDateInput.value),
+            siparis_verilen_tarih:formatDateToCustomFormat(orderDateInput.value),
             // description:newDescription.value,
         }
     }).then((response)=>{
@@ -119,7 +107,7 @@ function editPurchase(purchaseId){
     });
 }
 async function cancelRequest(requestId){
-    const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
+    const apiUrl = `${baseUrl}purchase-request/${requestId}/`;
     const token = localStorage.getItem('token');
 
     axios({
@@ -149,7 +137,7 @@ async function cancelRequest(requestId){
     })
 }
 async function updatePurchaseStatus(requestId){
-    const apiUrl = `http://backend.norbit.com.tr/purchase/${requestId}/`;
+    const apiUrl = `${baseUrl}purchase/${requestId}/`;
     const token = localStorage.getItem('token');
 
     axios({
@@ -179,7 +167,7 @@ async function updatePurchaseStatus(requestId){
     })
 }
 async function replyRequest(requestId){
-    const apiUrl = `http://backend.norbit.com.tr/purchase-request/${requestId}/`;
+    const apiUrl = `${baseUrl}purchase-request/${requestId}/`;
     const token = localStorage.getItem('token');
 
     axios({
@@ -237,7 +225,7 @@ prevPageBtn.addEventListener('click', () => {
     }
 });
 async function getPurchase(page = 1){
-    const apiUrl = `http://backend.norbit.com.tr/purchase/list/?page=${page}`;
+    const apiUrl = `${baseUrl}purchase/list/?page=${page}`;
     const token  = localStorage.getItem('token');
 
     axios ({
@@ -331,7 +319,7 @@ const showPurchase = async (responseData)  => {
 
 
 const getResponsibleId = async (id) => {
-    const apiUrl= `http://backend.norbit.com.tr/ems/list/?id=${id}`
+    const apiUrl= `${baseUrl}ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
 
     const api = new Promise((resolve, reject) => {
@@ -367,7 +355,7 @@ const getResponsibleId = async (id) => {
 } 
 
 function getResponsiblePerson(purchaseId){
-    const apiUrl= "http://backend.norbit.com.tr/ems/list/"
+    const apiUrl= `${baseUrl}ems/list/`;
     const token  = localStorage.getItem('token');
 
     axios({
@@ -398,11 +386,7 @@ function getResponsiblePerson(purchaseId){
 };
 searchButton.addEventListener('click', () => {
     const searchTerm = searchInput.value;
-    if (searchTerm) {
         searchData(searchTerm);
-    } else {
-        alert('Arama terimi boş olamaz.');
-    }
 });
 
 async function searchData(searchTerm){
