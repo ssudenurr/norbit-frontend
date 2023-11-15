@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
 // userControl();
 
 
+    const baseUrl = "http://backend.norbit.com.tr:9999/";
+
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password-input");
   const loginBtn = document.getElementById('loginBtn'); 
@@ -16,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
       window.alert("Kullanıcı adı ve şifre boş geçilemez");
       return;
     } 
-    const usersApiUrl = "http://backend.norbit.com.tr/accounts/login/";
+    const usersApiUrl = `${baseUrl}accounts/login/`;
     
     axios({
       method: 'post',
@@ -48,24 +50,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
 })
 
-const sendEmail = document.getElementById('send-email');
-const userEmail = document.getElementById('email').value;
-sendEmail.addEventListener('click', () => {
-  const apiUrl = "http://backend.norbit.com.tr/accounts/password/reset/"
-  const token = localStorage.getItem('token');
+// const sendEmail = document.getElementById('send-email');
+// const userEmail = document.getElementById('email').value;
+// sendEmail.addEventListener('click', () => {
+//   const apiUrl = `${baseUrl}accounts/password/reset/`
+//   const token = localStorage.getItem('token');
 
-axios({
-  method:'post',
-  url:apiUrl,
-  headers:{ 
-    "Authorization": `Token ${token}`
-    },
-    data: {
-      email: userEmail,
-    },
-}).then((response) => {
-  console.log('Password reset email sent successfully');
-}).catch((error) => {
-  console.log('Error sending password reset email:', error);
-})
-});
+// axios({
+//   method:'post',
+//   url:apiUrl,
+//   headers:{ 
+//     "Authorization": `Token ${token}`
+//     },
+//     data: {
+//       email: userEmail,
+//     },
+// }).then((response) => {
+//   console.log('Password reset email sent successfully');
+// }).catch((error) => {
+//   console.log('Error sending password reset email:', error);
+// })
+// });

@@ -1,3 +1,4 @@
+
 const siteName = document.getElementById("inputSiteName");
 const siteLink = document.getElementById("inputSiteLink");
 const mailAdress = document.getElementById("inputMail");
@@ -16,11 +17,8 @@ const saveBtn = document.getElementById("save-btn");
 saveBtn.style.display = "none";
 const addBtn = document.getElementById("add-btn");
 addBtn.addEventListener("click", () => {
-  saveBtn.style.display = "none";
-
-  if (valueControl) {
     addNewInfo();
-  }
+
   modal.hide();
   window.location.reload();
 });
@@ -82,7 +80,7 @@ prevPageBtn.addEventListener("click", () => {
   }
 });
 async function getAccountInfo(itemsPerPage = 1) {
-  const urlApi = `https://backend.norbit.com.tr/accountinfo/list/?page=${itemsPerPage}`;
+  const urlApi = `${baseUrl}accountinfo/list/?page=${itemsPerPage}`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -161,7 +159,7 @@ const showAccountInfo = async (responseData) => {
 };
 
 const addNewInfo = async () => {
-  const apiUrl = `https://backend.norbit.com.tr/accountinfo/create/`;
+  const apiUrl = `${baseUrl}accountinfo/create/`;
   const token = localStorage.getItem("token");
 
   valueControl();
@@ -187,7 +185,7 @@ const addNewInfo = async () => {
 };
 
 function getRowData(rowId) {
-  const apiUrl = `http://backend.norbit.com.tr/accountinfo/${rowId}/`;
+  const apiUrl = `${baseUrl}accountinfo/${rowId}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -212,7 +210,7 @@ function getRowData(rowId) {
 }
 
 function editAccountInfo(id) {
-  const apiUrl = `http://backend.norbit.com.tr/accountinfo/${id}/`;
+  const apiUrl = `${baseUrl}accountinfo/${id}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -239,7 +237,7 @@ function editAccountInfo(id) {
 }
 
 function deleteAccountInfo(id) {
-  const apiUrl = `http://backend.norbit.com.tr/accountinfo/${id}/`;
+  const apiUrl = `${baseUrl}accountinfo/${id}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -262,7 +260,7 @@ searchButton.addEventListener("click", () => {
   searchData(searchTerm);
 });
 async function searchData(searchTerm) {
-  const apiUrl = `https://backend.norbit.com.tr/accountinfo/list/?search=${searchTerm}`;
+  const apiUrl = `${baseUrl}accountinfo/list/?search=${searchTerm}`;
   const token = localStorage.getItem("token");
 
   axios({

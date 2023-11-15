@@ -12,7 +12,7 @@ document.getElementById('submitPassword').addEventListener('click', function() {
         return;
     }
 
-    const apiUrl = "http://backend.norbit.com.tr/accounts/password/change/";
+    const apiUrl = `${baseUrl}accounts/password/change/`;
     const token = localStorage.getItem('token');
 
     const data = {

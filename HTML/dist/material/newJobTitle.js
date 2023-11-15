@@ -1,3 +1,4 @@
+
 const tableBody = document.querySelector("#job-title-table tbody");
 const modal = new bootstrap.Modal(document.getElementById("exampleModal"));
 const inputJobTitle = document.getElementById("inputJobTitle");
@@ -44,7 +45,7 @@ function formatDateToCustomFormat(date) {
 
 function getJobTitleList() {
   // GET COMPANY NAME
-  const apiUrl = "https://backend.norbit.com.tr/jobs/list/";
+  const apiUrl = `${baseUrl}jobs/list/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -102,13 +103,13 @@ async function clickToEditBtn(jobId) {
     <button type="button" class="btn btn-info" data-bs-dismiss="modal" id="save-btn">Kaydet</button>
     `;
   document.getElementById("save-btn").addEventListener("click", () => {
-    editJobData(jobId);
+    editJobTitle(jobId);
   });
   getRowData(jobId);
 }
 
 function createJobTitle() {
-  const apiUrl = "https://backend.norbit.com.tr/jobs/create/";
+  const apiUrl = `${baseUrl}jobs/create/`;
   const token = localStorage.getItem("token");
   axios({
     method: "post",
@@ -130,7 +131,7 @@ function createJobTitle() {
 }
 
 function getRowData(jobId) {
-  const apiUrl = `http://backend.norbit.com.tr/jobs/${jobId}/`;
+  const apiUrl = `${baseUrl}jobs/${jobId}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -154,7 +155,7 @@ function getRowData(jobId) {
 }
 
 function editJobTitle(jobId) {
-  const apiUrl = `http://backend.norbit.com.tr/jobs/${jobId}/`;
+  const apiUrl = `${baseUrl}jobs/${jobId}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -177,7 +178,7 @@ function editJobTitle(jobId) {
     });
 }
 function deleteJobTitle(jobId) {
-  const apiUrl = `http://backend.norbit.com.tr/jobs/${jobId}/`;
+  const apiUrl = `${baseUrl}jobs/${jobId}/`;
   const token = localStorage.getItem("token");
 
   const api = new Promise((resolve, reject) => {

@@ -1,5 +1,4 @@
 
-
 const problemTitle = document.getElementById('problem-title-input');
 const solutionDescription = document.getElementById('solution-description'); 
 const solutionFileInput1 = document.getElementById('solution-file-1');
@@ -55,7 +54,7 @@ nextPageBtn.addEventListener('click', () => {
     getData(currentPage);
 });
 const getData = async (page = 1) => {   
-    const urlApi = `http://backend.norbit.com.tr/knowhow/list/?page=${page}`;
+    const urlApi = `${baseUrl}knowhow/list/?page=${page}`;
     const token  = localStorage.getItem('token');
     const api = new Promise((resolve, reject) => {
         axios({
@@ -191,7 +190,7 @@ const AddContent = async (knowHowData) => {
 };
 
 const addToProblemSolve = () => {
-    const apiUrl = `http://backend.norbit.com.tr/knowhow/create/`; 
+    const apiUrl = `${baseUrl}knowhow/create/`; 
     const token  = localStorage.getItem('token');
     
     const problemTitle = document.getElementById('problem-title-input').value;
@@ -277,7 +276,7 @@ const deleteClickFunction = async () => {
     });
 }
 const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
-    const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+    const apiUrl= `${baseUrl}accounts/user/`
     const token  = localStorage.getItem('token');
     const api = new Promise((resolve, reject) => {
         axios ({
@@ -307,7 +306,7 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
     
 }  
 const getOwner = async (id) => {
-    const apiUrl= `http://backend.norbit.com.tr/ems/list/?id=${id}`
+    const apiUrl= `${baseUrl}ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
     const api = new Promise((resolve, reject) => {
     axios ({
@@ -345,7 +344,7 @@ const getOwner = async (id) => {
 }  
 
 const deleteProblem = async(pageId) =>{
-    const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
+    const apiPageUrl = `${baseUrl}knowhow/detail/${pageId}/`;
     const token  = localStorage.getItem('token');  
 
     const removeData = new Promise ((resolve,reject) =>{
@@ -380,7 +379,7 @@ const deleteProblem = async(pageId) =>{
 
 const editToProblem = async (itemId) => {
     // console.log(itemId);
-    const pageApi = `https://backend.norbit.com.tr/knowhow/detail/${itemId}/`;
+    const pageApi = `${baseUrl}knowhow/detail/${itemId}/`;
     const token = localStorage.getItem('token');
 
     const newProblemContent = document.getElementById('problem-title-input').value;
@@ -454,7 +453,7 @@ function createEditButton(pageId) {
 
 
 function getRowData(pageId) {
-    const apiUrl = `http://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
+    const apiUrl = `${baseUrl}knowhow/detail/${pageId}/`;
     const token = localStorage.getItem('token');
 
     axios({
@@ -556,7 +555,7 @@ function getRowData(pageId) {
 }
 
 const deleteFile = async (pageId, fileId) => {
-    const apiPageUrl = `https://backend.norbit.com.tr/knowhow/detail/${pageId}/`;
+    const apiPageUrl = `${baseUrl}knowhow/detail/${pageId}/`;
     const token = localStorage.getItem('token');
 
     const formData = new FormData();

@@ -1,6 +1,6 @@
 
 function getUserInfo(){
-    const apiUrl= "http://backend.norbit.com.tr/accounts/user/"
+    const apiUrl= `${baseUrl}accounts/user/`
     const token  = localStorage.getItem('token');
 
     axios ({
@@ -33,7 +33,7 @@ async function userDetails(userData){
 
 }
 function getCompanyName() {      // GET COMPANY NAME
-    const apiUrl= "http://backend.norbit.com.tr/company/list/"
+    const apiUrl= `${baseUrl}company/list/`;
     const token  = localStorage.getItem('token');
 
     axios({
@@ -59,7 +59,7 @@ function getCompanyName() {      // GET COMPANY NAME
         });
 }
 const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
-    const apiUrl= `http://backend.norbit.com.tr/company/${id}/`
+    const apiUrl= `${baseUrl}company/${id}/`
     const token  = localStorage.getItem('token');
 
     const api = new Promise((resolve, reject) => {
@@ -87,7 +87,7 @@ const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
     }
 };
 function getJobTitle() {     // GET JOB TİTLE
-    const apiUrl= "http://backend.norbit.com.tr/jobs/list/"
+    const apiUrl= `${baseUrl}jobs/list/`
     const token  = localStorage.getItem('token');
 
     axios({
@@ -116,7 +116,7 @@ function getJobTitle() {     // GET JOB TİTLE
 }
 
 const getJobTitleId  = async (job_id) => {    // GET JOB TİTLE ID
-    const apiUrl= `http://backend.norbit.com.tr/jobs/${job_id}/`
+    const apiUrl= `${baseUrl}jobs/${job_id}/`
     const token  = localStorage.getItem('token');
 
     const api = new Promise((resolve, reject) => {
@@ -145,7 +145,7 @@ const getJobTitleId  = async (job_id) => {    // GET JOB TİTLE ID
 
 
 function updateUserInfo() {
-    const apiUrl = "http://backend.norbit.com.tr/accounts/user/";
+    const apiUrl = `${baseUrl}accounts/user/`;
     const token = localStorage.getItem('token');
 
     const newFirstName = document.getElementById('newFirstName').value;
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function updateUserInfo() {
-        const apiUrl = "http://backend.norbit.com.tr/accounts/user/";
+        const apiUrl = `${baseUrl}accounts/user/`;
         const token = localStorage.getItem('token');
 
         const newFirstName = document.getElementById('newFirstName').value;

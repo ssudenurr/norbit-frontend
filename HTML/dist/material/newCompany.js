@@ -1,3 +1,5 @@
+
+
 const tableBody = document.querySelector("#company-table tbody");
 const modal = new bootstrap.Modal(document.getElementById("exampleModal"));
 const inputCompanyName = document.getElementById("inputCompanyName");
@@ -44,7 +46,7 @@ function formatDateToCustomFormat(date) {
 
 function getCompanyList() {
   // GET COMPANY NAME
-  const apiUrl = "https://backend.norbit.com.tr/company/list/";
+  const apiUrl = `${baseUrl}company/list/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -107,7 +109,7 @@ async function clickToEditBtn(companyId) {
 }
 
 function createCompanyName() {
-  const apiUrl = "https://backend.norbit.com.tr/company/create/";
+  const apiUrl = `${baseUrl}company/create/`;
   const token = localStorage.getItem("token");
   axios({
     method: "post",
@@ -129,7 +131,7 @@ function createCompanyName() {
 }
 
 function getRowData(companyId) {
-  const apiUrl = `http://backend.norbit.com.tr/company/${companyId}/`;
+  const apiUrl = `${baseUrl}company/${companyId}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -153,7 +155,7 @@ function getRowData(companyId) {
 }
 
 function editCompanyData(companyId) {
-  const apiUrl = `http://backend.norbit.com.tr/company/${companyId}/`;
+  const apiUrl = `${baseUrl}company/${companyId}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -176,7 +178,7 @@ function editCompanyData(companyId) {
     });
 }
 function deleteCompany(companyId) {
-  const apiUrl = `http://backend.norbit.com.tr/company/${companyId}/`;
+  const apiUrl = `${baseUrl}company/${companyId}/`;
   const token = localStorage.getItem("token");
 
   const api = new Promise((resolve, reject) => {
