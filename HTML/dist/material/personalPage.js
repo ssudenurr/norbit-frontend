@@ -1,3 +1,4 @@
+
 const addRowButton = document.getElementById("add-btn");
 
 const modaltitle = document.getElementById("exampleModalLabel");
@@ -96,7 +97,7 @@ async function createEditButton(userId) {
       modal.hide();
       clearInput();
     }
-    // window.location.reload();
+    window.location.reload();
   });
 
   modaltitle.innerHTML = "Personel Düzenleme Formu";
@@ -135,10 +136,10 @@ function createPersonel() {
   // CREATE NEW PERSONAL
   valueControl();
 
-  const apiUrl = "http://backend.norbit.com.tr/accounts/registration/";
+  const apiUrl = `${baseUrl}accounts/registration/`;
   const token = localStorage.getItem("token");
 
-  const transDate = new Date(entryDate.value);
+  // const transDate = new Date(entryDate.value);
   axios({
     method: "post",
     url: apiUrl,
@@ -150,7 +151,7 @@ function createPersonel() {
       last_name: lastName.value,
       job_title: job.value,
       user_type: userTypes.value,
-      job_start_date: formatDateToCustomFormat(transDate),
+      job_start_date: formatDateToCustomFormat(entryDate.value),
       company_name: company.value,
       username: username.value,
       password1: password.value,
@@ -200,7 +201,7 @@ const deleteRow = async (delete_button) => {
   // DELETE TO PERSONAL
 
   userId = delete_button.getAttribute("data-user-id");
-  const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
+  const apiUrl = `${baseUrl}/ems/employee/${userId}/`;
   const token = localStorage.getItem("token");
 
   const api = new Promise((resolve, reject) => {
@@ -235,7 +236,7 @@ const deleteRow = async (delete_button) => {
 
 function getRowData(userId) {
   // GET CURRENT ROW USER'S DATA
-  const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userId}/`;
+  const apiUrl = `${baseUrl}ems/employee/${userId}/`;
   const token = localStorage.getItem("token");
   axios({
     method: "get",
@@ -273,12 +274,12 @@ function modalValueControl() {
   const alert = document.getElementById("alertWarning");
 
   if (
-    !newFirstName.value ||
-    !newLastName.value ||
-    !newjob.value ||
-    !newCompany.value ||
-    !newUserType.value ||
-    !newUserName.value
+    !firstName.value ||
+    !lastName.value ||
+    !job.value ||
+    !company.value ||
+    !userTypes.value ||
+    !username.value
   ) {
     alert.style.display = "block";
     setTimeout(() => {
@@ -291,38 +292,25 @@ function modalValueControl() {
   return true; // Return true to indicate that validation passed.
 }
 
-const newFirstName = document.getElementById("inputFirstame");
-const newLastName = document.getElementById("inputLastname");
-const newjob = document.getElementById("inputJob");
-const newCompany = document.getElementById("inputCompany");
-const newUserType = document.getElementById("inputUserType");
-const newUserName = document.getElementById("inputUsername");
-const newEntryDate = document.getElementById("inputDate");
-const formattedEndDate = exitDate.value ? formatDateToCustomFormat(exitDate.value) : null;
-// const newExitDate = document.getElementById("inputExitDate");
-// console.log(exitDate.value);
-// const exitDateValue = newExitDate.value.trim();
-
 
 function editPersonel(userID) {
-  const apiUrl = `http://backend.norbit.com.tr/ems/employee/${userID}/`;
+  const apiUrl = `${baseUrl}ems/employee/${userID}/`;
   const token = localStorage.getItem("token");
 
   const data = {
-    first_name: newFirstName.value,
-    last_name: newLastName.value,
-    job_title: newjob.value,
-    user: newUserType.value,
-    company_name: newCompany.value,
-    job_end_date:formattedEndDate,
-    job_start_date:formatDateToCustomFormat(newEntryDate.value),
-    username: newUserName.value,
+    first_name: firstName.value,
+    last_name: lastName.value,
+    job_title: [job.value],
+    user: userTypes.value,
+    company_name: [company.value],
+    job_start_date: formatDateToCustomFormat(entryDate.value),
+    username: username.value,
   };
 
-  // if (exitDateValue) {
-  //   data.job_end_date = formatDateToCustomFormat(exitDateValue);
-  //   console.log(job_end_date);
-  // }
+  // Add job_end_date if exitDateValue is available
+  if (exitDate) {
+    data.job_end_date = formatDateToCustomFormat(exitDate.value);
+  }
 
   axios({
     method: "patch",
@@ -341,6 +329,7 @@ function editPersonel(userID) {
       console.error(error);
     });
 }
+
 let currentPage = 1;
 const itemsPerPage = 10;
 
@@ -370,7 +359,7 @@ nextPageBtn.addEventListener("click", () => {
 
 const personalList = (page = 1) => {
   // GETTING CONTACT INFORMATION FROM API
-  const apiUrl = `https://backend.norbit.com.tr/ems/list/?page=${page}`;
+  const apiUrl = `${baseUrl}ems/list/?page=${page}`;
 
   const token = localStorage.getItem("token");
 
@@ -400,11 +389,12 @@ const showPersonal = async (personalData) => {
   for (const item of personalData) {
     const newRow = document.createElement("tr");
     const job = (await getJobTitleId(item.job_title)) || "-";
+    // console.log(item.company_name);
     const company = (await getCompanyNameId(item.company_name)) || "-";
     const first_name = item.first_name || "-";
     const last_name = item.last_name || "-";
-    const user = item.user || "-";
-    const job_start_date = formatTarih(item.job_start_date) || "-";
+    const user = item.user  === "AU" ? "Admin User" : "Normal User";
+    const job_start_date =item.job_start_date ? formatTarih(item.job_start_date) : "-";
     const job_end_date = item.job_end_date
       ? formatTarih(item.job_end_date)
       : "-";
@@ -462,7 +452,7 @@ const showPersonal = async (personalData) => {
     const colId = document.getElementById("colId");
     if (loginnedUserType === "AdminUser") {
       addRowButton.style.display = "block";
-      // permissionBtn.style.display = "block"
+      permissionBtn.style.display = "block"
 
     }
     if (loginnedUserType === "NormalUser") {
@@ -492,7 +482,7 @@ const excludedValues = [121, 122, 123, 124, 113, 114, 115, 116, 141, 144, 143, 1
 61,62,63,64,49,50,51,52,101,102,103,41,42,43,44,45,46,47,48,85,86,87,88,13,14,15,16,17,18,19,20,29,30,31,32,33,34,35,36,37,38,39,40];
 
 function getPermission(page = 1) {
-  const apiUrl = `https://backend.norbit.com.tr/permission/?page=${page}`;
+  const apiUrl = `${baseUrl}permission/?page=${page}`;
   const token = localStorage.getItem("token");
 
   return axios({
@@ -585,13 +575,13 @@ function groupByName(responseData) {
   const names = groupedPermissionsArray.map(group => group.name);
 
 groupedNames = names;
-  console.log(groupedPermissions);
+  // console.log(groupedPermissions);
   return groupedPermissionsArray;
 }
 
 async function getPermissionId(id) {
   // console.log(id);
-  const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
+  const apiUrl = `${baseUrl}permission/${id}/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -653,7 +643,7 @@ async function getPermissionId(id) {
     });
 }
 function addUserPermissions(id) {
-  const apiUrl = `https://backend.norbit.com.tr/permission/${id}/`;
+  const apiUrl = `${baseUrl}permission/${id}/`;
   const token = localStorage.getItem("token");
 
   const selectedPermissions = document.querySelectorAll('input[type="checkbox"]:checked');
@@ -717,7 +707,7 @@ const editClickFunction = async () => {
 
 function getJobTitle() {
   // GET JOB TİTLE
-  const apiUrl = "http://backend.norbit.com.tr/jobs/list/";
+  const apiUrl = `${baseUrl}jobs/list/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -748,7 +738,7 @@ function getJobTitle() {
 
 const getJobTitleId = async (job_id) => {
 
-  const apiUrl = `https://backend.norbit.com.tr/jobs/${job_id}/`;
+  const apiUrl = `${baseUrl}jobs/${job_id}/`;
   const token = localStorage.getItem("token");
 
   const api = new Promise((resolve, reject) => {
@@ -781,7 +771,7 @@ const getJobTitleId = async (job_id) => {
 
 function getCompanyName() {
   // GET COMPANY NAME
-  const apiUrl = "http://backend.norbit.com.tr/company/list/";
+  const apiUrl = `${baseUrl}company/list/`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -810,7 +800,7 @@ function getCompanyName() {
 }
 
 const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
-  const apiUrl= `http://backend.norbit.com.tr/company/${id}/`
+  const apiUrl= `${baseUrl}company/${id}/`;
   const token  = localStorage.getItem('token');
 
   const api = new Promise((resolve, reject) => {
@@ -840,7 +830,7 @@ const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
 
 const getUserInfoId = async () => {
   //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
-  const apiUrl = "http://backend.norbit.com.tr/accounts/user/";
+  const apiUrl = `${baseUrl}accounts/user/`;
   const token = localStorage.getItem("token");
   const api = new Promise((resolve, reject) => {
     axios({
@@ -869,7 +859,7 @@ const getUserInfoId = async () => {
 };
 
 function getPermissionFilter(id, permissionName, codename) {
-  const apiUrl = `https://backend.norbit.com.tr/permission/?id=${id}&name=${permissionName}&codename=${codename}`;
+  const apiUrl = `${baseUrl}permission/?id=${id}&name=${permissionName}&codename=${codename}`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -899,7 +889,7 @@ searchButton.addEventListener("click", () => {
   searchData(searchTerm);
 });
 async function searchData(searchTerm) {
-  const apiUrl = `http://backend.norbit.com.tr/ems/list/?search=${searchTerm}`;
+  const apiUrl = `${baseUrl}ems/list/?search=${searchTerm}`;
   const token = localStorage.getItem("token");
 
   axios({
@@ -931,17 +921,19 @@ async function searchData(searchTerm) {
       console.error("Arama sırasında hata oluştu: ", error);
     });
 }
-searchInput.addEventListener("input", () => {
+searchInput.addEventListener('input', () => {
   const searchTerm = searchInput.value.trim();
-  if (searchTerm === "") {
-    const tableRows = document.querySelectorAll("#personalTable tbody tr");
-    tableRows.forEach((row) => {
-      row.style.display = "table-row";
-    });
+  if (searchTerm === '') {
+
+      const tableRows = document.querySelectorAll('#personalTable tbody tr');
+      tableRows.forEach(row => {
+          row.style.display = 'table-row';
+      });
   } else {
-    searchData(searchTerm);
+      searchData(searchTerm);
   }
 });
+
 const modalElement = document.getElementById("permissionModal");
 function clearInputPermission() {
   modalElement.addEventListener('hidden.bs.modal', function (event) {
