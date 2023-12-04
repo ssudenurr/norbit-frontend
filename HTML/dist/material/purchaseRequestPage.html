@@ -33,6 +33,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+<!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script> -->
+
 </head>
 
 <body>
@@ -125,7 +132,7 @@
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="d-flex align-items-center">
                                         <img class="rounded-circle header-profile-user"
-                                            src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                                            src="" alt="Header Avatar">
                                         <span class="text-start ms-xl-2">
                                             <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="userName"></span>
                                             <span
@@ -322,8 +329,8 @@
                                     </div>
                                     <div class="table-responsive table-card mt-3 mb-1">
                                         <table class="table align-middle table-striped mb-0" id="purchaseTable">
-                                            <thead class="table-light">
-                                                <tr>
+                                            <!-- <thead class="table-light">
+                                                 <tr>
                                                     <th scope="sort"></th> 
                                                     <th scope="sort">İsteği Yapan Kişi</th> 
                                                     <th scope="sort">Sorumlu Kişi</th> 
@@ -334,11 +341,29 @@
                                                     <th scope="sort">Sayısı</th>                        
                                                     <th scope="sort">Link</th>
                                                     <th scope="sort">İstek Tarihi</th>
+                                                    <th scope="sort">Son Tarih</th>
                                                     <th scope="sort">Açıklama</th>
                                                     <th scope="sort">Düzenleme</th>
-                                                    <!-- <th scope="col"></th>   -->
-                                                </tr>
-                                            </thead>
+                                                </tr> 
+
+                                            </thead>                                                 -->
+                                            <thead class="table-light">
+                                                    <tr>
+                                                        <th scope="sort" ></th> 
+                                                        <th class="sort" data-sort = "owner">İsteği Yapan Kişi</th> 
+                                                        <th class="sort" data-sort = "responsible-person">Sorumlu Kişi</th> 
+                                                        <th class="sort" data-sort = "status">Durum</th>                                   
+                                                        <th class="sort" data-sort = "product-name">Ürün Adı</th>      
+                                                        <th class="sort" data-sort = "category">Kategori</th>                              
+                                                        <th class="sort" data-sort = "price">Fiyat</th>    
+                                                        <th class="sort" data-sort = "count">Sayısı</th>                        
+                                                        <th class="sort" data-sort = "link">Link</th>
+                                                        <th class="sort" data-sort = "purchasing-date">İstek Tarihi</th>
+                                                        <th class="sort" data-sort = "deadline">Son Tarih</th>
+                                                        <th scope="sort" data-sort = "description">Açıklama</th>
+                                                        <th scope="col" data-sort = "edit">Düzenleme</th>
+                                                    </tr>
+                                                </thead>
                                             <tbody class="list form-check-all">
                                                 <!-- Add Personal Data-->
                                             </tbody>
@@ -402,8 +427,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <label for="purchasingDate" class="form-label">İstek Tarihi</label>
-                                    <input type="date" name="datetime" class="form-control"  id="purchasingDate">
+                                    <label for="deadline" class="form-label">Son Tarih</label>
+                                    <input type="date" name="datetime" class="form-control"  id="deadline">
                                 </div>
                                 <div class="col-md-6">
                                     <label for="link" class="form-label" >Link</label>
