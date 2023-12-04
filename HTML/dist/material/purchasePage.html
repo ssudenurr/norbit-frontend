@@ -310,7 +310,7 @@
                             <div class="purchase-request-list">
                                 <div class="g-4 mb-3 row">
                                     <div class="col-sm-auto col">
-                                        <div class="table-buttons">
+                                        <div class="table-buttons" id="buttons-container" style="display: none;">
                                             
                                             <a class="btn btn-outline-success btn-sm fw-semibold fs-14" id="edit-btn" style="width: 75px; height: 32px;" > Düzenle</a>
                                             <a class="btn btn-outline-primary btn-sm fw-semibold fs-14" id="reply" style="width: 68px; height: 32px;" > Geri Al</a> 
@@ -335,6 +335,7 @@
                                             <tr>
                                                 <th scope="sort">ID</th> 
                                                 <th scope="sort">İsteyen Kişi</th> 
+                                                <th scope="sort">Sipariş Veren Kişi</th> 
                                                 <th scope="sort" >Durum</th>                                   
                                                 <th scope="sort">Ürün Adı</th>                                    
                                                 <th scope="sort">Fiyat</th>    
@@ -420,9 +421,10 @@
                                 <label for="inputOrderDate" class="form-label">Sipariş Tarihi</label>
                                 <input type="date" name="text" class="form-control"  id="inputOrderDate">
                             </div>
-                            <!-- <div class="col-md-6" id="purchaseDateMenu">
-                                <label for="inputPurchaseDate" class="form-label">Satın Alınan Tarihi</label>
-                                <input type="date" name="text" class="form-control"  id="inputPurchaseDate">
+                            <!-- <div class="col-md-6" >
+                                <label for="inputOwnerName" class="form-label">Sipariş Veren Kişi</label>
+                                <select type="text" class="form-select" id="inputOwnerName">
+                                </select>
                             </div> -->
 
                         </div>
