@@ -6,7 +6,7 @@ const productName = document.getElementById("productName");
 const price = document.getElementById("price");
 const count = document.getElementById("count");
 const link = document.getElementById("link");
-const purchasingDate = document.getElementById("purchasingDate");
+const deadline = document.getElementById("deadline");
 const description = document.getElementById("description");
 const responsiblePerson = document.getElementById("responsible-person");
 const statusData = document.getElementById("statusData");
@@ -155,14 +155,14 @@ closeBtn.addEventListener("click", () => {
 });
 
 addBtn.addEventListener("click", () => {
-  getResponsiblePerson();
   clearInput();
   modalButtonBox.innerHTML += `
     <button type="button" class="btn btn-primary" id="row-add-btn" onclick='createPurchase()'>Ekle</button>
     `;
   document.querySelector("#row-add-btn").addEventListener("click", () => {
-    // if (modalValueControl()) {
-    //   modal.hide();
+
+      // modal.hide();
+    //   if (modalValueControl()) {
     // }
   });
 });
@@ -174,7 +174,6 @@ function valueControl() {
     !productName.value ||
     !price.value ||
     !count.value ||
-    !purchasingDate.value ||
     !link.value ||
     !description.value
   ) {
@@ -204,7 +203,7 @@ async function createPurchase() {
       product_name: productName.value,
       price: price.value,
       count: count.value,
-      created_at: formatDateToCustomFormat(purchasingDate.value),
+      deadline: formatDateToCustomFormat(deadline.value),
       e_commerce_site: link.value,
       description: description.value,
       status: statusData.value,
@@ -213,10 +212,10 @@ async function createPurchase() {
     },
   })
     .then(async (response) => {
-      getResponsiblePerson();
+      // getResponsiblePerson();
       clearInput();
       tableBody.innerHTML = "";
-      // window.location.reload();
+      window.location.reload();
       purchaseList();
     })
     .catch((error) => {
@@ -266,7 +265,7 @@ const getPurchaseData = (purchaseId) => {
       const productNameData = purchaseData.product_name;
       const priceData = purchaseData.price;
       const countData = purchaseData.count;
-      const purchasingDateData = purchaseData.created_at;
+      const deadlineData = purchaseData.deadline;
       const linkData = purchaseData.e_commerce_site;
       const descriptionData = purchaseData.description;
 
@@ -276,7 +275,7 @@ const getPurchaseData = (purchaseId) => {
       productName.value = productNameData;
       price.value = priceData;
       count.value = countData;
-      purchasingDate.value = formatTarih(purchasingDateData);
+      deadline.value = formatTarih(deadlineData);
       link.value = linkData;
       description.value = descriptionData;
       getResponsiblePerson(purchaseData.responsible_person);
@@ -291,7 +290,6 @@ function getModalValues() {
     productName: productName.value,
     price: price.value,
     count: count.value,
-    purchasingDate: purchasingDate.value,
     link: link.value,
     description: description.value,
   };
@@ -316,6 +314,7 @@ const showPurchaseRequest = async (requestData) => {
     const count = item.count || "-";
     const e_commerce_site = item.e_commerce_site || "-";
     const purchasing_date = formatTarih(item.created_at) || "-";
+    const deadline = formatTarih(item.deadline) || "-";
     const description = item.description || "-";
     const category = (await getCategoryId(item.category)) || "-";
     
@@ -341,6 +340,7 @@ const showPurchaseRequest = async (requestData) => {
         </a>
         </td>
         <td>${purchasing_date}</td>  
+        <td>${deadline}</td>  
         <td>${description}</td>
         <td><button id="editBtn" class="btn btn-outline-success mdi mdi-pencil btn-sm fs-5 edit-btn" data-bs-toggle ="modal" data-bs-target="#exampleModal" data-user-id='${
           item.id
@@ -590,7 +590,6 @@ function modalValueControl() {
   const newProductName = document.getElementById("productName");
   const newPrice = document.getElementById("price");
   const newCount = document.getElementById("count");
-  const newPurchaseDate = document.getElementById("purchasingDate");
   const newLink = document.getElementById("link");
   // const newDescription = document.getElementById("description");
 
@@ -601,7 +600,6 @@ function modalValueControl() {
     !newProductName.value ||
     !newPrice.value ||
     !newCount.value ||
-    !newPurchaseDate.value ||
     !newLink.value
   ) {
     alert.style.display = "block";
@@ -641,7 +639,7 @@ function editPurchaseRequest(purchaseId) {
       responsible_person: responsiblePerson.value,
       product_name: productName.value,
       price: price.value,
-      created_at: formatDateToCustomFormat(purchasingDate.value),
+      deadline: formatDateToCustomFormat(deadline.value),
       count: count.value,
       e_commerce_site: link.value,
       description: description.value,
@@ -736,7 +734,7 @@ function clearInput() {
   price.value = "";
   count.value = "";
   link.value = "";
-  purchasingDate.value = "";
+  deadline.value = "";
   description.value = "";
   responsiblePerson.value = "";
 }
@@ -782,6 +780,7 @@ window.addEventListener("load", async (event) => {
     statusMenu.style.display = "block";
     getStatusData();
   }
+  getResponsiblePerson();
 
   purchaseList(1);
   getCategoryData();
