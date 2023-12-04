@@ -12,7 +12,7 @@ const countInput = document.getElementById('inputCount');
 const linkInput = document.getElementById('inputLink');
 const descriptionInput = document.getElementById('inputDescription');
 const categoryInput = document.getElementById('inputCategory');
-
+const ownerInput = document.getElementById('inputOwnerName');
 const modaltitle = document.getElementById('exampleModalLabel');
 
 const addButton = document.getElementById('add-btn');
@@ -33,8 +33,7 @@ function valueControl(){
         !whereInTheOfficeInput.value ||
         !priceInput.value ||
         !countInput.value ||
-        !linkInput.value ||
-        !descriptionInput.value
+        !categoryInput 
 
     ){
         alert.style.display = "block";
@@ -78,18 +77,22 @@ function formatTarih(tarih) {
 }
 
 function formatDateToCustomFormat(date) {
-  let date2 = new Date(date)
-  var yyyy = date2.getFullYear();
-  var MM = String(date2.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
-  var dd = String(date2.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
-  var hh = String(date2.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
-  var mm = String(date2.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
-
-  // Sonuç formatını birleştiriyoruz
-  var formattedDate = yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm;
-
-  return formattedDate;
-}
+    if (!date) {
+        return null; // Handle the case where date is empty
+    }
+    let date2 = new Date(date);
+    var yyyy = date2.getFullYear();
+    var MM = String(date2.getMonth() + 1).padStart(2, '0');
+    var dd = String(date2.getDate()).padStart(2, '0');
+    var hh = String(date2.getHours()).padStart(2, '0');
+    var mm = String(date2.getMinutes()).padStart(2, '0');
+    var ss = String(date2.getSeconds()).padStart(2, '0');
+  
+    // Format the date string
+    var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
+  
+    return formattedDate;
+  }
 
 
 function createInventory(){
@@ -116,6 +119,7 @@ function createInventory(){
       }
   }).then((response) => {
     // getCategoryList();
+    // getResponsiblePerson();
     window.location.reload();
 
   }).catch((error) => {
@@ -135,7 +139,8 @@ function getRowData(rowId){
       },
   }).then( async (response)=>{
       const rowData = response.data;
-
+      
+    //   const ownerData = await getResponsibleId(rowData.owner);
       const productNameData = rowData.product_name;
       const purchaseDateData = rowData.satin_alinan_tarih;
       const whereInTheOfficeInputData = rowData.where_in_the_office;
@@ -145,6 +150,7 @@ function getRowData(rowId){
       const descriptionData = rowData.description;
       const categoryData = await getCategoryId(rowData.category);
 
+    //   ownerInput.value = ownerData;
       categoryInput.value = categoryData;
       purchaseDate.value = formatTarih(purchaseDateData);
       whereInTheOfficeInput.value = whereInTheOfficeInputData;
@@ -154,6 +160,7 @@ function getRowData(rowId){
       linkInput.value = linkData;
       descriptionInput.value = descriptionData; 
       getCategoryList(rowData.category);
+    //   getResponsiblePerson(rowData.owner)
 
 
   }).catch((error) => {
@@ -289,12 +296,14 @@ const showInventory =  async (responseData) => {
         const count = item.count || '-';
         const e_commerce_site = item.e_commerce_site || '-';
         const description = item.description || '-';
+        const ownerName = await getResponsibleId(item.owner) || '-';
         // console.log(item.category[0]);
         // const categoryName = await getCategoryId(item.category[0]) ;
         const categoryName = await getCategoryId(item.category[0])
         newRow.innerHTML = `
         <td><input class="form-check" type ="checkbox"  id="checkbox" value=""</td>
         <td>${product_name}</td>
+        <td>${ownerName}</td>
         <td>${purchasing_date}</td>
         <td>${categoryName}</td>
         <td>${price}</td>
@@ -317,9 +326,9 @@ const showInventory =  async (responseData) => {
         checkBox.addEventListener('change', (e) => {
             e.preventDefault();
             const inventoryId = item.id;
-            if(this.checked){
-                console.log("Seçilen satırın ID'si: " + inventoryId);
-            }   
+            // if(this.checked){
+            //     console.log("Seçilen satırın ID'si: " + inventoryId);
+            // }   
             editButton.addEventListener('click', () =>{
                 rowAdd.style.display = "none";
                 rowEdit.style.display = "block";
@@ -390,74 +399,83 @@ try {
 }
 }
 
+let personList = [];
+async function getResponsiblePerson(purchaseId, page = 1) {
+    const apiUrl = `${baseUrl}ems/list/?page=${page}`;
+    const token = localStorage.getItem("token");
+  
+    try {
+      const response = await axios({
+        method: "get",
+        url: apiUrl,
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+  
+      const personNameData = response.data.results;
+      console.log(response.data);
+  
+      const personListElement = document.getElementById("inputOwnerName");
+  
+      personNameData.forEach((person) => {
+        const option = document.createElement("option");
+        option.value = person.id;
+        option.text = person.first_name + " " + person.last_name;
+        if (person.id === purchaseId) {
+          option.selected = true; // Seçilen kişiyi seçili olarak işaretle
+        }
+        personListElement.appendChild(option);
+        personList.push(person);
+      });
+  
+      // Check if there are more pages
+      const nextPage = response.data.next;
+      if (nextPage !== null) {
+        const nextPage = page + 1;
+        return await getResponsiblePerson(personList, nextPage);
+      } else {
+        return personList;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+const getResponsibleId = async (id) => {
+    const apiUrl= `${baseUrl}ems/list/?id=${id}`
+    const token  = localStorage.getItem('token');
 
-//  
-// function getResponsiblePerson(purchaseId){
-//     const apiUrl= "http://backend.norbit.com.tr/ems/list/"
-//     const token  = localStorage.getItem('token');
+    const api = new Promise((resolve, reject) => {
+        axios({
+            method:'get',
+            url:apiUrl,
+            headers:{ 
+                "Authorization": `Token ${token}`
+            },
+        }).then((response)=>{
+            const responseData = response.data.results
 
-//     axios({
-//         method:'get',
-//         url:apiUrl,
-//         headers:{ 
-//             "Authorization": `Token ${token}`
-//         },
-//     }).then((response)=>{
-//         const personNameData = response.data.results;
+            const ownerData = responseData.map((item) => {
+                const firstname = item.first_name;
+                const lastname = item.last_name;
+                return firstname + ' ' + lastname;
+            });
 
-//         const personList = document.getElementById('responsible-person');
-//         personList.innerHTML = '';
+            resolve(ownerData);
+        }).catch((error) => {
+            reject(error)
+        
+        });
+    });
 
-//         personNameData.forEach((person) => {
-//             const option = document.createElement('option');
-//             option.value= person.id;
-//             option.text = person.first_name + ' ' + person.last_name;
-//             if (person.id === purchaseId) {
-//                 option.selected = true; // Seçilen kişiyi seçili olarak işaretle
-//               }
-//             personList.appendChild(option)
-//         });
-
-//     }).catch((error) => {
-//           console.log(error);
-//         });
-// };
-// const getResponsibleId = async (id) => {
-//   const apiUrl= `http://backend.norbit.com.tr/ems/list/?id=${id}`
-//   const token  = localStorage.getItem('token');
-
-//   const api = new Promise((resolve, reject) => {
-//       axios({
-//           method:'get',
-//           url:apiUrl,
-//           headers:{ 
-//               "Authorization": `Token ${token}`
-//           },
-//       }).then((response)=>{
-//           const responseData = response.data.results
-
-//           const ownerData = responseData.map((item) => {
-//               const firstname = item.first_name;
-//               const lastname = item.last_name;
-//               return firstname + ' ' + lastname;
-//           });
-
-//           resolve(ownerData);
-//       }).catch((error) => {
-//           reject(error)
-      
-//       });
-//   });
-
-//   try {
-//       const response = await api;
-//       return response;
-//   }
-//   catch (e) {
-//       return e
-//   }
-// } 
-
+    try {
+        const response = await api;
+        return response;
+    }
+    catch (e) {
+        return e
+    }
+} 
 searchButton.addEventListener("click", () => {
     const searchTerm = searchInput.value.trim();
     searchData(searchTerm);
@@ -519,6 +537,7 @@ function clearInput() {
     descriptionInput.value = '';
   }
 window.addEventListener('load', () =>{
+    // getResponsiblePerson();
     getInventory(1);
     // writeContent();
 })
