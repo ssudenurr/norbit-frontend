@@ -17,25 +17,35 @@ const linkInput = document.getElementById('inputLink');
 const purchasingDateInput = document.getElementById('inputPurchasingDate');
 const descriptionInput = document.getElementById('inputDescription');
 const orderDateInput = document.getElementById('inputOrderDate');
+const ownerNameInput = document.getElementById('inputOwnerName');
 const rowEdit = document.getElementById('editBtn');
 
 function formatTarih(tarih) {
+    if (!tarih) {
+      return ""; // or handle the null case as needed
+    }
     const tarihParcalari = tarih.split('T');
     return tarihParcalari[0];
-}
-function formatDateToCustomFormat(date) {
-    let date2 = new Date(date)
-    var yyyy = date2.getFullYear();
-    var MM = String(date2.getMonth() + 1).padStart(2, '0'); // Ayı 2 basamaklı hale getiriyoruz
-    var dd = String(date2.getDate()).padStart(2, '0'); // Günü 2 basamaklı hale getiriyoruz
-    var hh = String(date2.getHours()).padStart(2, '0'); // Saati 2 basamaklı hale getiriyoruz
-    var mm = String(date2.getMinutes()).padStart(2, '0'); // Dakikayı 2 basamaklı hale getiriyoruz
+  }
   
-    // Sonuç formatını birleştiriyoruz
-    var formattedDate = yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm;
+  function formatDateToCustomFormat(date) {
+    if (!date) {
+        return null; // Handle the case where date is empty
+    }
+    let date2 = new Date(date);
+    var yyyy = date2.getFullYear();
+    var MM = String(date2.getMonth() + 1).padStart(2, '0');
+    var dd = String(date2.getDate()).padStart(2, '0');
+    var hh = String(date2.getHours()).padStart(2, '0');
+    var mm = String(date2.getMinutes()).padStart(2, '0');
+    var ss = String(date2.getSeconds()).padStart(2, '0');
+  
+    // Format the date string
+    var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
   
     return formattedDate;
 }
+
 function getRowData(rowId){
     const apiUrl = `${baseUrl}purchase/${rowId}/`
     const token  = localStorage.getItem('token');
@@ -48,7 +58,8 @@ function getRowData(rowId){
         },
     }).then( async (response)=>{
         const rowData = response.data;
-
+        console.log(rowData);
+        // const ownerData = await getResponsibleId(rowData.owner);
         
         const whereInTheOfficeInputData = rowData.where_in_the_office;
         const productNameData = rowData.product_name;
@@ -65,47 +76,49 @@ function getRowData(rowId){
         } else {
             whereInTheOfficeInput.value = ''; // Set an empty value
         }
+        // ownerNameInput.value = ownerData;
         productNameInput.value = productNameData;
         priceInput.value = priceData;
         countInput.value = countData;
         linkInput.value = linkData;
         purchasingDateInput.value = formatTarih(purchasingDateData);
         orderDateInput.value = formatTarih(orderDateData);
+        // getResponsiblePerson(rowData.owner)
         // console.log(purchasingDateInput.value);
-        ;
         // descriptionInput.value = descriptionData;
 
     })
 }
-
-function editPurchase(purchaseId){
-    const apiUrl = `${baseUrl}purchase/${purchaseId}/`
-    const token  = localStorage.getItem('token');
+function editPurchase(purchaseId) {
+    const apiUrl = `${baseUrl}purchase/${purchaseId}/`;
+    const token = localStorage.getItem('token');
 
     axios({
-        method:'patch',
-        url:apiUrl,
-        headers:{
+        method: 'patch',
+        url: apiUrl,
+        headers: {
             "Authorization": `Token ${token}`
         },
-        data:{
+        data: {
             where_in_the_office: whereInTheOfficeInput.value,
-            product_name:productNameInput.value,
-            price:priceInput.value,
-            count:countInput.value,
-            e_commerce_site:linkInput.value,
-            created_at:formatDateToCustomFormat(purchasingDateInput.value),
-            siparis_verilen_tarih:formatDateToCustomFormat(orderDateInput.value),
-            // description:newDescription.value,
+            // owner: ownerNameInput.value,
+            product_name: productNameInput.value,
+            price: priceInput.value,
+            count: countInput.value,
+            e_commerce_site: linkInput.value,
+            created_at: formatDateToCustomFormat(purchasingDateInput.value),
+            siparis_verilen_tarih: formatDateToCustomFormat(orderDateInput.value), // Use empty string if it's empty
+            // description: newDescription.value,
         }
-    }).then((response)=>{
+    }).then((response) => {
         // const userData = response.data
-        window.location.reload();   
+        window.location.reload();
 
     }).catch((error) => {
-        console.error(error)
+        console.error(error);
     });
 }
+
 async function cancelRequest(requestId){
     const apiUrl = `${baseUrl}purchase-request/${requestId}/`;
     const token = localStorage.getItem('token');
@@ -237,6 +250,7 @@ async function getPurchase(page = 1){
     }).then((response) =>{
         const responseData = response.data.results;
         const nextPage = response.next;
+        // getResponsiblePerson();
         showPurchase(responseData);
         responseData.map((item) => {
             dataList.push(item);
@@ -257,16 +271,18 @@ const showPurchase = async (responseData)  => {
         const newRow = document.createElement('tr') ;
         const responsiblePerson = await getResponsibleId(purchase.responsible_person)  || '-';
         const productName = purchase.product_name || '-';
+        const ownerName = await getResponsibleId(purchase.owner)  || '-';
         const price = purchase.price || '-';
         const count = purchase.count || '-';
         const e_commerce_site = purchase.e_commerce_site || '-';
         const purchasing_date = formatTarih(purchase.created_at);
         const orderDate = purchase.siparis_verilen_tarih ? formatTarih(purchase.siparis_verilen_tarih) : '-';
         const description = purchase.description || '-';
-        let statusData = purchase.siparis_verilen_tarih ? "Tamamlandı" : (purchase.status === "ON" ? "Onaylandı" : "-");
+        let statusData = ownerName || purchase.siparis_verilen_tarih ? "Tamamlandı" : (purchase.status === "ON" ? "Onaylandı" : "-");
         newRow.innerHTML = `
         <td><input class="form-check" type ="checkbox"  id="checkbox" value=""</td>
         <td>${responsiblePerson}</td>
+        <td>${ownerName}</td>
         <td><span class="badge badge bg-success fw-semibold fs-12">${statusData}</span></td>
         <td>${productName}</td>
         <td>${price}</td>
@@ -304,6 +320,7 @@ const showPurchase = async (responseData)  => {
                 replyRequest(purchaseId);
             });
             editBtn.addEventListener('click', () => {
+                // getResponsiblePerson();
                 getRowData(purchaseId);
                 modal.show();
                 // editPurchase();
@@ -353,37 +370,48 @@ const getResponsibleId = async (id) => {
         return e
     }
 } 
-
-function getResponsiblePerson(purchaseId){
-    const apiUrl= `${baseUrl}ems/list/`;
-    const token  = localStorage.getItem('token');
-
-    axios({
-        method:'get',
-        url:apiUrl,
-        headers:{ 
-            "Authorization": `Token ${token}`
-        },
-    }).then((response)=>{
-        const personNameData = response.data.results;
-
-        const personList = document.getElementById('responsible-person');
-        personList.innerHTML = '';
-
-        personNameData.forEach((person) => {
-            const option = document.createElement('option');
-            option.value= person.id;
-            option.text = person.first_name + ' ' + person.last_name;
-            if (person.id === purchaseId) {
-                option.selected = true; // Seçilen kişiyi seçili olarak işaretle
-              }
-            personList.appendChild(option)
-        });
-
-    }).catch((error) => {
-          console.log(error);
-        });
-};
+let personList = [];
+// async function getResponsiblePerson(purchaseId, page = 1) {
+//     const apiUrl = `${baseUrl}ems/list/?page=${page}`;
+//     const token = localStorage.getItem("token");
+  
+//     try {
+//       const response = await axios({
+//         method: "get",
+//         url: apiUrl,
+//         headers: {
+//           Authorization: `Token ${token}`,
+//         },
+//       });
+  
+//       const personNameData = response.data.results;
+//       console.log(response.data);
+  
+//       const personListElement = document.getElementById("inputOwnerName");
+  
+//       personNameData.forEach((person) => {
+//         const option = document.createElement("option");
+//         option.value = person.id;
+//         option.text = person.first_name + " " + person.last_name;
+//         if (person.id === purchaseId) {
+//           option.selected = true; // Seçilen kişiyi seçili olarak işaretle
+//         }
+//         personListElement.appendChild(option);
+//         personList.push(person);
+//       });
+  
+//       // Check if there are more pages
+//       const nextPage = response.data.next;
+//       if (nextPage !== null) {
+//         const nextPage = page + 1;
+//         return await getResponsiblePerson(personList, nextPage);
+//       } else {
+//         return personList;
+//       }
+//     } catch (error) {
+//       console.error(error);
+//     }
+//   }
 searchButton.addEventListener('click', () => {
     const searchTerm = searchInput.value;
         searchData(searchTerm);
@@ -436,8 +464,34 @@ searchInput.addEventListener('input', () => {
     }
 });
 
-
+async function getUserInfoId (){
+    try {
+      const apiUrl = `${baseUrl}accounts/user/`;
+      const token = localStorage.getItem("token");
+  
+      const response = await axios({
+        method: "get",
+        url: apiUrl,
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+  
+      const userInfo = response.data;
+      const buttonsContainer = document.getElementById("buttons-container");
+      if (userInfo.user_type === "AdminUser") {
+        buttonsContainer.style.display = "block"
+      }
+  
+      return userInfo;
+    } catch (error) {
+      console.error(error);
+      throw error; // Re-throw the error to propagate it to the caller if needed
+    }
+  };
+  
 window.addEventListener('load', (event) => {
+    getUserInfoId();
     getPurchase();
     });
     
