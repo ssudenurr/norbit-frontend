@@ -1771,7 +1771,7 @@
       scrollFunction();
     });
 
-const baseUrl = "http://backend.norbit.com.tr:9999/";
+const baseUrl = "https://backend.norbit.com.tr:9999/";
 
 const userName = document.getElementById('userName')
 const userType = document.getElementById('userType')
