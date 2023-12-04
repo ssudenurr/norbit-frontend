@@ -18,7 +18,7 @@ saveBtn.style.display = "none";
 const addBtn = document.getElementById("add-btn");
 addBtn.addEventListener("click", () => {
     addNewInfo();
-
+    clearInput();
   modal.hide();
   window.location.reload();
 });
