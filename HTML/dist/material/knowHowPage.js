@@ -173,11 +173,21 @@ const AddContent = async (knowHowData) => {
                             </div>
                         </div>
                         <div class="mt-auto d-flex justify-content-end align-items-end">
-                            <div>
-                                <button id="editBtn" class="btn btn-outline-success btn-m fw-semibold edit-btn" style="letter-spacing: 0.5px;" onclick='createEditButton(${item.id})' data-user-id='${userId}' data-bs-toggle="modal" data-bs-target="#exampleModal">Düzenle</button>
-                                <button class="btn btn-outline-danger btn-mm fw-semibold delete-btn" style="letter-spacing: 0.5px;" onclick='deleteClickFunction(${item.id})' data-user-id='${item.id}'>Sil</button>
-                            </div>
+                        <div class="mt-auto d-flex justify-content-end align-items-end">
+                        <div>
+                            ${
+                                userId.id === item.owner || userId.user_type === "AdminUser"
+                                    ? `<button id="editBtn" class="btn btn-outline-success btn-m fw-semibold edit-btn" style="letter-spacing: 0.5px;" onclick='createEditButton(${item.id})' data-user-id='${userId}' data-bs-toggle="modal" data-bs-target="#exampleModal">Düzenle</button>`
+                                    : ''
+                            }
+                            ${
+                                userId.id === item.owner || userId.user_type === "AdminUser"
+                                    ? `<button class="btn btn-outline-danger btn-mm fw-semibold delete-btn" style="letter-spacing: 0.5px;" onclick='deleteClickFunction(${item.id})' data-user-id='${item.id}'>Sil</button>`
+                                    : ''
+                            }
                         </div>
+                    </div>
+                    </div>
                     </div>
                 </div>
             </div>
