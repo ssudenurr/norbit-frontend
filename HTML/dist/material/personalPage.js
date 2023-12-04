@@ -56,19 +56,25 @@ function formatTarih(tarih) {
 }
 
 
+  
 function formatDateToCustomFormat(date) {
+  if (!date) {
+      return null; // Handle the case where date is empty
+  }
   let date2 = new Date(date);
   var yyyy = date2.getFullYear();
-  var MM = String(date2.getMonth() + 1).padStart(2, "0"); // Ayı 2 basamaklı hale getiriyoruz
-  var dd = String(date2.getDate()).padStart(2, "0"); // Günü 2 basamaklı hale getiriyoruz
-  var hh = String(date2.getHours()).padStart(2, "0"); // Saati 2 basamaklı hale getiriyoruz
-  var mm = String(date2.getMinutes()).padStart(2, "0"); // Dakikayı 2 basamaklı hale getiriyoruz
+  var MM = String(date2.getMonth() + 1).padStart(2, '0');
+  var dd = String(date2.getDate()).padStart(2, '0');
+  var hh = String(date2.getHours()).padStart(2, '0');
+  var mm = String(date2.getMinutes()).padStart(2, '0');
+  var ss = String(date2.getSeconds()).padStart(2, '0');
 
-  // Sonuç formatını birleştiriyoruz
+  // Format the date string
   var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
 
   return formattedDate;
 }
+
 let userId = null; 
 const closeBtn = document.getElementById("btn-close");
 closeBtn.addEventListener("click", () => {
@@ -323,7 +329,7 @@ function editPersonel(userID) {
     .then((response) => {
       const userData = response.data;
       console.log(userData);
-      window.location.reload();
+      // window.location.reload();
     })
     .catch((error) => {
       console.error(error);
@@ -504,6 +510,60 @@ function getPermission(page = 1) {
     }
   });
 }
+const permissionMapping = {
+  "Can add account info": "Hesap bilgisi ekleyebilir",
+  "Can change account info": "Hesap bilgisini değiştirebilir",
+  "Can delete account info": "Hesap bilgisini silebilir",
+  "Can view account info": "Hesap bilgisini görebilir",
+  "Can add projects": "Proje ekleyebilir",
+  "Can change projects": "Projeleri değiştirebilir",
+  "Can delete projects": "Projeleri silebilir",
+  "Can view projects": "Projeleri görebilir",
+  "Can add inventory": "Envanter ekleyebilir",
+  "Can change inventory": "Envanteri değiştirebilir",
+  "Can delete inventory": "Envanteri silebilir",
+  "Can view inventory": "Envanteri görebilir",
+  "Can add know how": "Bilgi ekleyebilir",
+  "Can change know how": "Bilgiyi değiştirebilir",
+  "Can delete know how": "Bilgiyi silebilir",
+  "Can view know how": "Bilgiyi görebilir",
+  "Can add company": "Şirket ekleyebilir",
+  "Can change company": "Şirketi değiştirebilir",
+  "Can delete company": "Şirketi silebilir",
+  "Can view company": "Şirketi görebilir",
+  "Can add job title": "İş unvanı ekleyebilir",
+  "Can change job title": "İş unvanını değiştirebilir",
+  "Can delete job title": "İş unvanını silebilir",
+  "Can view job title": "İş unvanını görebilir",
+  "Can add category": "Kategori ekleyebilir",
+  "Can change category": "Kategoriyi değiştirebilir",
+  "Can delete category": "Kategoriyi silebilir",
+  "Can view category": "Kategoriyi görebilir",
+  "Can add purchase request": "Satın alma talebi ekleyebilir",
+  "Can change purchase request": "Satın alma talebini değiştirebilir",
+  "Can delete purchase request": "Satın alma talebini silebilir",
+  "Can view purchase request": "Satın alma talebini görebilir",
+  "Can add email address": "E-posta adresi ekleyebilir",
+  "Can change email address": "E-posta adresini değiştirebilir",
+  "Can delete email address": "E-posta adresini silebilir",
+  "Can view email address": "E-posta adresini görebilir",
+  "Can add email confirmation": "E-posta onayı ekleyebilir",
+  "Can change email confirmation": "E-posta onayını değiştirebilir",
+  "Can delete email confirmation": "E-posta onayını silebilir",
+  "Can view email confirmation": "E-posta onayını görebilir",
+  "Can add permission": "İzin ekleyebilir",
+  "Can change permission": "İzini değiştirebilir",
+  "Can delete permission": "İzini silebilir",
+  "Can view permission": "İzini görebilir",
+  "Can add drive": "Sürücü ekleyebilir",
+  "Can change drive": "Sürücüyü değiştirebilir",
+  "Can delete drive": "Sürücüyü silebilir",
+  "Can view drive": "Sürücüyü görebilir",
+  "Can add drive file": "Sürücü dosyası ekleyebilir",
+  "Can change drive file": "Sürücü dosyasını değiştirebilir",
+  "Can delete drive file": "Sürücü dosyasını silebilir",
+  "Can view drive file": "Sürücü dosyasını görebilir",
+};
 
 
 let itemName = []; 
@@ -514,28 +574,24 @@ function createPermissionData(responseData) {
   responseData.forEach((item) => {
     if (!excludedValues.includes(item.id)) {
       const nospaceName = item.name.trim();
-      //   console.log(nospaceName)
-      if (!itemName.includes(nospaceName)) {
+      const translatedName = permissionMapping[nospaceName] || nospaceName;
+
+      if (!itemName.includes(translatedName)) {
         const permissionItem = document.createElement("div");
         permissionItem.className = "form-check";
-        //   console.log(item)
         permissionItem.innerHTML = `
           <input class="form-check-input modal-checkbox" type="checkbox" id="permission${item.id}" value="${item.id}" name="${item.name}">
           <label class="form-check-label" for="permission${item.id}">
-              ${item.name}
+              ${translatedName}
           </label>
         `;
 
         permissionList.appendChild(permissionItem);
-        itemName.push(nospaceName);
-        // console.log(itemName);
+        itemName.push(translatedName);
       }
     }
   });
-
-  // console.log(itemName);
 }
-
 
 
 getPermission()
