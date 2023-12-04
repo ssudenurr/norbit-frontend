@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // userControl();
 
 
-    const baseUrl = "http://backend.norbit.com.tr:9999/";
+    const baseUrl = "https://backend.norbit.com.tr:9999/";
 
   const usernameInput = document.getElementById("username");
   const passwordInput = document.getElementById("password-input");
