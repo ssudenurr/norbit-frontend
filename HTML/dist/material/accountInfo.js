@@ -17,10 +17,9 @@ const saveBtn = document.getElementById("save-btn");
 saveBtn.style.display = "none";
 const addBtn = document.getElementById("add-btn");
 addBtn.addEventListener("click", () => {
-    addNewInfo();
-    clearInput();
+  addNewInfo();
+  clearInput();
   modal.hide();
-  window.location.reload();
 });
 const closeBtn = document.getElementById("btn-close");
 closeBtn.addEventListener("click", () => {
@@ -59,6 +58,7 @@ const nextPageBtn = document.getElementById("next-page");
 const prevPageBtn = document.getElementById("prev-page");
 const pageNumber = document.getElementById("page-number");
 
+/*SAYFALAR ARASINDA GEZİNMEK İÇİNDİR */
 function displayDataOnPage() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -67,18 +67,20 @@ function displayDataOnPage() {
   tableBody.innerHTML = "";
   showAccountInfo(pageData);
 }
-
+/*BİR SONRAKİ SAYFAYA GEÇMEK İÇİN */
 nextPageBtn.addEventListener("click", () => {
   currentPage++;
   getAccountInfo(currentPage);
 });
-
+/*BİR ÖNCEKİ SAYFAYA GEÇMEK İÇİN */
 prevPageBtn.addEventListener("click", () => {
   if (currentPage > 1) {
     currentPage--;
     getAccountInfo(currentPage);
   }
 });
+
+/*HESAP BİLGİLERİNİ GETİRİR */
 async function getAccountInfo(itemsPerPage = 1) {
   const urlApi = `${baseUrl}accountinfo/list/?page=${itemsPerPage}`;
   const token = localStorage.getItem("token");
@@ -92,22 +94,20 @@ async function getAccountInfo(itemsPerPage = 1) {
   })
     .then((response) => {
       const responseData = response.data.results;
-      // const nextPage = response.next;
 
       showAccountInfo(responseData);
 
       responseData.map((item) => {
         dataList.push(item);
       });
-      // if (nextPage) {
-      //     // getAccountInfo(nextPage);
-      // }
-      // displayDataOnPage()
+
     })
     .catch((error) => {
       console.log(error);
     });
-}
+};
+
+/*HESAP BİLGİLERİNİ SAYFADA GÖSTERİR */
 const showAccountInfo = async (responseData) => {
   tableBody.innerHTML = "";
   for (const item of responseData) {
@@ -117,13 +117,13 @@ const showAccountInfo = async (responseData) => {
     const siteLink = item.website_link || "-";
     const siteMail = item.e_mail || "-";
     const sitePassword = item.password || "-";
-
+    //BELİRLİ BİR KARAKTERDEN SONRASINI GÖSTERMEZ
     newRow.innerHTML = `
     <td><input class="form-check" type="checkbox" id="checkbox" value=""></td>    
     <td>${siteName}</td>
     <td>
         <a href="${siteLink}" target="_blank" style="text-decoration: underline!important; max-width: 220px; display: block;">
-        ${siteLink.length > 45 ? siteLink.substr(0, 45) + " ..." : siteLink}
+        ${siteLink.length > 45 ? siteLink.substr(0, 45) + " ..." : siteLink} 
     </a>
 </td>
     <td>${siteMail}</td>
@@ -150,6 +150,7 @@ const showAccountInfo = async (responseData) => {
       saveBtn.addEventListener("click", () => {
         valueControl();
         editAccountInfo(infoId);
+        clearInput();
       });
       deleteBtn.addEventListener("click", () => {
         deleteAccountInfo(infoId);
@@ -158,6 +159,53 @@ const showAccountInfo = async (responseData) => {
   }
 };
 
+let currentSortOrder = 'asc';
+const table = document.getElementById("account-info-table");
+/*TABLODAKİ VERİLERİ ASC VE DESC OLARAK SIRALAR */
+function sortTable(columnIndex) {
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+  rows.sort((a, b) => {
+    const aValue = a.children[columnIndex].textContent.trim();
+    const bValue = b.children[columnIndex].textContent.trim();
+    const comparison = aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+
+    return currentSortOrder === 'asc' ? comparison : -comparison;
+  });
+
+  // Clear the table body
+  table.querySelector("tbody").innerHTML = "";
+
+
+  rows.forEach(row => {
+    table.querySelector("tbody").appendChild(row);
+  });
+  currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+}
+
+
+const headers = document.querySelectorAll("thead th");
+/*TABLODAKİ BAŞLIKLARA TIKLANDIĞI ZAMAN BAŞLIĞIN VE SIRALANAN VERİLERİN RENGİ DEĞİŞİR */
+
+headers.forEach((header, index) => {
+  let sort_asc = true;
+  header.addEventListener("click", () => {
+    const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+    headers.forEach(header => header.classList.remove('active'))
+    header.classList.add('active');
+
+    document.querySelectorAll('td').forEach(td => td.classList.remove('active'));
+    rows.forEach(row => {
+      row.children[index].classList.add('active')
+    });
+
+    header.classList.toggle('asc', sort_asc);
+    sort_asc = header.classList.contains('asc') ? false : true;
+    sortTable(index);
+  });
+});
+/*YENİ BİR HESAP BİLGİSİ EKLER */
 const addNewInfo = async () => {
   const apiUrl = `${baseUrl}accountinfo/create/`;
   const token = localStorage.getItem("token");
@@ -177,13 +225,13 @@ const addNewInfo = async () => {
     },
   })
     .then(async (response) => {
-      // window.location.reload();
+      window.location.reload();
     })
     .catch((error) => {
       console.log(error);
     });
 };
-
+/*İLGİLİ SATIRDAKİ BİLGİLERİ MODALIN İÇİNE DOLDURUR */
 function getRowData(rowId) {
   const apiUrl = `${baseUrl}accountinfo/${rowId}/`;
   const token = localStorage.getItem("token");
@@ -207,8 +255,8 @@ function getRowData(rowId) {
     mailAdress.value = siteMail;
     accountPassword.value = sitePassword;
   });
-}
-
+};
+/*SEÇİLEN SATIRDAKİ BİLGİLERİ GÜNCELLER */
 function editAccountInfo(id) {
   const apiUrl = `${baseUrl}accountinfo/${id}/`;
   const token = localStorage.getItem("token");
@@ -236,6 +284,7 @@ function editAccountInfo(id) {
     });
 }
 
+/*SEÇİLEN SATIRDAKİ BİLGİLERİ SİLER */
 function deleteAccountInfo(id) {
   const apiUrl = `${baseUrl}accountinfo/${id}/`;
   const token = localStorage.getItem("token");
@@ -254,11 +303,15 @@ function deleteAccountInfo(id) {
     .catch((error) => {
       console.log("error", error);
     });
-}
+};
+
+
 searchButton.addEventListener("click", () => {
   const searchTerm = searchInput.value.trim();
   searchData(searchTerm);
 });
+
+/*TABLODAKİ VERİLER ARASINDA ARAMA YAPMA */
 async function searchData(searchTerm) {
   const apiUrl = `${baseUrl}accountinfo/list/?search=${searchTerm}`;
   const token = localStorage.getItem("token");
@@ -305,6 +358,7 @@ searchInput.addEventListener("input", () => {
     searchData(searchTerm);
   }
 });
+
 window.addEventListener("load", (event) => {
   getAccountInfo(1);
 });
