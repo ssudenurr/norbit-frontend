@@ -124,7 +124,7 @@
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="d-flex align-items-center">
                                         <img class="rounded-circle header-profile-user"
-                                            src="assets/images/users/avatar-1.jpg" alt="Header Avatar">
+                                            src="" alt="Header Avatar">
                                         <span class="text-start ms-xl-2">
                                             <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text" id="userName"></span>
                                             <span
@@ -400,14 +400,14 @@
             <div class="container-fluid">
                 <div class="profile-foreground position-relative mx-n4 mt-n4">
                     <div class="profile-wid-bg">
-                        <img src="assets/images/profile-bg.jpg" alt="" class="profile-wid-img" />
+                        <img src="" alt="" class="profile-wid-img" />
                     </div>
                 </div>
                 <div class="pt-4 mb-4 mb-lg-3 pb-lg-4 profile-wrapper">
                     <div class="row g-4" id="userDetails">
                         <div class="col-auto">
                             <div class="avatar-lg">
-                                <img src="assets/images/users/avatar-1.jpg" alt="user-img" class="img-thumbnail rounded-circle" />
+                                <img src="" alt="user-img" class="img-thumbnail rounded-circle" />
                             </div>
                         </div>
                         <!--end col-->
@@ -469,36 +469,48 @@
                                         </a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link fs-14" data-bs-toggle="tab" href="#projects" role="tab">
-                                            <i class="ri-price-tag-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Projects</span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
                                         <a class="nav-link fs-14" data-bs-toggle="tab" href="#documents" role="tab">
                                             <i class="ri-folder-4-line d-inline-block d-md-none"></i> <span class="d-none d-md-inline-block">Documents</span>
                                         </a>
                                     </li>
                                 </ul>
-                                <div class="modal" id="updateModal" tabindex="-1">
+                                <div class="modal" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true" data-bs-backdrop="false">
                                     <div class="modal-dialog">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title">Bilgi Güncelleme</h5>                               
+                                                <h5 class="modal-title"></h5>  
+                                                <button type="button" class="btn-close" id='btn-close' data-bs-dismiss="modal"
+                                                aria-label="Close"></button>                             
                                             </div>
                                             <div class="modal-body">
-                                                <form id="updateForm" class="mb-3">
-                                                    <input type="text" id="newFirstName" placeholder="Yeni İsim"  class="rounded-2 border-0 px-3 py-1">
-                                                    <input type="text" id="newLastName" placeholder="Yeni Soyisim"  class="rounded-2 border-0 px-3 py-1">                                            
-                                                </form>
+                                                <div class="row" id="updateForm">
+                                                    <div class="col-md-6" >
+                                                        <label for="firstName" class="form-label">Ad</label>
+                                                        <input type="text" class="form-control" id="firstName" >
+                                                    </div>  
+                                                    <div class="col-md-6" >
+                                                        <label for="newLastName" class="form-label">Soyad</label>
+                                                        <input type="text" class="form-control" id="lastName" >
+                                                    </div>   
+                                                </div>
+                                                <div class="row">
+
+                                                    <div class="col-md-6" >
+                                                        <label for="aboutİnput" class="form-label">Hakkında</label>
+                                                        <input type="text" class="form-control" id="aboutİnput" >
+                                                    </div>  
+                                                </div>
+                                                <div class="row">
+                                                </div>
+
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close">Kapat</button>
                                                 <button type="button" class="btn btn-primary" id="saveChangesBtn">Kaydet</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <a class="btn btn-success btn-m" id="updateBtn">Düzenle</a>
 
                             </div>
                             <!-- Tab panes -->
@@ -508,353 +520,77 @@
                                         <div class="col-xxl-3">
                                             <div class="card">
                                                 <div class="card-body">
-                                                    <h5 class="card-title mb-3">Info</h5>
+                                                    <h5 class="card-title mb-3"></h5>
                                                     <div class="table-responsive">
                                                         <table class="table table-borderless mb-0">
                                                             <tbody>
+                                                                <tr>
+                                                                    <th class="ps-0" scope="row">İsim :</th>
+                                                                    <td>
+                                                                        <span id="firstNameValue"></span>
+                                                                        <input type="text" id="editFirstName" style="display: none;" class="form-control w-60">
+
+                                                                    </td>
+                                                                </tr>
                                                                     <tr>
-                                                                    <th class="ps-0" scope="row" id="firstName">First Name :</th>
-                                                                    <td id="firstNameValue"></td>  
+                                                                        <th class="ps-0" scope="row">Soyisim:</th>
+                                                                        <td>
+                                                                            <span id="lastNameValue"></span>
+                                                                            <input type="text" id="editLastName" style="display: none;" class="form-control w-60">
+                                                                        </td>
                                                                     </tr>
                                                                     <tr>
-                                                                    <th class="ps-0" scope="row" id="LastName">Last Name :</th>
-                                                                    <td id="lastNameValue"></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                    <th class="ps-0" scope="row" id="lastName">Last Login :</th>
+                                                                    <th class="ps-0" scope="row" id="lastName">Son Giriş:</th>
                                                                     <td id="lastLoginValue"></td>
                                                                     </tr>
                                                                     <tr>
-                                                                    <th class="ps-0" scope="row" id="email">E-mail :</th>
+                                                                    <th class="ps-0" scope="row" id="email">Mail :</th>
                                                                     <td id="emailValue"></td>
                                                                     </tr>
                                                                     <tr>
-                                                                    <th class="ps-0" scope="row" id="companyName">Company Name :</th>
+                                                                    <th class="ps-0" scope="row" id="companyName">Şirket:</th>
                                                                     <td id="companyNameValue"></td>
                                                                     </tr>
                                                                     <tr>
-                                                                    <th class="ps-0" scope="row" id="userType">User Type :</th>
+                                                                    <th class="ps-0" scope="row" id="userType">Kullanıcı Tipi:</th>
                                                                     <td id="userTypeValue"></td>
+                                                                    <tr>
+                                                                        <th class="ps-0" scope="row">Hakkında:</th>
+                                                                        <td>
+                                                                            <span id="aboutValue"></span>
+                                                                            <input type="text" id="editAbout" style="display: none;" class="form-control w-60">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>
+                                                                            
+                                                                        </th>
                                                                     </tr>
                                                             </tbody>
                                                         </table>
-                                                    </div>
-                                                </div><!-- end card body -->
-                                            </div><!-- end card -->
-
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title mb-4">Portfolio</h5>
-                                                    <div class="d-flex flex-wrap gap-2">
                                                         <div>
-                                                            <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                                <span class="avatar-title rounded-circle fs-16 bg-body text-body shadow">
-                                                                    <i class="ri-github-fill"></i>
-                                                                </span>
-                                                            </a>
+                                                            <button class="btn btn-success btn-m" id="updateBtn">Düzenle</button>
+                                                            <button class="btn btn-success btn-m" style="display: none;" id="save-btn">Kaydet</button>
                                                         </div>
-                                                        <div>
-                                                            <a href="javascript:void(0);" class="avatar-xs d-block">
-                                                                <span class="avatar-title rounded-circle fs-16 bg-info shadow">
-                                                                    <i class="ri-linkedin-fill"></i>
-                                                                </span>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div><!-- end card body -->
-                                            </div><!-- end card -->
-
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title mb-4">Skills</h5>
-                                                    <div class="d-flex flex-wrap gap-2 fs-15">
-                                                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Photoshop</a>
-                                                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">illustrator</a>
-                                                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">HTML</a>
-                                                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">CSS</a>
-                                                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Javascript</a>
-                                                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Php</a>
-                                                        <a href="javascript:void(0);" class="badge bg-primary-subtle text-primary">Python</a>
                                                     </div>
                                                 </div><!-- end card body -->
                                             </div><!-- end card -->
                                         </div>
                                         <!--end col-->
                                         <div class="col-xxl-9">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <h5 class="card-title mb-3">About</h5>
-                                                    <!-- <p>Hi I'm Anna Adame, It will be as simple as Occidental; in fact, it will be Occidental. To an English person, it will seem like simplified English, as a skeptical Cambridge friend of mine told me what Occidental is European languages are members of the same family.</p>
-                                                    <p>You always want to make sure that your fonts work well together and try to limit the number of fonts you use to three or less. Experiment and play around with the fonts that you already have in the software you’re working with reputable font websites. This may be the most commonly encountered tip I received from the designers I spoke with. They highly encourage that you use different fonts in one design, but do not over-exaggerate and go overboard.</p> -->
-                                                    <div class="row">
-                                                        <div class="col-6 col-md-4">
-                                                            <div class="d-flex mt-4">
-                                                                <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                                    <div class="avatar-title bg-light rounded-circle fs-16 text-primary shadow">
-                                                                        <i class="ri-user-2-fill"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="flex-grow-1 overflow-hidden">
-                                                                    <!-- <p class="mb-1">Designation :</p>
-                                                                    <h6 class="text-truncate mb-0">Lead Designer / Developer</h6> -->
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--end col-->
-                                                        <div class="col-6 col-md-4">
-                                                            <div class="d-flex mt-4">
-                                                                <div class="flex-shrink-0 avatar-xs align-self-center me-3">
-                                                                    <div class="avatar-title bg-light rounded-circle fs-16 text-primary shadow">
-                                                                        <i class="ri-global-line"></i>
-                                                                    </div>
-                                                                </div>
-                                                                <!-- <div class="flex-grow-1 overflow-hidden">
-                                                                    <p class="mb-1">Website :</p>
-                                                                    <a href="#" class="fw-semibold">www.velzon.com</a>
-                                                                </div> -->
-                                                            </div>
-                                                        </div>
-                                                        <!--end col-->
-                                                    </div>
-                                                    <!--end row-->
-                                                </div>
-                                                <!--end card-body-->
-                                            </div><!-- end card -->
 
                                             <div class="card">
                                                 <div class="card-body">
                                                     <h5 class="card-title">Projects</h5>
                                                     <!-- Swiper -->
                                                     <div class="swiper project-swiper mt-n4">
-                                                        <div class="d-flex justify-content-end gap-2 mb-2">
-                                                            <div class="slider-button-prev">
-                                                                <div class="avatar-title fs-18 rounded px-1 shadow">
-                                                                    <i class="ri-arrow-left-s-line"></i>
-                                                                </div>
-                                                            </div>
-                                                            <div class="slider-button-next">
-                                                                <div class="avatar-title fs-18 rounded px-1 shadow">
-                                                                    <i class="ri-arrow-right-s-line"></i>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
                                                         <div class="swiper-wrapper">
-                                                            <div class="swiper-slide">
-                                                                <div class="card profile-project-card profile-project-success mb-0">
-                                                                    <!-- <div class="card-body p-4">
-                                                                        <div class="d-flex">
-                                                                            <div class="flex-grow-1 text-muted overflow-hidden">
-                                                                                <h5 class="fs-14 text-truncate mb-1">
-                                                                                    <a href="#" class="text-body">ABC Project Customization</a>
-                                                                                </h5>
-                                                                                <p class="text-muted text-truncate mb-0">Last Update : <span class="fw-semibold text-body">4 hr Ago</span></p>
-                                                                            </div>
-                                                                            <div class="flex-shrink-0 ms-2">
-                                                                                <div class="badge bg-warning-subtle text-warning fs-10"> Inprogress</div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex mt-4">
-                                                                            <div class="flex-grow-1">
-                                                                                <div class="d-flex align-items-center gap-2">
-                                                                                    <div>
-                                                                                        <h5 class="fs-12 text-muted mb-0"> Members :</h5>
-                                                                                    </div>
-                                                                                    <div class="avatar-group">
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-5.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <div class="avatar-title rounded-circle bg-light text-primary">
-                                                                                                    A
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-2.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div> -->
-                                                                    <!-- end card body -->
-                                                                </div>
-                                                                <!-- end card -->
-                                                            </div>
-                                                            <!-- end slide item -->
-                                                            <div class="swiper-slide">
-                                                                <div class="card profile-project-card profile-project-danger mb-0">
-                                                                    <div class="card-body p-4">
-                                                                        <div class="d-flex">
-                                                                            <div class="flex-grow-1 text-muted overflow-hidden">
-                                                                                <h5 class="fs-14 text-truncate mb-1">
-                                                                                    <a href="#" class="text-body">Client - John</a>
-                                                                                </h5>
-                                                                                <p class="text-muted text-truncate mb-0"> Last Update : <span class="fw-semibold text-body">1 hr Ago</span></p>
-                                                                            </div>
-                                                                            <div class="flex-shrink-0 ms-2">
-                                                                                <div class="badge bg-success-subtle text-success fs-10"> Completed</div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex mt-4">
-                                                                            <div class="flex-grow-1">
-                                                                                <div class="d-flex align-items-center gap-2">
-                                                                                    <div>
-                                                                                        <h5 class="fs-12 text-muted mb-0"> Members :</h5>
-                                                                                    </div>
-                                                                                    <div class="avatar-group">
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-2.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <div class="avatar-title rounded-circle bg-light text-primary">
-                                                                                                    C
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div><!-- end card body -->
+                                                            <div class="swiper-slide" id="project-card">
+                                                                <div class="card profile-project-card profile-project-danger mb-0"  >
+
                                                                 </div><!-- end card -->
                                                             </div><!-- end slide item -->
-                                                            <div class="swiper-slide">
-                                                                <div class="card profile-project-card profile-project-info mb-0">
-                                                                    <div class="card-body p-4">
-                                                                        <div class="d-flex">
-                                                                            <div class="flex-grow-1 text-muted overflow-hidden">
-                                                                                <h5 class="fs-14 text-truncate mb-1">
-                                                                                    <a href="#" class="text-body">Brand logo Design</a>
-                                                                                </h5>
-                                                                                <p class="text-muted text-truncate mb-0">Last Update : <span class="fw-semibold text-body">2 hr Ago</span></p>
-                                                                            </div>
-                                                                            <div class="flex-shrink-0 ms-2">
-                                                                                <div class="badge bg-warning-subtle text-warning fs-10"> Inprogress</div>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="d-flex mt-4">
-                                                                            <div class="flex-grow-1">
-                                                                                <div class="d-flex align-items-center gap-2">
-                                                                                    <div>
-                                                                                        <h5 class="fs-12 text-muted mb-0"> Members :</h5>
-                                                                                    </div>
-                                                                                    <div class="avatar-group">
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-5.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div><!-- end card body -->
-                                                                </div><!-- end card -->
-                                                            </div><!-- end slide item -->
-                                                            <div class="swiper-slide">
-                                                                <div class="card profile-project-card profile-project-danger mb-0">
-                                                                    <div class="card-body p-4">
-                                                                        <div class="d-flex">
-                                                                            <div class="flex-grow-1 text-muted overflow-hidden">
-                                                                                <h5 class="fs-14 text-truncate mb-1">
-                                                                                    <a href="#" class="text-body">Project update</a>
-                                                                                </h5>
-                                                                                <p class="text-muted text-truncate mb-0"> Last Update : <span class="fw-semibold text-body">4 hr Ago</span></p>
-                                                                            </div>
-                                                                            <div class="flex-shrink-0 ms-2">
-                                                                                <div class="badge bg-success-subtle text-success fs-10"> Completed</div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="d-flex mt-4">
-                                                                            <div class="flex-grow-1">
-                                                                                <div class="d-flex align-items-center gap-2">
-                                                                                    <div>
-                                                                                        <h5 class="fs-12 text-muted mb-0"> Members :</h5>
-                                                                                    </div>
-                                                                                    <div class="avatar-group">
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-5.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- end card body -->
-                                                                </div>
-                                                                <!-- end card -->
-                                                            </div>
-                                                            <!-- end slide item -->
-                                                            <div class="swiper-slide">
-                                                                <div class="card profile-project-card profile-project-warning mb-0">
-                                                                    <div class="card-body p-4">
-                                                                        <div class="d-flex">
-                                                                            <div class="flex-grow-1 text-muted overflow-hidden">
-                                                                                <h5 class="fs-14 text-truncate mb-1">
-                                                                                    <a href="#" class="text-body">Chat App</a>
-                                                                                </h5>
-                                                                                <p class="text-muted text-truncate mb-0"> Last Update : <span class="fw-semibold text-body">1 hr Ago</span></p>
-                                                                            </div>
-                                                                            <div class="flex-shrink-0 ms-2">
-                                                                                <div class="badge bg-warning-subtle text-warning fs-10"> Inprogress</div>
-                                                                            </div>
-                                                                        </div>
-
-                                                                        <div class="d-flex mt-4">
-                                                                            <div class="flex-grow-1">
-                                                                                <div class="d-flex align-items-center gap-2">
-                                                                                    <div>
-                                                                                        <h5 class="fs-12 text-muted mb-0"> Members :</h5>
-                                                                                    </div>
-                                                                                    <div class="avatar-group">
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-4.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <img src="assets/images/users/avatar-5.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                            </div>
-                                                                                        </div>
-                                                                                        <div class="avatar-group-item shadow">
-                                                                                            <div class="avatar-xs">
-                                                                                                <div class="avatar-title rounded-circle bg-light text-primary">
-                                                                                                    A
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <!-- end card body -->
-                                                                </div>
-                                                                <!-- end card -->
-                                                            </div>
                                                             <!-- end slide item -->
                                                         </div>
 
@@ -868,155 +604,6 @@
                                         <!--end col-->
                                     </div>
                                     <!--end row-->
-                                </div>
-
-                                <div class="tab-pane fade" id="projects" role="tabpanel">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <!-- <div class="col-xxl-3 col-sm-6">
-                                                    <div class="card profile-project-card profile-project-warning">
-                                                        <div class="card-body p-4">
-                                                            <div class="d-flex">
-                                                                <div class="flex-grow-1 text-muted overflow-hidden">
-                                                                    <h5 class="fs-14 text-truncate"><a href="#" class="text-body">Chat App Update</a></h5>
-                                                                    <p class="text-muted text-truncate mb-0">Last Update : <span class="fw-semibold text-body">2 year Ago</span></p>
-                                                                </div>
-                                                                <div class="flex-shrink-0 ms-2">
-                                                                    <div class="badge bg-warning-subtle text-warning fs-10">Inprogress</div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="d-flex mt-4">
-                                                                <div class="flex-grow-1">
-                                                                    <div class="d-flex align-items-center gap-2">
-                                                                        <div>
-                                                                            <h5 class="fs-12 text-muted mb-0">Members :</h5>
-                                                                        </div>
-                                                                        <div class="avatar-group">
-                                                                            <div class="avatar-group-item shadow">
-                                                                                <div class="avatar-xs">
-                                                                                    <img src="assets/images/users/avatar-1.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="avatar-group-item shadow">
-                                                                                <div class="avatar-xs">
-                                                                                    <img src="assets/images/users/avatar-3.jpg" alt="" class="rounded-circle img-fluid" />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="avatar-group-item shadow">
-                                                                                <div class="avatar-xs">
-                                                                                    <div class="avatar-title rounded-circle bg-light text-primary">
-                                                                                        J
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                </div> -->
-
-                                                <div class="col-lg-12">
-                                                    <div class="mt-4">
-                                                        <ul class="pagination pagination-separated justify-content-center mb-0">
-                                                            <li class="page-item disabled">
-                                                                <a href="javascript:void(0);" class="page-link"><i class="mdi mdi-chevron-left"></i></a>
-                                                            </li>
-                                                            <li class="page-item active">
-                                                                <a href="javascript:void(0);" class="page-link">1</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a href="javascript:void(0);" class="page-link">2</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a href="javascript:void(0);" class="page-link">3</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a href="javascript:void(0);" class="page-link">4</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a href="javascript:void(0);" class="page-link">5</a>
-                                                            </li>
-                                                            <li class="page-item">
-                                                                <a href="javascript:void(0);" class="page-link"><i class="mdi mdi-chevron-right"></i></a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!--end row-->
-                                        </div>
-                                        <!--end card-body-->
-                                    </div>
-                                    <!--end card-->
-                                </div>
-                                <!--end tab-pane-->
-                                <div class="tab-pane fade" id="documents" role="tabpanel">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center mb-4">
-                                                <h5 class="card-title flex-grow-1 mb-0">Documents</h5>
-                                                <div class="flex-shrink-0">
-                                                    <input class="form-control d-none" type="file" id="formFile">
-                                                    <label for="formFile" class="btn btn-danger"><i class="ri-upload-2-fill me-1 align-bottom"></i> Upload File</label>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-lg-12">
-                                                    <div class="table-responsive">
-                                                        <table class="table table-borderless align-middle mb-0">
-                                                            <thead class="table-light">
-                                                                <tr>
-                                                                    <th scope="col">File Name</th>
-                                                                    <th scope="col">Type</th>
-                                                                    <th scope="col">Size</th>
-                                                                    <th scope="col">Upload Date</th>
-                                                                    <th scope="col">Action</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <!-- <tr>
-                                                                    <td>
-                                                                        <div class="d-flex align-items-center">
-                                                                            <div class="avatar-sm">
-                                                                                <div class="avatar-title bg-primary-subtle text-primary rounded fs-20 shadow">
-                                                                                    <i class="ri-file-zip-fill"></i>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="ms-3 flex-grow-1">
-                                                                                <h6 class="fs-15 mb-0"><a href="javascript:void(0)">Artboard-documents.zip</a>
-                                                                                </h6>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>Zip File</td>
-                                                                    <td>4.57 MB</td>
-                                                                    <td>12 Dec 2021</td>
-                                                                    <td>
-                                                                        <div class="dropdown">
-                                                                            <a href="javascript:void(0);" class="btn btn-light btn-icon" id="dropdownMenuLink15" data-bs-toggle="dropdown" aria-expanded="true">
-                                                                                <i class="ri-equalizer-fill"></i>
-                                                                            </a>
-                                                                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuLink15">
-                                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-eye-fill me-2 align-middle text-muted"></i>View</a></li>
-                                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-download-2-fill me-2 align-middle text-muted"></i>Download</a></li>
-                                                                                <li class="dropdown-divider"></li>
-                                                                                <li><a class="dropdown-item" href="javascript:void(0);"><i class="ri-delete-bin-5-line me-2 align-middle text-muted"></i>Delete</a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr> -->
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                                 <!--end tab-pane-->
                             </div>
@@ -1057,7 +644,7 @@
     <script src="assets/js/app.js"></script>
     <script src="logout.js"></script>
     <script src="profilePage.js"></script>
-           <script src="changePassword.js"></script>
+    <script src="changePassword.js"></script>
 </body>
 
 </html>

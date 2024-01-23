@@ -32,6 +32,8 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
+
 
 <!-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 
@@ -329,39 +331,21 @@
                                     </div>
                                     <div class="table-responsive table-card mt-3 mb-1">
                                         <table class="table align-middle table-striped mb-0" id="purchaseTable">
-                                            <!-- <thead class="table-light">
-                                                 <tr>
-                                                    <th scope="sort"></th> 
-                                                    <th scope="sort">İsteği Yapan Kişi</th> 
-                                                    <th scope="sort">Sorumlu Kişi</th> 
-                                                    <th scope="sort" >Durum</th>                                   
-                                                    <th scope="sort">Ürün Adı</th>      
-                                                    <th scope="sort">Kategori</th>                              
-                                                    <th scope="sort">Fiyat</th>    
-                                                    <th scope="sort">Sayısı</th>                        
-                                                    <th scope="sort">Link</th>
-                                                    <th scope="sort">İstek Tarihi</th>
-                                                    <th scope="sort">Son Tarih</th>
-                                                    <th scope="sort">Açıklama</th>
-                                                    <th scope="sort">Düzenleme</th>
-                                                </tr> 
-
-                                            </thead>                                                 -->
-                                            <thead class="table-light">
+                                            <thead class="table-light fs-14">
                                                     <tr>
-                                                        <th scope="sort" ></th> 
-                                                        <th class="sort" data-sort = "owner">İsteği Yapan Kişi</th> 
-                                                        <th class="sort" data-sort = "responsible-person">Sorumlu Kişi</th> 
-                                                        <th class="sort" data-sort = "status">Durum</th>                                   
-                                                        <th class="sort" data-sort = "product-name">Ürün Adı</th>      
-                                                        <th class="sort" data-sort = "category">Kategori</th>                              
-                                                        <th class="sort" data-sort = "price">Fiyat</th>    
-                                                        <th class="sort" data-sort = "count">Sayısı</th>                        
-                                                        <th class="sort" data-sort = "link">Link</th>
-                                                        <th class="sort" data-sort = "purchasing-date">İstek Tarihi</th>
-                                                        <th class="sort" data-sort = "deadline">Son Tarih</th>
-                                                        <th scope="sort" data-sort = "description">Açıklama</th>
-                                                        <th scope="col" data-sort = "edit">Düzenleme</th>
+                                                        <th></th> 
+                                                        <th class="cursor-pointer">İsteği Yapan Kişi<span class="icon-arrow">&UpArrow;</span></th> 
+                                                        <th class="cursor-pointer">Sorumlu Kişi<span class="icon-arrow">&UpArrow;</span></th> 
+                                                        <th class="cursor-pointer">Durum<span class="icon-arrow">&UpArrow;</span></th>                                   
+                                                        <th class="cursor-pointer">Ürün Adı<span class="icon-arrow">&UpArrow;</span></th>      
+                                                        <th class="cursor-pointer">Kategori<span class="icon-arrow">&UpArrow;</span></th>                              
+                                                        <th class="cursor-pointer">Fiyat<span class="icon-arrow">&UpArrow;</span></th>    
+                                                        <th class="cursor-pointer">Sayısı<span class="icon-arrow">&UpArrow;</span></th>                        
+                                                        <th class="cursor-pointer">Link<span class="icon-arrow">&UpArrow;</span></th>
+                                                        <th class="cursor-pointer">İstek Tarihi<span class="icon-arrow">&UpArrow;</span></th>
+                                                        <th class="cursor-pointer">Son Tarih<span class="icon-arrow">&UpArrow;</span></th>
+                                                        <th scope="cursor-pointer">Açıklama<span class="icon-arrow">&UpArrow;</span></th>
+                                                        <th scope="col">Düzenleme</th>
                                                     </tr>
                                                 </thead>
                                             <tbody class="list form-check-all">
@@ -370,6 +354,11 @@
                                         </table>
     
                                     </div>
+                                    <style>
+                                    thead th.active{
+                                            color: rgb(176, 219, 224);
+                                        }
+                                    </style>
                                 </div>
                             </div>
                             <div id="pagination">
@@ -403,8 +392,7 @@
                     </div>
                     <div class="modal-body">
                         <form class="row g-3" id="purchaseForm">
-        
-                            <br>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="responsible-person" class="form-label" >İsteyen Kişi</label>
@@ -436,21 +424,28 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6" style="display: none;" id="statusMenu">
-                                    <label for="statusData" class="form-label" >Statü</label>
-                                    <select type="text" class="form-select" id="statusData"></select>
+                                <div class="col-md-6">
+                                    <label for="description" class="form-label">Açıklama</label>
+                                    <input type="text" class="form-control"  id="description">
                                 </div>
+
                                 <div class="col-md-6">
                                     <label for="statusData" class="form-label" id="categoryMenu">Kategori</label>
                                     <select type="text" class="form-select" id="categoryData"></select>
                                 </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="description" class="form-label">Açıklama</label>
-                                <input type="text" class="form-control"  id="description">
                             </div>
-                        </div>
+                            <div class="row" id="adminMenu">
+                                <div class="col-md-6" id="statusMenu" style="display: none;">
+                                    <label for="statusData" class="form-label">Statü</label>
+                                    <select type="text" class="form-select" id="statusData"></select>
+                                </div>
+                                <div class="col-md-6" id="orderingDateMenu" style="display: none;">
+                                    <label for="orderingDate" class="form-label">Satın Alım Tarihi</label>
+                                    <input type="date" name="datetime" class="form-control" id="orderingDate">
+                                </div>
+                            </div>
+                            
+
                     </div>
                     <div class="modal-footer" id="button-box">
                         <!-- <button type="button" class="btn btn-primary" id="addBtn">Ekle</button> -->
