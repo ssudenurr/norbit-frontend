@@ -11,6 +11,7 @@ const description = document.getElementById("description");
 const responsiblePerson = document.getElementById("responsible-person");
 const statusData = document.getElementById("statusData");
 const categoryData = document.getElementById("categoryData");
+const orderinDateData = document.getElementById("orderingDate")
 
 const tableBody = document.querySelector("#purchaseTable tbody");
 const modalButtonBox = document.getElementById("button-box");
@@ -36,63 +37,20 @@ function displayDataOnPage() {
 
 const nextPageBtn = document.getElementById("next-page");
 const prevPageBtn = document.getElementById("prev-page");
-
+/*BİR ÖNCEKİ SAYFAYA GEÇMEK İÇİN */
 prevPageBtn.addEventListener("click", () => {
   if (currentPage > 1) {
     currentPage--;
     purchaseList(currentPage);
   }
 });
-
+/*BİR SONRAKİ SAYFAYA GEÇMEK İÇİN */
 nextPageBtn.addEventListener("click", () => {
   currentPage++;
   purchaseList(currentPage);
 });
-const purchaseList = async (page = 1) => {
-  const apiUrl = `${baseUrl}purchase-request/list/?page=${page}`;
-  const token = localStorage.getItem("token");
-  const api = new Promise((resolve, reject) => {
-    axios({
-      method: "get",
-      url: apiUrl,
-      headers: {
-        Authorization: `Token ${token}`,
-      },
-    })
-      .then((response) => {
-        const requestData = response.data.results;
-        resolve(requestData);
 
-        tableBody.innerHTML = "";
-        showPurchaseRequest(requestData);
-      })
-      .catch((error) => {
-        reject(error);
-        console.log(error);
-      });
-  });
-  try {
-    const requestData = await api;
-    const results = requestData;
-    // console.log(results);
-
-    const nextPage = requestData.next;
-
-    results.forEach((item) => {
-      dataList.push(item);
-    });
-
-    if (nextPage) {
-      const nextPageNum = parsePageNumber(nextPage);
-      getData(nextPageNum);
-    } else {
-      console.log(dataList);
-    }
-  } catch (e) {
-    // console.log(error,"error");
-  }
-};
-
+/*YAPILMIŞ OLAN İSTEĞİ İPTAL ETMEK İÇİN*/
 async function cancelRequest(requestId) {
   const apiUrl = `${baseUrl}purchase-request/${requestId}/`;
   const token = localStorage.getItem("token");
@@ -120,6 +78,8 @@ async function cancelRequest(requestId) {
       console.error("An error occurred while updating the status:", error);
     });
 }
+
+/*İSTEĞİN STATÜ DEĞERİNİ DEĞİŞTİRİR */
 async function updatePurchaseStatus(requestId) {
   const apiUrl = `${baseUrl}purchase-request/${requestId}/`;
   const token = localStorage.getItem("token");
@@ -167,8 +127,9 @@ addBtn.addEventListener("click", () => {
   });
 });
 
+/*İNPUT ALANLARININ BOŞ OLUP OLMADIĞINI KONTROL EDER */
 function valueControl() {
-  const alert = document.getElementById("alertWarning"); // Define 'alert' here
+  const alert = document.getElementById("alertWarning"); 
   if (
     !responsiblePerson.value ||
     !productName.value ||
@@ -186,36 +147,41 @@ function valueControl() {
     return;
   }
   alert.style.display = "none";
-}
+};
 
+/*YENİ BİR İSTEK OLUŞTURUR */
 async function createPurchase() {
   const apiUrl = `${baseUrl}purchase-request/list/`;
   const token = localStorage.getItem("token");
   valueControl();
+  const data = {
+    responsible_person: responsiblePerson.value,
+    product_name: productName.value,
+    price: price.value,
+    count: count.value,
+    deadline: formatDateToCustomFormat(deadline.value),
+    e_commerce_site: link.value,
+    description: description.value,
+    category: [categoryData.value]
+  };
+  if(statusData.value || orderinDateData.value){
+    data.status = statusData.value;
+    data.satin_alinan_tarih = formatDateToCustomFormat(orderinDateData.value);
+  }
   axios({
     method: "post",
     url: apiUrl,
     headers: {
       Authorization: `Token ${token}`,
     },
-    data: {
-      responsible_person: responsiblePerson.value,
-      product_name: productName.value,
-      price: price.value,
-      count: count.value,
-      deadline: formatDateToCustomFormat(deadline.value),
-      e_commerce_site: link.value,
-      description: description.value,
-      status: statusData.value,
-      category: [categoryData.value],
-      project:[],
-    },
+    data: data,
   })
     .then(async (response) => {
       // getResponsiblePerson();
-      clearInput();
-      tableBody.innerHTML = "";
-      window.location.reload();
+      // clearInput();
+      // tableBody.innerHTML = "";
+      console.log(response);
+      // window.location.reload();
       purchaseList();
     })
     .catch((error) => {
@@ -223,14 +189,18 @@ async function createPurchase() {
     });
 }
 
-function formatTarih(tarih) {
-  if (tarih) {
-    const tarihParcalari = tarih.split("T");
-    return tarihParcalari[0];
+/*UZUN FORMATTAKİ TARİHİ KISA FORMATA ÇEVİRİR */
+function formatTarih(date) {
+  if (date) {
+    const datePieces = date.split("T");
+    if (datePieces.length > 0) {
+      return datePieces[0];
+    }
   }
-  return "-";
+  return null; 
 }
 
+/*KISA FORMATTAKİ TARİHİ UZUN FORMATA ÇEVİRİR */
 function formatDateToCustomFormat(date) {
   let date2 = new Date(date);
   var yyyy = date2.getFullYear();
@@ -241,9 +211,9 @@ function formatDateToCustomFormat(date) {
 
   // Sonuç formatını birleştiriyoruz
   var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
-
   return formattedDate;
 }
+/*İLGİLİ SATIRIN BİLGİLERİNİ MODAL İÇİNE DOLDURUR */
 const getPurchaseData = (purchaseId) => {
   const apiUrl = `${baseUrl}purchase-request/${purchaseId}/`;
   const token = localStorage.getItem("token");
@@ -269,8 +239,6 @@ const getPurchaseData = (purchaseId) => {
       const linkData = purchaseData.e_commerce_site;
       const descriptionData = purchaseData.description;
 
-      // const transDate = new Date (purchasingDateData);
-
       responsiblePerson.value = responsiblePersonData;
       productName.value = productNameData;
       price.value = priceData;
@@ -284,18 +252,98 @@ const getPurchaseData = (purchaseId) => {
       console.error(error);
     });
 };
-function getModalValues() {
-  const data = {
-    responsiblePerson: responsiblePerson.value,
-    productName: productName.value,
-    price: price.value,
-    count: count.value,
-    link: link.value,
-    description: description.value,
-  };
-  return data;
+
+let currentSortOrder = 'asc';
+const table = document.getElementById("purchaseTable");
+
+/*TABLODAKİ VERİLERİ ASC VE DESC OLARAK SIRALAR */
+function sortTable(columnIndex) { 
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+  rows.sort((a, b) => {
+    const aValue = a.children[columnIndex].textContent.trim();
+    const bValue = b.children[columnIndex].textContent.trim();
+    const comparison = aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });  
+  
+    return currentSortOrder === 'asc' ? comparison : -comparison;
+  });
+
+  // Clear the table body
+  table.querySelector("tbody").innerHTML = "";
+
+
+  rows.forEach(row => {
+    table.querySelector("tbody").appendChild(row);
+  });
+  currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
 }
 
+
+const headers = document.querySelectorAll("thead th");
+/*TABLODAKİ BAŞLIKLARA TIKLANDIĞI ZAMAN BAŞLIĞIN VE SIRALANAN VERİLERİN RENGİ DEĞİŞİR */
+headers.forEach((header, index) => {
+  let sort_asc = true;
+  header.addEventListener("click", () => {
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+    headers.forEach(header => header.classList.remove('active'))
+    header.classList.add('active');
+
+    document.querySelectorAll('td').forEach(td => td.classList.remove('active'));
+    rows.forEach(row => {
+      row.children[index].classList.add('active')
+    });
+
+    header.classList.toggle('asc', sort_asc);
+    sort_asc = header.classList.contains('asc') ? false : true;
+    sortTable(index);
+  });
+});
+/* İSTEK LİSTESİNİ ALIR */
+const purchaseList = async (page = 1) => {
+  const apiUrl = `${baseUrl}purchase-request/list/?page=${page}`;
+  const token = localStorage.getItem("token");
+  const api = new Promise((resolve, reject) => {
+    axios({
+      method: "get",
+      url: apiUrl,
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    })
+      .then((response) => {
+        const requestData = response.data.results;
+        resolve(requestData);
+
+        tableBody.innerHTML = "";
+        showPurchaseRequest(requestData);
+      })
+      .catch((error) => {
+        reject(error);
+        console.log(error);
+      });
+  });
+  try {
+    const requestData = await api;
+    const results = requestData;
+
+    const nextPage = requestData.next;
+
+    results.forEach((item) => {
+      dataList.push(item);
+    });
+
+    if (nextPage) {
+      const nextPageNum = parsePageNumber(nextPage);
+      getData(nextPageNum);
+    } else {
+      console.log(dataList);
+    }
+  } catch (e) {
+    // console.log(error,"error");
+  }
+};
+/*YAPILAN İSTEKLERİ TABLOYA EKLER VE GÖSTERİR */
 const showPurchaseRequest = async (requestData) => {
   tableBody.innerHTML = "";
   for (const item of requestData) {
@@ -394,7 +442,8 @@ const showPurchaseRequest = async (requestData) => {
     clearInput();
   }
 };
-
+/*İSTEĞİ YAPAN KİŞİNİN İD DEĞERİNİ GÖNDEREREK AYRINTILI
+ BİLGİSİNİ ALMAK İÇİN KULLANILIR */
 const getOwnerNameId = async (id) => {
   const apiUrl = `${baseUrl}ems/list/?id=${id}`;
   const token = localStorage.getItem("token");
@@ -431,6 +480,8 @@ const getOwnerNameId = async (id) => {
     return e;
   }
 };
+/*İSTEKTEN SORUMLU KİŞİNİN AYRINTILI BİLGİSİNİ 
+ALMAK İÇİN KULLANILIR*/
 const getResponsibleId = async (id) => {
   const apiUrl = `${baseUrl}ems/list/?id=${id}`;
   const token = localStorage.getItem("token");
@@ -458,7 +509,6 @@ const getResponsibleId = async (id) => {
         reject(error);
       });
   });
-
   try {
     const response = await api;
     return response;
@@ -466,6 +516,7 @@ const getResponsibleId = async (id) => {
     return e;
   }
 };
+/*İSTEĞE KATEGORİ BİLGİSİ EKLENMEK İSTEDİĞİN KATEGORİ İSİMLERİNİ GETİRİR */
 const getCategoryId = async (id) => {
   const apiUrl = `${baseUrl}category/${id}`;
   const token = localStorage.getItem("token");
@@ -497,7 +548,7 @@ const getCategoryId = async (id) => {
   }
 };
 let personList = [];
-
+/* SORUMLU KİŞİ SEÇMEK OLUŞTURMAK İÇİN PERSONEL LİSTESİ ALINDI*/
 async function getResponsiblePerson(purchaseId, page = 1) {
   const apiUrl = `${baseUrl}ems/list/?page=${page}`;
   const token = localStorage.getItem("token");
@@ -527,7 +578,7 @@ async function getResponsiblePerson(purchaseId, page = 1) {
       personList.push(person);
     });
 
-    // Check if there are more pages
+    // başka sayfa olup olmadığının kontrolü
     const nextPage = response.data.next;
     if (nextPage !== null) {
       const nextPage = page + 1;
@@ -539,7 +590,7 @@ async function getResponsiblePerson(purchaseId, page = 1) {
     console.error(error);
   }
 }
-
+/*STATÜ DEĞERLERİNİ SAYFADA ANLAŞILIR HALE GETİRMEK İÇİN KULLANILIR */
 const getStatusData = async () => {
   const statusSelect = document.getElementById("statusData");
 
@@ -557,7 +608,7 @@ const getStatusData = async () => {
     statusSelect.appendChild(optionData);
   });
 };
-
+/*KATEGORİ LİSTESİNİ İSMİNE GÖRE ALIR */
 function getCategoryData() {
   const apiUrl = `${baseUrl}category`;
   const token = localStorage.getItem("token");
@@ -584,47 +635,20 @@ function getCategoryData() {
       console.log(error);
   });
 };
-
-function modalValueControl() {
-  const newResponsible = document.getElementById("responsible-person");
-  const newProductName = document.getElementById("productName");
-  const newPrice = document.getElementById("price");
-  const newCount = document.getElementById("count");
-  const newLink = document.getElementById("link");
-  // const newDescription = document.getElementById("description");
-
-  const alert = document.getElementById("alertWarning");
-
-  if (
-    !newResponsible.value ||
-    !newProductName.value ||
-    !newPrice.value ||
-    !newCount.value ||
-    !newLink.value
-  ) {
-    alert.style.display = "block";
-    setTimeout(() => {
-      alert.style.display = "none";
-    }, 1600);
-    return false;
-  }
-
-  alert.style.display = "none";
-  return true;
-}
-
+/*KALKMIŞ OLAN EKLE BUTONUNUN YERİNE DÜZENLE BUTONU GELİR */
 function createEditButton(purchaseId) {
   modalButtonBox.innerHTML += `
       <button type="button" class="btn btn-primary" id="row-edit-btn">Düzenle</button>
     `;
   document.getElementById("row-edit-btn").addEventListener("click", () => {
-    if (modalValueControl()) {
+    if (!valueControl()) {
       editPurchaseRequest(purchaseId);
     }
   });
 
   getPurchaseData(purchaseId);
 }
+/*İLGİLİ SATIRDAKİ İSTEĞİ DÜZENLEMEK İÇİNDİR */
 function editPurchaseRequest(purchaseId) {
   const apiUrl = `${baseUrl}purchase-request/${purchaseId}/`;
   const token = localStorage.getItem("token");
@@ -648,13 +672,14 @@ function editPurchaseRequest(purchaseId) {
     .then((response) => {
       const userData = response.data;
       console.log(userData);
-      window.location.reload();
+      // window.location.reload();
     })
     .catch((error) => {
       console.error(error);
     });
 }
 
+/*İLGİLİ SATIRDAKİ İSTEĞİ SİLMEK İÇİNDİR */
 const deletePurchase = async (delete_button) => {
   Id = delete_button.getAttribute("data-user-id");
   const apiUrl = `${baseUrl}purchase-request/${Id}/`;
@@ -692,9 +717,8 @@ const deletePurchase = async (delete_button) => {
     return e;
   }
 };
-
+//GİRİŞ YAPAN KİŞİNİN BİLGİLERİNİ ALIR*/
 const getUserInfoId = async () => {
-  //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
   const apiUrl = `${baseUrl}accounts/user/`;
   const token = localStorage.getItem("token");
   const api = new Promise((resolve, reject) => {
@@ -708,6 +732,7 @@ const getUserInfoId = async () => {
       .then((response) => {
         const userInfo = response.data;
         const statusMenu = document.getElementById("statusMenu");
+        const orderingDateMenu = document.getElementById("orderingDateMenu");
         // if (userInfo.user_type === "AdminUser") {
         //   statusBtn.style.display = "inline-block ";
         //   statusMenu.style.display=('block');
@@ -729,6 +754,7 @@ const getUserInfoId = async () => {
   }
 };
 
+/*İNPUT ALANLARINI BOŞALTIR */
 function clearInput() {
   productName.value = "";
   price.value = "";
@@ -738,9 +764,11 @@ function clearInput() {
   description.value = "";
   responsiblePerson.value = "";
 }
+
 const searchInput = document.getElementById("search-input");
 const searchButton = document.getElementById("search-button");
 
+/*TABLODAKİ VERİLER ARASINDA ARAMA YAPAR*/
 function searchData() {
   const searchInput = document.getElementById("search-input");
   const searchTerm = searchInput.value.toLowerCase();
@@ -770,14 +798,16 @@ searchInput.addEventListener("input", () => {
     searchData(searchTerm);
   }
 });
-
+/*SAYFA YENİLENDİĞİNDE ÇALIŞIR */
 window.addEventListener("load", async (event) => {
   const loginnedUser = await getUserInfoId();
   const loginnedUserType = loginnedUser.user_type;
   if (loginnedUserType === "AdminUser") {
     cancelBtn.style.display = "inline-block";
     statusBtn.style.display = "inline-block ";
+    orderingDateMenu.style.display = "block";
     statusMenu.style.display = "block";
+
     getStatusData();
   }
   getResponsiblePerson();
