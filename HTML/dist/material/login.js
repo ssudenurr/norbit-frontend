@@ -1,8 +1,7 @@
-
+/*İNPUT ALANLARINDAKİ BİLGİYİ BACKEND DE KAYITLI BİLGİLERLE
+ KARŞILAŞTIRIP KULLANICI GİRİŞİ SAĞLAR */
 document.addEventListener("DOMContentLoaded", function () {
 // userControl();
-
-
     const baseUrl = "https://backend.norbit.com.tr:9999/";
 
   const usernameInput = document.getElementById("username");
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const usernameValue = usernameInput.value;
     const passwordValue = passwordInput.value;
 
-    if (usernameValue.trim() === "" || passwordValue.trim() === "") {
+    if (usernameValue.trim() === "" || passwordValue.trim() === "") { //EĞER İNPUT ALANLARI BOŞSA UYARI VER
       window.alert("Kullanıcı adı ve şifre boş geçilemez");
       return;
     } 
