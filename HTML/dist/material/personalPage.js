@@ -1,4 +1,3 @@
-
 const addRowButton = document.getElementById("add-btn");
 
 const modaltitle = document.getElementById("exampleModalLabel");
@@ -27,6 +26,7 @@ updateBtn.style.display='none';
 const modal = new bootstrap.Modal(document.getElementById("permissionModal"));
 const permissionBtn = document.getElementById("permission-btn");
 
+/* DÜZENLE BUTONU KALKAR YERİNE EKLE BUTONU GELİR */
 addRowButton.addEventListener("click", () => {
   const rowEditBtn = document.getElementById("row-edit-btn");
   if (rowEditBtn) {
@@ -44,19 +44,18 @@ addRowButton.addEventListener("click", () => {
 });
 
 
-
-function formatTarih(tarih) {
-  if (tarih) {
-    const tarihParcalari = tarih.split("T");
-    if (tarihParcalari.length > 0) {
-      return tarihParcalari[0];
+/*UZUN FORMATTAKİ TARİHİ GG/AA/YYYY FORMATINA ÇEVİRME*/
+function formatTarih(date) {
+  if (date) {
+    const datePieces = date.split("T");
+    if (datePieces.length > 0) {
+      return datePieces[0];
     }
   }
   return null; // Eksik tarih için null değeri döndürün
 }
 
-
-  
+/*KISA FORMATTAKİ TARİHİ UZUN FORMATA ÇEVİRME*/
 function formatDateToCustomFormat(date) {
   if (!date) {
       return null; // Handle the case where date is empty
@@ -82,6 +81,7 @@ closeBtn.addEventListener("click", () => {
   modal.hide();
 });
 
+/*EKLE BUTONU KALDIRILDI VE DÜZENLE BUTONU OLUŞTURULDU */
 async function createEditButton(userId) {
   const rowAddBtn = document.getElementById("row-add-btn");
   if (rowAddBtn) {
@@ -98,25 +98,19 @@ async function createEditButton(userId) {
   const rowEditBtn = document.getElementById("row-edit-btn");
   rowEditBtn.addEventListener("click", () => {
 
-    if (modalValueControl()) {
+    if (!valueControl()) {
       editPersonel(userId);
       modal.hide();
       clearInput();
     }
-    window.location.reload();
-  });
 
-  modaltitle.innerHTML = "Personel Düzenleme Formu";
+  });
 
   getRowData(userId);
 }
-
+/* İNPUT ALANLARININ BOŞ OLUP OLMADIĞI KONTROL EDİLDİ*/
 function valueControl() {
   const alert = document.getElementById("alertWarning");
-  // if (!alert) {
-  //   console.error("alertWarning öğesi bulunamadı.");
-  //   return;
-  // }
 
   if (
     !firstName.value ||
@@ -125,8 +119,7 @@ function valueControl() {
     !userTypes.value ||
     !entryDate.value ||
     !company.value ||
-    !username.value ||
-    !password.value
+    !username.value 
   ) {
     alert.style.display = "block";
 
@@ -138,14 +131,11 @@ function valueControl() {
   }
 }
 
+/*YENİ BİR PERSONEL OLUŞTURMA FONKSİYONU*/
 function createPersonel() {
-  // CREATE NEW PERSONAL
   valueControl();
-
   const apiUrl = `${baseUrl}accounts/registration/`;
   const token = localStorage.getItem("token");
-
-  // const transDate = new Date(entryDate.value);
   axios({
     method: "post",
     url: apiUrl,
@@ -175,22 +165,7 @@ function createPersonel() {
     });
 }
 
-function getModalValues() {
-  // GET MODAL INPUT VALUES
-  const data = {
-    firstName: firstName.value,
-    lastName: lastName.value,
-    job: job.value,
-    userType: userTypes.value,
-    entryDate: entryDate.value,
-    exitDate: exitDate.value,
-    company: company.value,
-    username: username.value,
-    // "password": password.value
-  };
-  return data;
-}
-
+/*İNPUT ALANLARINI TEMİZLEMEK İÇİN */
 function clearInput() {
   // CLEAR VALUE
   firstName.value = "";
@@ -203,11 +178,11 @@ function clearInput() {
   // password.value = '';
 }
 
+/*PERSONELİ SİLME */
 const deleteRow = async (delete_button) => {
-  // DELETE TO PERSONAL
 
   userId = delete_button.getAttribute("data-user-id");
-  const apiUrl = `${baseUrl}/ems/employee/${userId}/`;
+  const apiUrl = `${baseUrl}ems/employee/${userId}/`;
   const token = localStorage.getItem("token");
 
   const api = new Promise((resolve, reject) => {
@@ -225,7 +200,7 @@ const deleteRow = async (delete_button) => {
         } else {
           console.error("Satır silinemedi.");
         }
-        //resolve(dataList)
+        resolve(dataList) 
       })
       .catch((error) => {
         reject("null");
@@ -240,8 +215,8 @@ const deleteRow = async (delete_button) => {
   }
 };
 
+/*SATIRIN İÇİNDEKİ BİLGİLERİNİ MODAL İÇİNE DOLDURMA */
 function getRowData(userId) {
-  // GET CURRENT ROW USER'S DATA
   const apiUrl = `${baseUrl}ems/employee/${userId}/`;
   const token = localStorage.getItem("token");
   axios({
@@ -266,6 +241,7 @@ function getRowData(userId) {
       firstName.value = nameData;
       lastName.value = surnameData;
       entryDate.value = formatTarih(startDate);
+      console.log(entryDate.value);
       exitDate.value = formatTarih(exitData);
       job.value = jobData;
       company.value = companyData;
@@ -276,29 +252,7 @@ function getRowData(userId) {
       console.error(error);
     });
 }
-function modalValueControl() {
-  const alert = document.getElementById("alertWarning");
-
-  if (
-    !firstName.value ||
-    !lastName.value ||
-    !job.value ||
-    !company.value ||
-    !userTypes.value ||
-    !username.value
-  ) {
-    alert.style.display = "block";
-    setTimeout(() => {
-      alert.style.display = "none";
-    }, 1600);
-    return false; // Return false to indicate that validation failed.
-  }
-
-  alert.style.display = "none";
-  return true; // Return true to indicate that validation passed.
-}
-
-
+/*PERSONELİN BİLGİLERİNİ GÜNCELLEMEK İÇİNDİR*/
 function editPersonel(userID) {
   const apiUrl = `${baseUrl}ems/employee/${userID}/`;
   const token = localStorage.getItem("token");
@@ -313,7 +267,6 @@ function editPersonel(userID) {
     username: username.value,
   };
 
-  // Add job_end_date if exitDateValue is available
   if (exitDate) {
     data.job_end_date = formatDateToCustomFormat(exitDate.value);
   }
@@ -329,7 +282,7 @@ function editPersonel(userID) {
     .then((response) => {
       const userData = response.data;
       console.log(userData);
-      // window.location.reload();
+      window.location.reload(); 
     })
     .catch((error) => {
       console.error(error);
@@ -338,7 +291,7 @@ function editPersonel(userID) {
 
 let currentPage = 1;
 const itemsPerPage = 10;
-
+/*SAYFALAR ARASINDA GEZİNMEK İÇİN */
 function displayDataOnPage() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
@@ -350,21 +303,20 @@ function displayDataOnPage() {
 
 const prevPageBtn = document.getElementById("prev-page");
 const nextPageBtn = document.getElementById("next-page");
-
+/*BİR ÖNCEKİ SAYFAYA GEÇMEK İÇİN */
 prevPageBtn.addEventListener("click", () => {
   if (currentPage > 1) {
     currentPage--;
     personalList(currentPage);
   }
 });
-
+/*BİR SONRAKİ SAYFAYA GEÇMEK İÇİN */
 nextPageBtn.addEventListener("click", () => {
   currentPage++;
   personalList(currentPage);
 });
-
+/*PERSONEL LİSTESİNİ ALIR */
 const personalList = (page = 1) => {
-  // GETTING CONTACT INFORMATION FROM API
   const apiUrl = `${baseUrl}ems/list/?page=${page}`;
 
   const token = localStorage.getItem("token");
@@ -386,7 +338,52 @@ const personalList = (page = 1) => {
       console.error("hata oluştu", error);
     });
 };
+let currentSortOrder = 'asc';
+const table = document.getElementById("personalTable");
+/*TABLODAKİ VERİLERİ ASC VE DESC OLARAK SIRALAR */
+function sortTable(columnIndex) { 
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
 
+  rows.sort((a, b) => {
+    const aValue = a.children[columnIndex].textContent.trim();
+    const bValue = b.children[columnIndex].textContent.trim();
+    const comparison = aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });  
+  
+    return currentSortOrder === 'asc' ? comparison : -comparison;
+  });
+
+  // Clear the table body
+  table.querySelector("tbody").innerHTML = "";
+
+
+  rows.forEach(row => {
+    table.querySelector("tbody").appendChild(row);
+  });
+  currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+}
+
+const headers = document.querySelectorAll("thead th");
+/*TABLODAKİ BAŞLIKLARA TIKLANDIĞI ZAMAN BAŞLIĞIN VE SIRALANAN VERİLERİN RENGİ DEĞİŞİR */
+headers.forEach((header, index) => {
+  let sort_asc = true;
+  header.addEventListener("click", () => {
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+    headers.forEach(header => header.classList.remove('active'))
+    header.classList.add('active');
+
+    document.querySelectorAll('td').forEach(td => td.classList.remove('active'));
+    rows.forEach(row => {
+      row.children[index].classList.add('active')
+    });
+
+    header.classList.toggle('asc', sort_asc);
+    sort_asc = header.classList.contains('asc') ? false : true;
+    sortTable(index);
+  });
+});
+
+/*GELEN VERİLERİ TABLOYA YERLEŞTİRİR  */
 const showPersonal = async (personalData) => {
   tableBody.innerHTML = "";
   const loginnedUser = await getUserInfoId();
@@ -395,7 +392,6 @@ const showPersonal = async (personalData) => {
   for (const item of personalData) {
     const newRow = document.createElement("tr");
     const job = (await getJobTitleId(item.job_title)) || "-";
-    // console.log(item.company_name);
     const company = (await getCompanyNameId(item.company_name)) || "-";
     const first_name = item.first_name || "-";
     const last_name = item.last_name || "-";
@@ -424,9 +420,7 @@ const showPersonal = async (personalData) => {
     `;
 
     tableBody.appendChild(newRow);
-    // const checkboxes = document.querySelectorAll('input[name="checkbox-group"]');
     const checkBox = newRow.querySelector(".form-check");
-    // const userId = item.id;
     const firstname = item.first_name
     checkBox.addEventListener("change", async ()  => {
       if (checkBox.checked)  {
@@ -487,6 +481,7 @@ let allPermissions = [];
 const excludedValues = [121, 122, 123, 124, 113, 114, 115, 116, 141, 144, 143, 142,  1, 2, 3, 4, 9, 10, 11, 12,69,70,71,72,
 61,62,63,64,49,50,51,52,101,102,103,41,42,43,44,45,46,47,48,85,86,87,88,13,14,15,16,17,18,19,20,29,30,31,32,33,34,35,36,37,38,39,40];
 
+/*İZİNLERİN LİSTESİNİ ALMA FONKSİYONU */
 function getPermission(page = 1) {
   const apiUrl = `${baseUrl}permission/?page=${page}`;
   const token = localStorage.getItem("token");
@@ -509,7 +504,9 @@ function getPermission(page = 1) {
       return allPermissions;
     }
   });
-}
+};
+
+/*İZİN İSİMLERİ TÜRKÇEYE ÇEVRİLDİ */
 const permissionMapping = {
   "Can add account info": "Hesap bilgisi ekleyebilir",
   "Can change account info": "Hesap bilgisini değiştirebilir",
@@ -565,16 +562,15 @@ const permissionMapping = {
   "Can view drive file": "Sürücü dosyasını görebilir",
 };
 
-
 let itemName = []; 
-
+/*İZİN DEĞERLERİ MODALDA GÖSTERİLDİ */
 function createPermissionData(responseData) {
   const permissionList = document.getElementById("permission_list");
   itemName = []; // Her çağrıda boşaltın.
   responseData.forEach((item) => {
     if (!excludedValues.includes(item.id)) {
       const nospaceName = item.name.trim();
-      const translatedName = permissionMapping[nospaceName] || nospaceName;
+      const translatedName = permissionMapping[nospaceName] || nospaceName; //gelen değerdeki boşlukları kaldırmak için
 
       if (!itemName.includes(translatedName)) {
         const permissionItem = document.createElement("div");
@@ -591,33 +587,30 @@ function createPermissionData(responseData) {
       }
     }
   });
-}
-
+};
 
 getPermission()
   .then((allPermissions) => {
     createPermissionData(allPermissions);
     const groupedPermissions = groupByName(allPermissions);
-    // console.log(groupedPermissions);
-
   })
   .catch((error) => {
     console.log("error", error);
   });
 
 
-
+/*İZİNLERİN DEĞERLERİNİN GRUPLANMIŞ DİZİSİ */
 let groupedPermissions = [];
 
 let groupedNames = [];
-
+/*İZİNLERİ İSME GÖRE GRUPLAR */
 function groupByName(responseData) {
 
   responseData.forEach((item) => {
     let permissionName = item.name;
     permissionName = permissionName.trim(); 
 
-    if (!groupedPermissions[permissionName]) {
+    if (!groupedPermissions[permissionName]) { // aynı isimdeki izinleri gruplar
       groupedPermissions[permissionName] = {
         id: [],
         name: permissionName
@@ -634,9 +627,8 @@ groupedNames = names;
   // console.log(groupedPermissions);
   return groupedPermissionsArray;
 }
-
+/*İZİN İSİMLERİNİ TEKER TEKER ALMA FONKSİYONU */
 async function getPermissionId(id) {
-  // console.log(id);
   const apiUrl = `${baseUrl}permission/${id}/`;
   const token = localStorage.getItem("token");
 
@@ -648,16 +640,14 @@ async function getPermissionId(id) {
     },
   })
     .then((response) => {
-      //const responseData = [];
       const responseData = response.data.user_permissions;
-      // console.log(responseData);
       localStorage.setItem("responseData", JSON.stringify(responseData));
 
       for (let i = 0; i < responseData.length; i++) {
         responseData[i].id = parseInt(responseData[i].id, 10);
       }
       const integerData = responseData;
-      // console.log(integerData);
+      console.log(integerData);
       
       integerData.forEach((data) => {
         const permissionId = data;
@@ -671,33 +661,21 @@ async function getPermissionId(id) {
         integerData.forEach((permissionId) => {
           const id = permission.id;
           if (permissionId === id) {
-            // console.log(`ID ${id} usersPermission dizisinde bulunuyor.`);
             const checkbox = document.getElementById(`permission${id}`);
             if (checkbox) {
               checkbox.checked = integerData.some((permissionId) => permissionId === id);
-
-              // const selectedPermissions = document.querySelectorAll('input[type="checkbox"]:checked');
-              // selectedPermissions.forEach((checkbox) => {
-              //   const nameValue = checkbox.getAttribute("name");
-
-              //   if (groupedNames.includes(nameValue)) {
-              //     console.log(`"${nameValue}" groupedNames içinde var.`);
-              //   } else {
-              //     console.log(`"${nameValue}" groupedNames içinde yok.`);
-              //   }
-              // });
             }
           } else {
             // console.log(`ID ${id} usersPermission dizisinde bulunmuyor.`);
           }
         });
       });
-      // getPermissionFilter(perId, "", "");
     })
     .catch((error) => {
       console.log("error", error);
     });
 }
+/*KULLANICININ SEÇTİĞİ İZİNLERİ ALIR, DİZİYE EKLER VE BUNLARI GÜNCELLER*/
 function addUserPermissions(id) {
   const apiUrl = `${baseUrl}permission/${id}/`;
   const token = localStorage.getItem("token");
@@ -720,10 +698,9 @@ function addUserPermissions(id) {
       values.push(value);
     }
   });
-
-  // Şimdi idValues dizisini de values dizisine ekleyin
   values = values.concat(idValues);
-console.log(values);
+  console.log(values);
+
   axios({
     method: 'patch',
     url: apiUrl,
@@ -740,8 +717,7 @@ console.log(values);
     console.log("Hata:", error);
   });
 }
-
-
+/*SATIRLARDAKİ EDİT BUTONUNU TEK TEK ALIR */
 const editClickFunction = async () => {
   const editButtons = document.querySelectorAll("edit-btn");
   const passwordContent = document.getElementById("password-content");
@@ -761,8 +737,8 @@ const editClickFunction = async () => {
   });
 };
 
+/*İŞ TANIM LİSTESİ ALINDI */
 function getJobTitle() {
-  // GET JOB TİTLE
   const apiUrl = `${baseUrl}jobs/list/`;
   const token = localStorage.getItem("token");
 
@@ -791,7 +767,7 @@ function getJobTitle() {
       console.log(error);
     });
 }
-
+/* İŞ TANIMININ DEĞERİ TEK TEK ALINDI */
 const getJobTitleId = async (job_id) => {
 
   const apiUrl = `${baseUrl}jobs/${job_id}/`;
@@ -824,9 +800,8 @@ const getJobTitleId = async (job_id) => {
     return e;
   }
 };
-
+/*ŞİRKET İSİMLERİNİN LİSTESİ ALINDI */
 function getCompanyName() {
-  // GET COMPANY NAME
   const apiUrl = `${baseUrl}company/list/`;
   const token = localStorage.getItem("token");
 
@@ -854,8 +829,8 @@ function getCompanyName() {
       console.log(error);
     });
 }
-
-const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
+/*ŞİRKET İSMİNİN DEĞERLERİ TEK TEK ALINDI */
+const getCompanyNameId  = async (id) => { 
   const apiUrl= `${baseUrl}company/${id}/`;
   const token  = localStorage.getItem('token');
 
@@ -884,8 +859,9 @@ const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
   }
 };
 
+/*GİRİŞ YAPAN KİŞİNİN BİLGİLERİ*/
 const getUserInfoId = async () => {
-  //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
+
   const apiUrl = `${baseUrl}accounts/user/`;
   const token = localStorage.getItem("token");
   const api = new Promise((resolve, reject) => {
@@ -914,6 +890,7 @@ const getUserInfoId = async () => {
   }
 };
 
+/*İZİN DEĞERLERİNİ FİLTRELEME */
 function getPermissionFilter(id, permissionName, codename) {
   const apiUrl = `${baseUrl}permission/?id=${id}&name=${permissionName}&codename=${codename}`;
   const token = localStorage.getItem("token");
@@ -944,6 +921,8 @@ searchButton.addEventListener("click", () => {
   const searchTerm = searchInput.value.trim();
   searchData(searchTerm);
 });
+
+/*TABLODAKİ VERİLER ARASINDA ARAMA YAPMA */
 async function searchData(searchTerm) {
   const apiUrl = `${baseUrl}ems/list/?search=${searchTerm}`;
   const token = localStorage.getItem("token");
@@ -967,11 +946,8 @@ async function searchData(searchTerm) {
         } else {
           row.style.display = "none";
         }
-        if (searchInput.value === "") {
-          row.style.display = "table-row";
-        }
+
       });
-      showPersonal(searchData);
     })
     .catch((error) => {
       console.error("Arama sırasında hata oluştu: ", error);
@@ -990,6 +966,7 @@ searchInput.addEventListener('input', () => {
   }
 });
 
+/*SEÇİLİ OLAN PERMİSSİON DEĞERLEİNİ KALDIRIR */
 const modalElement = document.getElementById("permissionModal");
 function clearInputPermission() {
   modalElement.addEventListener('hidden.bs.modal', function (event) {
