@@ -1,4 +1,3 @@
-
 const problemTitle = document.getElementById('problem-title-input');
 const solutionDescription = document.getElementById('solution-description'); 
 const solutionFileInput1 = document.getElementById('solution-file-1');
@@ -11,6 +10,7 @@ const createButton = document.getElementById('createButton');
 createButton.addEventListener('click',() =>{
     saveButton.style.display='none';
     addButton.style.display = 'block'
+    clearInput()
     modal.show();
 })
 
@@ -53,6 +53,8 @@ nextPageBtn.addEventListener('click', () => {
     currentPage++;
     getData(currentPage);
 });
+
+/*KNOW-HOW BİLGİLERİNİ ALIR */
 const getData = async (page = 1) => {   
     const urlApi = `${baseUrl}knowhow/list/?page=${page}`;
     const token  = localStorage.getItem('token');
@@ -94,8 +96,10 @@ const getData = async (page = 1) => {
         console.log(e);
     }
 }
+
+/*İNPUT ALANLARININ BOŞ OLUP OLMADIĞINI KONTROL EDER */
 function valueControl() {
-    const alert = document.getElementById('alertWarning'); // Define alert here
+    const alert = document.getElementById('alertWarning'); 
     if (
         !problemTitle.value ||
         !solutionDescription.value
@@ -114,7 +118,7 @@ function valueControl() {
 
 }
 
-
+/*KNOW-HOW BİLGİLERİNİ SAYFADA GÖSTERİR */
 const AddContent = async (knowHowData) => {
     
     const knowHowList = document.getElementById('knowHow-list');
@@ -198,16 +202,13 @@ const AddContent = async (knowHowData) => {
         knowHowList.appendChild(knowHowDiv);
     };
 };
-
+/* YENİ BİR KNOW-HOW BİLGİSİ EKLER */
 const addToProblemSolve = () => {
     const apiUrl = `${baseUrl}knowhow/create/`; 
     const token  = localStorage.getItem('token');
     
     const problemTitle = document.getElementById('problem-title-input').value;
     const solutionDescription = document.getElementById('solution-description').value; 
-    // const solutionFileInput = document.getElementById('solution-file');
-
-    // console.log(problemTitle);
 
     const solutionFile1 = solutionFileInput1.files[0];
     const solutionFile2 = solutionFileInput2.files[0];
@@ -229,10 +230,7 @@ const addToProblemSolve = () => {
     if (solutionFile3) {
         formData.append('file_3', solutionFile3);
     }
-    // else {
-    //     formData.append('file', '');
-    // }
-  
+
     axios.post(apiUrl, formData, {
         headers:{ 
             "Authorization": `Token ${token}`,
@@ -242,7 +240,7 @@ const addToProblemSolve = () => {
     .then((response)=>{
 
         window.location.reload()
-        // console.log(response.data);
+        console.log(response.data);
 
     }).catch((error) => {
         console.log(error)
@@ -250,18 +248,6 @@ const addToProblemSolve = () => {
    
 }
 
-// const writeContent = async ()=>{
-//     const accordionBox = document.getElementById('accordionExample');
-//  await getData();
-
-//     setTimeout(() => {
-
-//         for (let i=0; i < dataList.length; i++){
-//         AddContent(dataList[i]);
-//     }
-//     }, 100)
-
-// }
 
 const deleteClickFunction = async () => {
     const deleteButtons = document.querySelectorAll('.delete-btn');
@@ -285,7 +271,8 @@ const deleteClickFunction = async () => {
 
     });
 }
-const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
+/*GİRİŞ YAPAN KİŞİNİN BİLGİLERİNİ ALIR*/
+const getUserInfoId = async () => { 
     const apiUrl= `${baseUrl}accounts/user/`
     const token  = localStorage.getItem('token');
     const api = new Promise((resolve, reject) => {
@@ -315,6 +302,7 @@ const getUserInfoId = async () => { //GİRİŞ YAPAN KİŞİNİN BİLGİLERİ
     }
     
 }  
+/*KNOW*HOW BİLGİSİNİ KİMİN OLUŞTURDUĞUNU GÖRMEK İÇİN İSİMLERİ ALIR */
 const getOwner = async (id) => {
     const apiUrl= `${baseUrl}ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
@@ -352,7 +340,7 @@ const getOwner = async (id) => {
         return e
     }
 }  
-
+/*İLGİLİ SATIRDAKİ KNOW-HOW BİLGİSİNİ SİLER */
 const deleteProblem = async(pageId) =>{
     const apiPageUrl = `${baseUrl}knowhow/detail/${pageId}/`;
     const token  = localStorage.getItem('token');  
@@ -387,6 +375,7 @@ const deleteProblem = async(pageId) =>{
     }
 }
 
+/*İLGİLİ SATIRDAKİ KNOW-HOW BİLGİSİNİ DÜZENLER */
 const editToProblem = async (itemId) => {
     // console.log(itemId);
     const pageApi = `${baseUrl}knowhow/detail/${itemId}/`;
@@ -435,6 +424,7 @@ const editToProblem = async (itemId) => {
         return error;
     }
 }
+
 function createEditButton(pageId) {
     document.querySelector('.modal-title').innerHTML = '';
     saveButton.style.display = 'block';
@@ -460,8 +450,7 @@ function createEditButton(pageId) {
 
     });
 }
-
-
+/*İLGİLİ SATIRDAKİ BİLGİLERİ MODALDA GETİRİR VE GÖSTERİR */
 function getRowData(pageId) {
     const apiUrl = `${baseUrl}knowhow/detail/${pageId}/`;
     const token = localStorage.getItem('token');
@@ -486,9 +475,9 @@ function getRowData(pageId) {
         const uploadData2 = problemData.file_2 || '';
         const uploadData3 = problemData.file_3 || '';
 
-        const fileName1 = uploadData1 ? uploadData1.split('/').pop() : '-';
-        const fileName2 = uploadData2 ? uploadData2.split('/').pop() : '-';
-        const fileName3 = uploadData3 ? uploadData3.split('/').pop() : '-';
+        const fileName1 = uploadData1 ? uploadData1.split('/').pop() : '';
+        const fileName2 = uploadData2 ? uploadData2.split('/').pop() : '';
+        const fileName3 = uploadData3 ? uploadData3.split('/').pop() : '';
         
         function showFileName(inputId, listId, uploadedLinkId, fileId) {
             const solutionFileInput = document.getElementById(inputId);
@@ -552,7 +541,7 @@ function getRowData(pageId) {
                 const fileId = deleteButton.getAttribute('data-file-id');
                 const listItem = deleteButton.closest('li');
                 const uploadedLink = listItem.querySelector(`#uploaded-link-${fileId.charAt(fileId.length - 1)}`);
-        
+                deleteFile(pageId,fileId)
                 uploadedLink.textContent = '-';
             });
         });
@@ -563,7 +552,7 @@ function getRowData(pageId) {
         console.error(error);
     });
 }
-
+/*İLGİLİ SATIRDAKİ DOSYAYI SİLER */
 const deleteFile = async (pageId, fileId) => {
     const apiPageUrl = `${baseUrl}knowhow/detail/${pageId}/`;
     const token = localStorage.getItem('token');
@@ -571,24 +560,27 @@ const deleteFile = async (pageId, fileId) => {
     const formData = new FormData();
     formData.append(fileId, "");
 
-    axios({
-        method: 'patch',
-        url: apiPageUrl,
-        headers: {
-            "Authorization": `Token ${token}`,
-            'Content-Type': 'multipart/form-data',
-        },
-        data: formData
-    }).then((response) => {
+    try {
+        const response = await axios({
+            method: 'patch',
+            url: apiPageUrl,
+            headers: {
+                "Authorization": `Token ${token}`,
+                'Content-Type': 'multipart/form-data',
+            },
+            data: formData
+        });
+
         if (response.status === 200) {
-            // File deleted successfully
+            console.log("File deleted successfully");
         } else {
             console.error('File could not be deleted.');
         }
-    }).catch((error) => {
+    } catch (error) {
         console.error(error);
-    });
+    }
 }
+
 function clearInput() {
     problemTitle.value = '';
     solutionDescription.value = '';
