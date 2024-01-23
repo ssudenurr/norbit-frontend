@@ -12,7 +12,7 @@ const countInput = document.getElementById('inputCount');
 const linkInput = document.getElementById('inputLink');
 const descriptionInput = document.getElementById('inputDescription');
 const categoryInput = document.getElementById('inputCategory');
-const ownerInput = document.getElementById('inputOwnerName');
+const orderingPersonInput = document.getElementById('inputOrderingPerson');
 const modaltitle = document.getElementById('exampleModalLabel');
 
 const addButton = document.getElementById('add-btn');
@@ -22,9 +22,14 @@ const rowEdit = document.getElementById('editBtn');
 const rowDelete = document.getElementById('delete-btn');
 
 const closeBtn = document.getElementById('btn-close');
-closeBtn.addEventListener('click', () =>{
+closeBtn.addEventListener('click', () => {
+    const checkBox = document.querySelector('input[type="checkbox"]');
+    checkBox.checked = false;
+    modal.hide();
     clearInput();
-})
+});
+
+
 function valueControl(){
     const alert = document.getElementById("alertWarning"); 
     if(
@@ -44,7 +49,8 @@ function valueControl(){
     
         return;
 }
-}
+};
+
 addButton.addEventListener('click', () => {
     rowAdd.style.display = "block"
     getCategoryList();
@@ -54,28 +60,20 @@ addButton.addEventListener('click', () => {
             valueControl();
             createInventory();
         });
-    // const existingRowAddBtn = document.querySelector('.row-add-btn');
-    // if (!existingRowAddBtn) {
-    //     const buttonBox = document.getElementById('button-box');
-    //     const addBtn = document.createElement('button');
-    //     addBtn.className = 'btn btn-primary row-add-btn';
-    //     addBtn.textContent = 'Ekle';
-    //     // addBtn.style.display = "none"
-
-    //     buttonBox.appendChild(addBtn);
-    // }
     clearInput();
 })
-
-function formatTarih(tarih) {
-    if (tarih && tarih !== '-') {
-        const tarihParcalari = tarih.split('T');
-        return tarihParcalari[0];
-    } else {
-        return '-';
+/*UZUN FORMATTAKİ TARİHİ KISA FORMATA ÇEVİRİR */
+function formatTarih(date) {
+    if (date) {
+      const datePieces = date.split("T");
+      if (datePieces.length > 0) {
+        return datePieces[0];
+      }
     }
-}
+    return null; // Eksik tarih için null değeri döndürün
+  }
 
+/*KISA FORMATTAKİ TARİHİ UZUN FORMATA ÇEVİRİR */
 function formatDateToCustomFormat(date) {
     if (!date) {
         return null; // Handle the case where date is empty
@@ -94,7 +92,7 @@ function formatDateToCustomFormat(date) {
     return formattedDate;
   }
 
-
+/*YENİ BİR ENVANTER BİLGİSİ EKLENİR */
 function createInventory(){
   const apiUrl= `${baseUrl}inventory/create/`;
   const token  = localStorage.getItem('token');
@@ -115,18 +113,17 @@ function createInventory(){
         where_in_the_office:whereInTheOfficeInput.value,
         category:[categoryInput.value],
         project: [],
+        ordering_person:[orderingPersonInput.value],
         
       }
   }).then((response) => {
-    // getCategoryList();
-    // getResponsiblePerson();
     window.location.reload();
 
   }).catch((error) => {
       console.log(error)
   })
 }
-
+/*İLGİLİ SATIRIN BİLGİLERİNİ MODALA DOLDURUR */
 function getRowData(rowId){
   const apiUrl = `${baseUrl}inventory/${rowId}/`
   const token  = localStorage.getItem('token');
@@ -140,9 +137,10 @@ function getRowData(rowId){
   }).then( async (response)=>{
       const rowData = response.data;
       
-    //   const ownerData = await getResponsibleId(rowData.owner);
+      const orderingPersonData = await getOrderingPersonId(rowData.ordering_person);
       const productNameData = rowData.product_name;
       const purchaseDateData = rowData.satin_alinan_tarih;
+      console.log(purchaseDateData);
       const whereInTheOfficeInputData = rowData.where_in_the_office;
       const priceData = rowData.price;
       const countData = rowData.count;
@@ -150,9 +148,10 @@ function getRowData(rowId){
       const descriptionData = rowData.description;
       const categoryData = await getCategoryId(rowData.category);
 
-    //   ownerInput.value = ownerData;
+      orderingPersonInput.value = orderingPersonData;
       categoryInput.value = categoryData;
       purchaseDate.value = formatTarih(purchaseDateData);
+      console.log(purchaseDate.value);
       whereInTheOfficeInput.value = whereInTheOfficeInputData;
       productNameInput.value = productNameData;
       priceInput.value = priceData;
@@ -160,13 +159,13 @@ function getRowData(rowId){
       linkInput.value = linkData;
       descriptionInput.value = descriptionData; 
       getCategoryList(rowData.category);
-    //   getResponsiblePerson(rowData.owner)
-
+      getOrderingPerson(rowData.ordering_person)
 
   }).catch((error) => {
     console.error(error);
   });
-}
+};
+
 let dataList = [];
 let currentPage = 1;
 let itemsPerPage = 5;
@@ -174,7 +173,7 @@ let itemsPerPage = 5;
 const nextPageBtn = document.getElementById("next-page");
 const prevPageBtn = document.getElementById("prev-page");
 
-
+/*SAYFALAR ARASINDA GEZİNMEK İÇİNDİR */
 function displayDataOnPage(){
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -183,20 +182,22 @@ function displayDataOnPage(){
     tableBody.innerHTML = "";
     showInventory(pageData); 
 
-}
+};
 
+/*BİR SONRAKİ SAYFAYA GEÇMEK İÇİN */
 nextPageBtn.addEventListener('click', () => {
     currentPage++;
     getInventory(currentPage);
 });
 
+/*BİR ÖNCEKİ SAYFAYA GEÇMEK İÇİN */
 prevPageBtn.addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
         getInventory(currentPage);
     }
 });
-
+/*ENVANTER LİSTESİNİ ALIR */
 async function getInventory(itemsPerPage = 1){
 
     const urlApi = `${baseUrl}inventory/list/?page=${itemsPerPage}`;
@@ -213,7 +214,6 @@ async function getInventory(itemsPerPage = 1){
       const responseData = response.data.results;
       const nextPage = response.next;
       showInventory(responseData);
-
       responseData.map((item) => {
         dataList.push(item);
     });
@@ -225,20 +225,11 @@ async function getInventory(itemsPerPage = 1){
 
       console.log(error)
   })
-}
+};
+/*SEÇİLEN ENVANTER BİLGİSİNİN DEĞERLERİNİ DÜZENLER */
 function editInventory(inventoryId){
   const apiUrl = `${baseUrl}inventory/${inventoryId}/`
   const token  = localStorage.getItem('token');
-
-  const newProductName = document.getElementById('inputProductName');
-  const newPurchaseDate = document.getElementById('inputPurchaseDate');
-  const newWhereInTheOffice = document.getElementById('input-Where-In-The-Office');
-  const newPrice = document.getElementById('inputPrice');
-  const newCount = document.getElementById('inputCount');
-  const newLink = document.getElementById('inputLink');
-  // const newPurhasingDate = document.getElementById('inputPurchasingDate');
-  const newDescription = document.getElementById('inputDescription');
-  const newCategory = document.getElementById("inputCategory")
 
   axios({
       method:'patch',
@@ -247,14 +238,15 @@ function editInventory(inventoryId){
           "Authorization": `Token ${token}`
       },
       data:{
-          product_name:newProductName.value,
-          satin_alinan_tarih:formatDateToCustomFormat(newPurchaseDate.value),
-          where_in_the_office:newWhereInTheOffice.value,
-          price:newPrice.value,
-          count:newCount.value,
-          e_commerce_site:newLink.value,
-          description:newDescription.value,
-          category:[newCategory.value],
+          ordering_person:[orderingPersonInput.value],
+          product_name:productNameInput.value,
+          satin_alinan_tarih:formatDateToCustomFormat(purchaseDate.value),
+          where_in_the_office:whereInTheOfficeInput.value,
+          price:priceInput.value,
+          count:countInput.value,
+          e_commerce_site:linkInput.value,
+          description:descriptionInput.value,
+          category:[categoryInput.value],
       }
   }).then((response)=>{
       // const userData = response.data
@@ -264,7 +256,7 @@ function editInventory(inventoryId){
       console.error(error)
   });
 }   
-
+/*SEÇİLEN ENVANTER DEĞERİNİ SİLER */
 function deleteInventory(inventoryId){
   const apiUrl = `${baseUrl}inventory/${inventoryId}/`
   const token  = localStorage.getItem('token');
@@ -283,8 +275,55 @@ function deleteInventory(inventoryId){
       console.error(error)
   });
 
+};
+
+/*TABLODAKİ VERİLERİ ASC VE DESC OLARAK SIRALAR */
+let currentSortOrder = 'asc';
+const table = document.getElementById("inventory-table");
+function sortTable(columnIndex) { 
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+  rows.sort((a, b) => {
+    const aValue = a.children[columnIndex].textContent.trim();
+    const bValue = b.children[columnIndex].textContent.trim();
+    const comparison = aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });  
+  
+    return currentSortOrder === 'asc' ? comparison : -comparison;
+  });
+
+  // Clear the table body
+  table.querySelector("tbody").innerHTML = "";
+
+
+  rows.forEach(row => {
+    table.querySelector("tbody").appendChild(row);
+  });
+  currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
 }
 
+
+const headers = document.querySelectorAll("thead th");
+/*TABLODAKİ BAŞLIKLARA TIKLANDIĞI ZAMAN BAŞLIĞIN VE SIRALANAN VERİLERİN RENGİ DEĞİŞİR */
+headers.forEach((header, index) => {
+  let sort_asc = true;
+  header.addEventListener("click", () => {
+  const rows = Array.from(table.querySelectorAll("tbody tr"));
+
+    headers.forEach(header => header.classList.remove('active'))
+    header.classList.add('active');
+
+    document.querySelectorAll('td').forEach(td => td.classList.remove('active'));
+    rows.forEach(row => {
+      row.children[index].classList.add('active')
+    });
+
+    header.classList.toggle('asc', sort_asc);
+    sort_asc = header.classList.contains('asc') ? false : true;
+    sortTable(index);
+  });
+});
+
+/*EKLENEN ENVANTER BİLGİLERİNİ TABLODA GÖSTERİR */
 const showInventory =  async (responseData) => {
     tableBody.innerHTML = '';
     for (const item of responseData) {
@@ -296,14 +335,14 @@ const showInventory =  async (responseData) => {
         const count = item.count || '-';
         const e_commerce_site = item.e_commerce_site || '-';
         const description = item.description || '-';
-        const ownerName = await getResponsibleId(item.owner) || '-';
+        const orderingPerson = (item.ordering_person && item.ordering_person.length > 0) ? await getOrderingPersonId(item.ordering_person) : '-';
         // console.log(item.category[0]);
         // const categoryName = await getCategoryId(item.category[0]) ;
-        const categoryName = await getCategoryId(item.category[0])
+        const categoryName = await getCategoryId(item.category[0]) || '-'
         newRow.innerHTML = `
-        <td><input class="form-check" type ="checkbox"  id="checkbox" value=""</td>
+        <td><input class="form-check" type ="checkbox"  id="checkbox" </td>
         <td>${product_name}</td>
-        <td>${ownerName}</td>
+        <td>${orderingPerson}</td>
         <td>${purchasing_date}</td>
         <td>${categoryName}</td>
         <td>${price}</td>
@@ -326,15 +365,12 @@ const showInventory =  async (responseData) => {
         checkBox.addEventListener('change', (e) => {
             e.preventDefault();
             const inventoryId = item.id;
-            // if(this.checked){
-            //     console.log("Seçilen satırın ID'si: " + inventoryId);
-            // }   
+
             editButton.addEventListener('click', () =>{
                 rowAdd.style.display = "none";
                 rowEdit.style.display = "block";
                 getRowData(inventoryId);
                 modal.show();
-                checkBox.checked = false;
                 // document.getElementById('extraData').style.display= 'none';
 
             });
@@ -348,7 +384,9 @@ const showInventory =  async (responseData) => {
             })
         });
     };
-}
+};
+
+/*KATEGORİ LİSTESİNİ GÖSTERİR */
 function getCategoryList() {
     // GET COMPANY NAME
     const apiUrl = `${baseUrl}category/`;
@@ -377,6 +415,8 @@ function getCategoryList() {
         console.log(error);
       });
   }
+
+/* KATEGORİ İSİMLERİNİ TEK TEK ALIR */
 async function getCategoryId(id) {
 const apiUrl = `${baseUrl}category/${id}`;
 const token = localStorage.getItem("token");
@@ -397,10 +437,11 @@ try {
     console.log(error);
     return null; // Return a default value or handle the error as needed
 }
-}
+};
 
+/*SİPARİŞ VEREN KİŞİ BİLGİLERİ İÇİN PERSONEL LİSTESİNİ ALIR */
 let personList = [];
-async function getResponsiblePerson(purchaseId, page = 1) {
+async function getOrderingPerson(purchaseId, page = 1) {
     const apiUrl = `${baseUrl}ems/list/?page=${page}`;
     const token = localStorage.getItem("token");
   
@@ -416,7 +457,7 @@ async function getResponsiblePerson(purchaseId, page = 1) {
       const personNameData = response.data.results;
       console.log(response.data);
   
-      const personListElement = document.getElementById("inputOwnerName");
+      const personListElement = document.getElementById("inputOrderingPerson");
   
       personNameData.forEach((person) => {
         const option = document.createElement("option");
@@ -433,15 +474,17 @@ async function getResponsiblePerson(purchaseId, page = 1) {
       const nextPage = response.data.next;
       if (nextPage !== null) {
         const nextPage = page + 1;
-        return await getResponsiblePerson(personList, nextPage);
+        return await getOrderingPerson(personList, nextPage);
       } else {
         return personList;
       }
     } catch (error) {
       console.error(error);
     }
-  }
-const getResponsibleId = async (id) => {
+};
+
+/*SİPARİŞ VEREN KİŞİNİN İSİM SOYİSİM BİLGİSİNİ ALIR*/
+const getOrderingPersonId = async (id) => {
     const apiUrl= `${baseUrl}ems/list/?id=${id}`
     const token  = localStorage.getItem('token');
 
@@ -454,14 +497,13 @@ const getResponsibleId = async (id) => {
             },
         }).then((response)=>{
             const responseData = response.data.results
-
-            const ownerData = responseData.map((item) => {
+            const personData = responseData.map((item) => {
                 const firstname = item.first_name;
                 const lastname = item.last_name;
                 return firstname + ' ' + lastname;
             });
 
-            resolve(ownerData);
+            resolve(personData);
         }).catch((error) => {
             reject(error)
         
@@ -480,6 +522,8 @@ searchButton.addEventListener("click", () => {
     const searchTerm = searchInput.value.trim();
     searchData(searchTerm);
   });
+  
+/*TABLODAKİ VERİLER ARASINDA ARAMA YAPMA */
 async function searchData(searchTerm){
     const apiUrl = `${baseUrl}inventory/list/?search=${searchTerm}`;
     const token  = localStorage.getItem('token');
@@ -502,12 +546,9 @@ async function searchData(searchTerm){
             } else {
                 row.style.display = 'none'; 
             }
-            if (searchInput.value === '') {
-                    row.style.display = 'table-row';
-            }
+
     
     })
-        showInventory(searchData); 
 
     })
     .catch(error => {
@@ -537,6 +578,8 @@ function clearInput() {
     descriptionInput.value = '';
   }
 window.addEventListener('load', () =>{
+    getOrderingPerson();
+
     // getResponsiblePerson();
     getInventory(1);
     // writeContent();
