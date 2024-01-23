@@ -20,15 +20,20 @@ addBtn.addEventListener("click", () => {
 
 function clearInput() {
     inputJobTitle.value = "";
-}
-function formatTarih(tarih) {
-  if (tarih) {
-    const tarihParcalari = tarih.split("T");
-    return tarihParcalari[0];
-  }
-  return "-";
-}
+};
 
+/*UZUN FORMATTAKİ TARİHİ KISA FORMATA ÇEVİRİR */
+function formatTarih(date) {
+  if (date && date !== '-') {
+      const datePieces = date.split('T')[0];
+      const editedDatePieces = datePieces.split('-')
+      return editedDatePieces.reverse().join('-');
+  } else {
+      return '-';
+  }
+};
+
+/*KISA FORMATTAKİ TARİHİ UZUN FORMATA ÇEVİRİR */
 function formatDateToCustomFormat(date) {
   let date2 = new Date(date);
   var yyyy = date2.getFullYear();
@@ -41,10 +46,10 @@ function formatDateToCustomFormat(date) {
   var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
 
   return formattedDate;
-}
+};
 
+/* TÜM İŞ TANIMLARINI ALIR*/
 function getJobTitleList() {
-  // GET COMPANY NAME
   const apiUrl = `${baseUrl}jobs/list/`;
   const token = localStorage.getItem("token");
 
@@ -64,8 +69,9 @@ function getJobTitleList() {
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
+/*İŞ TANIMLARINI SAYFADA GÖSTERİR */
 function showJobList(jobTitleData) {
   tableBody.innerHTML = "";
 
@@ -97,7 +103,9 @@ function showJobList(jobTitleData) {
         deleteJobTitle(itemId);
     });
   }
-}
+};
+
+/*EKLE BUTONU KALKTIĞINDA YERİNDE KAYDET BUTONU OLUŞUR */
 async function clickToEditBtn(jobId) {
   buttonBox.innerHTML = `
     <button type="button" class="btn btn-info" data-bs-dismiss="modal" id="save-btn">Kaydet</button>
@@ -106,8 +114,9 @@ async function clickToEditBtn(jobId) {
     editJobTitle(jobId);
   });
   getRowData(jobId);
-}
+};
 
+/*YENİ BİR İŞ TANIMI OLUŞTURUR */
 function createJobTitle() {
   const apiUrl = `${baseUrl}jobs/create/`;
   const token = localStorage.getItem("token");
@@ -128,8 +137,9 @@ function createJobTitle() {
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
+/*İLGİLİ SATIRDAKİ İŞ TANIMINI MODALA DOLDURUR */
 function getRowData(jobId) {
   const apiUrl = `${baseUrl}jobs/${jobId}/`;
   const token = localStorage.getItem("token");
@@ -152,8 +162,9 @@ function getRowData(jobId) {
     .catch((error) => {
       console.log("error", error);
     });
-}
+};
 
+/*İLGİLİ SATIRDAKİ İŞ TANIMINI DÜZENLER */
 function editJobTitle(jobId) {
   const apiUrl = `${baseUrl}jobs/${jobId}/`;
   const token = localStorage.getItem("token");
@@ -176,7 +187,9 @@ function editJobTitle(jobId) {
     .catch((error) => {
       console.error(error);
     });
-}
+};
+
+/*İLGİLİ SATIRDAKİ İŞ TANIMINI DÜZENLER */
 function deleteJobTitle(jobId) {
   const apiUrl = `${baseUrl}jobs/${jobId}/`;
   const token = localStorage.getItem("token");

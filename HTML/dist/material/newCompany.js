@@ -21,15 +21,20 @@ addBtn.addEventListener("click", () => {
 
 function clearInput() {
   inputCompanyName.value = "";
-}
-function formatTarih(tarih) {
-  if (tarih) {
-    const tarihParcalari = tarih.split("T");
-    return tarihParcalari[0];
-  }
-  return "-";
-}
+};
 
+/*UZUN FORMATTAKİ TARİHİ KISA FORMATA ÇEVİRİR */
+function formatTarih(date) {
+  if (date && date !== '-') {
+      const datePieces = date.split('T')[0];
+      const editedDatePieces = datePieces.split('-')
+      return editedDatePieces.reverse().join('-');
+  } else {
+      return '-';
+  }
+};
+
+/*KISA FORMATTAKİ TARİHİ UZUN FORMATA ÇEVİRİR */
 function formatDateToCustomFormat(date) {
   let date2 = new Date(date);
   var yyyy = date2.getFullYear();
@@ -43,9 +48,8 @@ function formatDateToCustomFormat(date) {
 
   return formattedDate;
 }
-
+/* TÜM ŞİRKET İSİMLERİNİ ALIR*/
 function getCompanyList() {
-  // GET COMPANY NAME
   const apiUrl = `${baseUrl}company/list/`;
   const token = localStorage.getItem("token");
 
@@ -66,7 +70,7 @@ function getCompanyList() {
       console.log(error);
     });
 }
-
+/*ŞİRKET BİLGİLERİNİ SAYFADA GÖSTERİR */
 function showCompanyList(companyData) {
   tableBody.innerHTML = "";
 
@@ -97,7 +101,9 @@ function showCompanyList(companyData) {
       deleteCompany(itemId);
     });
   }
-}
+};
+
+/*EKLE BUTONU KALKTIĞINDA YERİNDE KAYDET BUTONU OLUŞUR */
 async function clickToEditBtn(companyId) {
   buttonBox.innerHTML = `
     <button type="button" class="btn btn-info" data-bs-dismiss="modal" id="save-btn">Kaydet</button>
@@ -106,8 +112,9 @@ async function clickToEditBtn(companyId) {
     editCompanyData(companyId);
   });
   getRowData(companyId);
-}
+};
 
+/*YENİ BİR ŞİRKET BİLGİSİ OLUŞTURUR */
 function createCompanyName() {
   const apiUrl = `${baseUrl}company/create/`;
   const token = localStorage.getItem("token");
@@ -128,8 +135,9 @@ function createCompanyName() {
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
+/*İLGİLİ SATIRDAKİ ŞİRKET BİLGİSİNİ MODALA DOLDURUR */
 function getRowData(companyId) {
   const apiUrl = `${baseUrl}company/${companyId}/`;
   const token = localStorage.getItem("token");
@@ -152,8 +160,9 @@ function getRowData(companyId) {
     .catch((error) => {
       console.log("error", error);
     });
-}
+};
 
+/*İLGİLİ SATIRDAKİ ŞİRKET BİLGİSİNİ DÜZENLER */
 function editCompanyData(companyId) {
   const apiUrl = `${baseUrl}company/${companyId}/`;
   const token = localStorage.getItem("token");
@@ -176,7 +185,9 @@ function editCompanyData(companyId) {
     .catch((error) => {
       console.error(error);
     });
-}
+};
+
+/*İLGİLİ SATIRDAKİ ŞİRKET BİLGİSİNİ SİLER */
 function deleteCompany(companyId) {
   const apiUrl = `${baseUrl}company/${companyId}/`;
   const token = localStorage.getItem("token");

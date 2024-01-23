@@ -32,10 +32,10 @@ employeesOption.value = "";
 const saveButton = document.getElementById('save-btn');
 addBtn.addEventListener('click', ()=>{
         addNewProject();
-        window.location.reload();
 
-})
+});
 
+/*İNPUT ALANLARININ BOŞ OLUP OLMADIĞINI KONTROL EDER */
 function valueControl() {
     const alert = document.getElementById("alertWarning"); // Define 'alert' here
     if (
@@ -55,20 +55,24 @@ function valueControl() {
       return;
     }
     alert.style.display = "none";
-  }
+};
 
-  function formatTarih(tarih) {
-    if (tarih) {
-      const tarihParcalari = tarih.split("T");
-      return tarihParcalari[0];
+/*UZUN FORMATTAKİ TARİHİ KISA FORMATA ÇEVİRİR */
+function formatTarih(date) {
+    if (date) {
+      const datePieces = date.split("T");
+      if (datePieces.length > 0) {
+        return datePieces[0];
+      }
     }
-    return "-";
+    return null; 
   }
 
 
 let currentPage = 1;
 const itemsPerPage = 10 ;
 
+/*SAYFALAR ARASINDA GEZİNMEK İÇİNDİR */
 function displayDataOnPage() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
@@ -81,6 +85,7 @@ function displayDataOnPage() {
 const prevPageBtn = document.getElementById('prev-page');
 const nextPageBtn = document.getElementById('next-page');
 
+/*BİR ÖNCEKİ SAYFAYA GEÇMEK İÇİN */
 prevPageBtn.addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
@@ -88,11 +93,13 @@ prevPageBtn.addEventListener('click', () => {
     }
 });
 
+/*BİR SONRAKİ SAYFAYA GEÇMEK İÇİN */
 nextPageBtn.addEventListener('click', () => {
     currentPage++;
     getProjectsInfo(currentPage);
 });
 
+/*KISA FORMATTAKİ TARİHİ UZUN FORMATA ÇEVİRİR */
 function formatDateToCustomFormat(date) {
     let date2 = new Date(date);
     var yyyy = date2.getFullYear();
@@ -105,7 +112,9 @@ function formatDateToCustomFormat(date) {
     var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
 
     return formattedDate;
-  }
+};
+
+/*PROJE BİLGİLERİNİ TEKER TEKER ALMAK İÇİNDİR */
 function getProjectsInfo(page){
     const apiUrl = `${baseUrl}projects/list/?page=${page}`;
     const token  = localStorage.getItem('token');
@@ -123,7 +132,9 @@ function getProjectsInfo(page){
     }).catch((error) =>{
         console.log(error);
     })
-}
+};
+
+/*PROJE BİLGİLERİNİ MODALIN İÇİNDE YAZILI VE SEÇİLİ OLARAK GÖSTERİR*/
 async function getProjectsDetails(pageId){
     const apiUrl = `${baseUrl}projects/${pageId}/`;
     const token  = localStorage.getItem('token');
@@ -162,8 +173,9 @@ async function getProjectsDetails(pageId){
     }).catch((error) =>{
         console.log(error);
     })
-}
+};
 
+/*PROJE BİLGİLERİNİ SAYFADA GÖSTERİR */
 async function projectDetails(projectData) {
     projectList.innerHTML = ''; // Projeleri temizle
 
@@ -246,7 +258,7 @@ async function projectDetails(projectData) {
     }
 };
 
-
+/*GİRİŞ YAPAN KULLANICININ BİLGİLERİNİ ALIR */
 async function getUserInfoId (){
     try {
       const apiUrl = `${baseUrl}accounts/user/`;
@@ -272,25 +284,25 @@ async function getUserInfoId (){
     }
   };
 
+/*EKLE BUTONUNU KALDIRIR YERİNE KAYDET BUTONU GELİR VE DÜZENLEME FONKSİYONU ÇALIŞIR */
+async function createSaveButton(pageId) {
+document.querySelector('.modal-title').innerHTML = '';
 
-  async function createSaveButton(pageId) {
-    document.querySelector('.modal-title').innerHTML = '';
+saveButton.style.display = 'block';
+addBtn.style.display = 'none';
 
-    saveButton.style.display = 'block';
-    addBtn.style.display = 'none';
+await getProjectsDetails(pageId);
 
-    await getProjectsDetails(pageId);
-
-    saveButton.addEventListener('click', async () => {
-        // Get the selected employees' IDs and pass them to editToProject
-        const selectedEmployees = Array.from(employeesOption.selectedOptions).map(option => option.value);
-        console.log(selectedEmployees);
-        await editToProject(pageId, selectedEmployees);
-        // modal.hide();
-        window.location.reload();
-    });
+saveButton.addEventListener('click', async () => {
+    // Get the selected employees' IDs and pass them to editToProject
+    const selectedEmployees = Array.from(employeesOption.selectedOptions).map(option => option.value);
+    console.log(selectedEmployees);
+    await editToProject(pageId, selectedEmployees);
+    // modal.hide();
+    window.location.reload();
+});
 }
-
+/*PROJE BİLGİSİNİ GÜNCELLER */
 const editToProject = async (itemId, selectedEmployees) => {
     const pageApi = `${baseUrl}projects/${itemId}/`;
     const token = localStorage.getItem('token');
@@ -324,8 +336,8 @@ const editToProject = async (itemId, selectedEmployees) => {
     });
 };
 
-
-const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
+/* ŞİRKET İSMİNİ ALIR */
+const getCompanyNameId  = async (id) => {
     const apiUrl= `${baseUrl}company/${id}/`
     const token  = localStorage.getItem('token');
 
@@ -353,7 +365,7 @@ const getCompanyNameId  = async (id) => {    // GET COMPANY NAME ID
         return e
     }
 };
-
+/*ŞİRKET İSİMLERİNİN LİSTESİNİ ALIR */
 function getCompanyName() {
     const apiUrl = `${baseUrl}company/list/`;
     const token = localStorage.getItem('token');
@@ -381,48 +393,8 @@ function getCompanyName() {
         console.log(error);
     });
 }
-// async function employeesData(selectedEmployeeIds) {
-//     let allPersonNameData = [];
-//     let pageNumber = 1;
 
-//     const token = localStorage.getItem("token");
-
-
-
-//     while (true) {
-//         const apiUrl = `http://backend.norbit.com.tr/ems/list/?page=${pageNumber}`;
-//       const response = await axios({
-//         method: "get",
-//         url: apiUrl,
-//         headers: {
-//           Authorization: `Token ${token}`,
-//         },
-//       });
-
-//       const pageData = response.data.results;
-//       allPersonNameData = allPersonNameData.concat(pageData);
-
-//       if (!response.data.next) {
-//         break; // Son sayfa kontrolü
-//       }
-
-//       pageNumber++;
-//     }
-
-//     employeesOption.innerHTML = "";
-
-//     allPersonNameData.forEach((person) => {
-//       const option = document.createElement("option");
-//       option.value = person.id;
-//       option.text = person.username;
-//       if (selectedEmployeeIds && selectedEmployeeIds.includes(person.id)) {
-//         option.selected = true;
-//       }
-//       employeesOption.appendChild(option);
-//     });
-//   }
-
-
+/*PROJEDE YER ALAN KİŞİLERİ SEÇMEK İÇİN PERSONEL LİSTESİNİ ALIR */
 async function employeesData(selectedEmployeeIds, allPersonNameData = [], pageNumber = 1) {
     const apiUrl = `${baseUrl}ems/list/?page=${pageNumber}`;
     const token = localStorage.getItem("token");
@@ -460,10 +432,9 @@ async function employeesData(selectedEmployeeIds, allPersonNameData = [], pageNu
     } catch (error) {
       console.log('Hata oluştu:', error);
     }
-  }
+};
 
-
-
+/*KİŞİ BİLGİLERİNİN DETAYLARINI ALIR*/
 const getEmployeesId = async (id) => {
 
 const apiUrl = `${baseUrl}ems/employee/${id}`;
@@ -501,18 +472,20 @@ try {
     return e;
 }
 };
+
+/*PROJEDE YER ALAN KİŞİLERİN İSİMLERİNİ TOPLAR */
 async function getEmployeesData(employeeIds) {
     const employeeData = [];
 
     for (const id of employeeIds) {
         const employeeName = await getEmployeesId(id);
         employeeData.push(employeeName);
-        // console.log(employeeName);
     }
 
     return employeeData;
-}
+};
 
+/*YENİ BİR PROJE EKLEMEK İÇİNDİR */
 const addNewProject = async () =>{
     const apiUrl = `${baseUrl}projects/create/`;
     const token  = localStorage.getItem('token');
@@ -522,7 +495,6 @@ const addNewProject = async () =>{
     const projectDescription = document.getElementById('projectDescription').value;
     const projectstartDate = document.getElementById('startDate').value;
     const projectEndDate = document.getElementById('endDate').value;
-    // const formattedEndDate = projectEndDate ? formatDateToCustomFormat(projectEndDate) : '';
     const projectCustomer = document.getElementById('customer').value;
     const projectCompany = document.getElementById('company').value;
 
@@ -553,9 +525,7 @@ const addNewProject = async () =>{
     }).catch((error) => {
           console.log(error);
         });
-}
-
-
+};
 
 window.onload = function () {
     getProjectsInfo(1);

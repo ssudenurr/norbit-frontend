@@ -20,15 +20,20 @@ addBtn.addEventListener("click", () => {
 
 function clearInput() {
     inputCategory.value = "";
-}
-function formatTarih(tarih) {
-  if (tarih) {
-    const tarihParcalari = tarih.split("T");
-    return tarihParcalari[0];
-  }
-  return "-";
-}
+};
 
+/*UZUN FORMATTAKİ TARİHİ KISA FORMATA ÇEVİRİR */
+function formatTarih(date) {
+  if (date && date !== '-') {
+      const datePieces = date.split('T')[0];
+      const editedDatePieces = datePieces.split('-')
+      return editedDatePieces.reverse().join('-');
+  } else {
+      return '-';
+  }
+};
+
+/*KISA FORMATTAKİ TARİHİ UZUN FORMATA ÇEVİRİR */
 function formatDateToCustomFormat(date) {
   let date2 = new Date(date);
   var yyyy = date2.getFullYear();
@@ -41,8 +46,9 @@ function formatDateToCustomFormat(date) {
   var formattedDate = yyyy + "-" + MM + "-" + dd + "T" + hh + ":" + mm;
 
   return formattedDate;
-}
+};
 
+/*TÜM KATEGORİ BİLGİLERİNİ GETİRİR */
 function getCategoryList() {
   // GET COMPANY NAME
   const apiUrl = `${baseUrl}category/`;
@@ -64,8 +70,9 @@ function getCategoryList() {
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
+/*KATEGORİ BİLGİLERİ SAYFADA GÖSTERİR */
 function showCategoryList(categoryeData) {
   tableBody.innerHTML = "";
 
@@ -97,7 +104,9 @@ function showCategoryList(categoryeData) {
         deleteCategoryName(itemId);
     });
   }
-}
+};
+
+/*EKLE BUTONU KALKAR VE KAYDET BUTONU YERİNE GELİR */
 async function clickToEditBtn(categoryId) {
   buttonBox.innerHTML = `
     <button type="button" class="btn btn-info" data-bs-dismiss="modal" id="save-btn">Kaydet</button>
@@ -107,7 +116,7 @@ async function clickToEditBtn(categoryId) {
   });
   getRowData(categoryId);
 }
-
+/*YENİ BİR KETGORİ BİLGİSİ OLUŞTURUR */
 function createCategory() {
   const apiUrl = `${baseUrl}category/`;
   const token = localStorage.getItem("token");
@@ -128,8 +137,9 @@ function createCategory() {
     .catch((error) => {
       console.log(error);
     });
-}
+};
 
+/*İLGİLİ SATIRDAKİ KATEGORİ BİLGİSİNİ MODALA DOLDURUR */
 function getRowData(categoryId) {
   const apiUrl = `${baseUrl}category/${categoryId}/`;
   const token = localStorage.getItem("token");
@@ -152,8 +162,9 @@ function getRowData(categoryId) {
     .catch((error) => {
       console.log("error", error);
     });
-}
+};
 
+/*İLGİLİ SATIRDAKİ KATEGORİ BİLGİSİNİ DÜZENLER */
 function editCategoryName(categoryId) {
   const apiUrl = `${baseUrl}category/${categoryId}/`;
   const token = localStorage.getItem("token");
@@ -176,7 +187,9 @@ function editCategoryName(categoryId) {
     .catch((error) => {
       console.error(error);
     });
-}
+};
+
+/*İLGİLİ SATIRDAKİ KATEGORİ BİLGİSİNİ SİLER */
 function deleteCategoryName(categoryId) {
   const apiUrl = `${baseUrl}category/${categoryId}/`;
   const token = localStorage.getItem("token");
